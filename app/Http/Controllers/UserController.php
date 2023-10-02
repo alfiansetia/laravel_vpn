@@ -28,7 +28,7 @@ class UserController extends Controller
             return DataTables::of($result)->toJson();
         }
         $comp = $this->comp;
-        return view('user.data', compact(['comp']))->with('title', 'Data User');
+        return view('user.index', compact(['comp']))->with('title', 'Data User');
     }
 
 

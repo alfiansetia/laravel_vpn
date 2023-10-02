@@ -1,5 +1,14 @@
 <?php
 
+function isAdmin()
+{
+    if (strtolower(auth()->user()->role) == 'admin') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function formatBytes($size, $decimals = 0)
 {
     $unit = array(
