@@ -52,14 +52,16 @@
                                 </li>
                                 <li class="contacts-block__item" data-toggle="tooltip" title="last Login">
                                     <i data-feather="log-in"></i>
-                                    {{ date('d M Y H:i', strtotime(auth()->user()->last_login_at)) }}
+                                    {{ date('d M Y H:i', strtotime(auth()->user()->last_login_at ?? date('Y-m-d H:i:s'))) }}
                                 </li>
                                 <li class="contacts-block__item" data-toggle="tooltip" title="last Login IP">
                                     <i data-feather="globe"></i>
                                     {{ auth()->user()->last_login_ip ?? 'Unavailable' }}
                                 </li>
                             </ul>
-                            <a href="{{ route('setting.password') }}" class="btn btn-danger btn-block">Change Password</a>
+                            <a href="{{ route('setting.password') }}" class="btn btn-danger btn-block">
+                                <i class="fas fa-fingerprint mr-1"></i>Change Password
+                            </a>
                         </div>
                     </div>
                 </div>
