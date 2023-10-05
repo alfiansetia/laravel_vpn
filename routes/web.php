@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('setting/profile', [SettingController::class, 'profile'])->name('setting.profile');
     Route::get('setting/company', [SettingController::class, 'company'])->name('setting.company');
+    Route::post('setting/company', [SettingController::class, 'companyUpdate'])->name('setting.company.update');
     Route::get('setting/telegram', [SettingController::class, 'telegram'])->name('setting.telegram');
     Route::get('setting/backup', [SettingController::class, 'backup'])->name('setting.backup');
 });
