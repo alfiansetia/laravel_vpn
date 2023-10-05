@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::post('/telegram/{token}/webhook', [TelegramController::class, 'handle'])->name('telegram.handle');
+
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

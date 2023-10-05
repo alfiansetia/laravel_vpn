@@ -35,9 +35,6 @@ Route::get('/auth/callback', [LoginController::class, 'handleProviderCallback'])
 
 Route::post('/auth/onetap', [LoginController::class, 'onetap'])->name('auth.onetap');
 
-// Route::post('/' . env('TELEGRAM_BOT_TOKEN') . '/webhook', [TelegramController::class, 'handle'])->name('telegram.handle');
-
-
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -53,8 +50,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('router', UserController::class)->except(['edit', 'destroy']);
 
     Route::get('setting/profile', [SettingController::class, 'profile'])->name('setting.profile');
+    Route::post('setting/profile', [SettingController::class, 'profileUpdate'])->name('setting.profile.update');
+
+    Route::get('setting/password', [SettingController::class, 'password'])->name('setting.password');
+    Route::post('setting/password', [SettingController::class, 'passwordUpdate'])->name('setting.password.update');
+
     Route::get('setting/company', [SettingController::class, 'company'])->name('setting.company');
     Route::post('setting/company', [SettingController::class, 'companyUpdate'])->name('setting.company.update');
+
     Route::get('setting/telegram', [SettingController::class, 'telegram'])->name('setting.telegram');
     Route::get('setting/backup', [SettingController::class, 'backup'])->name('setting.backup');
 });
