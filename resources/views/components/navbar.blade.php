@@ -33,7 +33,8 @@
                 </a>
             </li>
             <li class="menu">
-                <a href="javascript:void(0);" aria-expanded="false" class="dropdown-toggle">
+                <a href="https://stats.uptimerobot.com/Xkn03tnOPl" target="_blank" aria-expanded="false"
+                    class="dropdown-toggle">
                     <div class="">
                         <i data-feather="bar-chart"></i>
                         <span> Status Server </span>
