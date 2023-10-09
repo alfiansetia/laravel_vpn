@@ -234,6 +234,20 @@
     <!-- END GLOBAL MANDATORY SCRIPTS -->
     @stack('jslib')
 
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                $(document).ready(function() {
+                    swal(
+                        'Failed!',
+                        "{{ $error }}",
+                        'error'
+                    )
+                })
+            </script>
+        @endforeach
+    @endif
+
     @stack('js')
     <script>
         function unblock() {

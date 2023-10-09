@@ -19,7 +19,7 @@ class RoleAdmin
             if ($request->ajax() || $request->expectsJson()) {
                 return response()->json(['message' => 'Unauthorize!'], 403);
             }
-            return redirect(route('dashboard'))->with(['error' => 'Unauthorize!'])->withInput();
+            return redirect(route('home'))->withErrors(['errors' => 'Unauthorize!'])->withInput();
         }
         return $next($request);
     }

@@ -13,6 +13,7 @@ class SettingController extends Controller
     private $comp;
     public function __construct()
     {
+        $this->middleware('roleAdmin')->only(['company', 'companyupdate']);
         $this->comp = Company::first();
     }
 
