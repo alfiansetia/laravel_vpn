@@ -106,7 +106,12 @@
                 processing: true,
                 serverSide: true,
                 rowId: 'id',
-                ajax: "{{ route('user.index') }}",
+                ajax: {
+                    url: "{{ route('user.index') }}",
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        handleResponseCode(jqXHR, textStatus, errorThrown)
+                    },
+                },
                 dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                     "<'table-responsive'tr>" +
                     "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -369,19 +374,11 @@
                             unblock();
                             table.ajax.reload();
                             $('#reset').click();
-                            if (res.status == true) {
-                                swal(
-                                    'Success!',
-                                    res.message,
-                                    'success'
-                                )
-                            } else {
-                                swal(
-                                    'Failed!',
-                                    res.message,
-                                    'error'
-                                )
-                            }
+                            swal(
+                                'Success!',
+                                res.message,
+                                'success'
+                            )
                         },
                         error: function(xhr, status, error) {
                             unblock();
@@ -464,19 +461,12 @@
                                 success: function(res) {
                                     unblock();
                                     table.ajax.reload();
-                                    if (res.status == true) {
-                                        swal(
-                                            'Success!',
-                                            res.message,
-                                            'success'
-                                        )
-                                    } else {
-                                        swal(
-                                            'Failed!',
-                                            res.message,
-                                            'error'
-                                        )
-                                    }
+                                    swal(
+                                        'Success!',
+                                        res.message,
+                                        'success'
+                                    )
+
                                 },
                                 error: function(xhr, status, error) {
                                     unblock();
