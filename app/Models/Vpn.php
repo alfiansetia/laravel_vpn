@@ -11,6 +11,12 @@ class Vpn extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'id'        => 'integer',
+        'user_id'   => 'integer',
+        'server_id' => 'integer',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

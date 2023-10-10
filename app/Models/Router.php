@@ -11,6 +11,11 @@ class Router extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'id'        => 'integer',
+        'user_id'   => 'integer',
+    ];
+
     protected $hidden = [
         'password',
     ];

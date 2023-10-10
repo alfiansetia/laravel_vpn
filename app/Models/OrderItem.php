@@ -12,6 +12,7 @@ class OrderItem extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'id'        => 'integer',
         'amount'    => 'integer',
     ];
 

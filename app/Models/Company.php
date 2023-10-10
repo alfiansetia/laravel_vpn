@@ -10,4 +10,8 @@ class Company extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'id'        => 'integer',
+    ];
 }

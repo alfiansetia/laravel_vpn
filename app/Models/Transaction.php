@@ -12,6 +12,7 @@ class Transaction extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'id'        => 'integer',
         'order_id'  => 'integer',
         'amount'    => 'integer',
     ];

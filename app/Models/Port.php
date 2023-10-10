@@ -11,6 +11,12 @@ class Port extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'id'        => 'integer',
+        'vpn_id'    => 'integer',
+        'dst'       => 'integer',
+        'to'        => 'integer',
+    ];
 
     public function vpn()
     {

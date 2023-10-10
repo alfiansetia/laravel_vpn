@@ -11,6 +11,10 @@ class Server extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'id'        => 'integer',
+    ];
+
     protected $hidden = [
         'username',
         'password',
