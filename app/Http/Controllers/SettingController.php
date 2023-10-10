@@ -79,7 +79,7 @@ class SettingController extends Controller
         $user = auth()->user();
         $this->validate($request, [
             'name'      => 'required|max:25|min:3',
-            'gender'    => 'required|max:25|min:3',
+            'gender'    => 'in:Male,Female',
             'phone'     => 'required|max:25|min:3',
             'address'   => 'required|max:100|min:3',
         ]);

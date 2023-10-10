@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\RouterController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VpnController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +27,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::get('profile', [UserController::class, 'profile']);
+    Route::post('profile', [UserController::class, 'profileUpdate']);
+
     Route::apiResource('routers', RouterController::class);
+
+    Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
+
+    Route::apiResource('ports', PortController::class)->only(['show']);
 });

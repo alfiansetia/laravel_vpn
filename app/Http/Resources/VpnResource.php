@@ -25,6 +25,7 @@ class VpnResource extends JsonResource
             'is_active' => $this->is_active,
             'user'      => new UserResource($this->whenLoaded('user')),
             'server'    => new ServerResource($this->whenLoaded('server')),
+            'ports'     => PortResource::collection($this->whenLoaded('port')),
         ];
     }
 }

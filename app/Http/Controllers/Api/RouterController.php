@@ -16,23 +16,23 @@ class RouterController extends Controller
         if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 0) {
             $limit = $request->limit;
         }
-        $data = Router::where('user_id', auth()->id())->paginate($limit);
-
+        $data = Router::where('user_id', auth()->id())->paginate($limit)->withQueryString();
         return RouterResource::collection($data);
     }
 
     public function show(string $id)
     {
-        $router = Router::find($id);
+        $router = Router::where('user_id', auth()->id())->find($id);
         if (!$router) {
             return response()->json(['message' => 'Data Not Found!'], 404);
         }
         return new RouterResource($router->load('user', 'port.vpn.server'));
     }
+
     public function store(Request $request)
     {
         $count = Router::where('user_id', '=', auth()->user()->id)->count();
-        if (($count < 2)) {
+        if ($count < 2) {
             $this->validate($request, [
                 'vpn_port'  => 'required', 'integer', 'exists:ports,id', function ($attribute, $value, $fail) {
                     $user = auth()->user();
@@ -57,7 +57,7 @@ class RouterController extends Controller
                 'password'      => Crypt::encrypt($request->password),
                 'desc'          => $request->desc,
             ]);
-            return response()->json(['message' => "Data Created!", 'data' => $router]);
+            return response()->json(['message' => "Router Created!", 'data' => $router]);
         } else {
             return response()->json(['status' => false, 'message' => 'User only limit 2 Router!', 'data' => ''], 403);
         }
@@ -65,7 +65,7 @@ class RouterController extends Controller
 
     public function destroy(string $id)
     {
-        $router = Router::find($id);
+        $router = Router::where('user_id', auth()->id())->find($id);
         if (!$router) {
             return response()->json(['message' => 'Data Not Found!'], 404);
         }
