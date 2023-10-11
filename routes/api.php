@@ -29,11 +29,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('profile', [UserController::class, 'profileUpdate']);
+    Route::post('password', [UserController::class, 'passwordUpdate']);
 
-    Route::apiResource('routers', RouterController::class);
-    Route::get('routers/{routers}/ping', [RouterController::class, 'ping']);
+    Route::group(['middleware' => ['verified']], function () {
 
-    Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
+        Route::apiResource('routers', RouterController::class);
+        Route::get('routers/{routers}/ping', [RouterController::class, 'ping']);
 
-    Route::apiResource('ports', PortController::class)->only(['show']);
+        Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
+
+        Route::apiResource('ports', PortController::class)->only(['show']);
+    });
 });
