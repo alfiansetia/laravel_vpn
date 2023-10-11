@@ -14,6 +14,13 @@ class ProfileResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            '.id'               => $this['.id'],
+            'name'              => $this['name'],
+            'shared-users'      => $this['shared-users'],
+            'rate-limit'        => $this['rate-limit'] ?? null,
+            'session-timeout'   => $this['session-timeout'] ?? null,
+            'default'           => ($this['default'] ?? false) == "true" ? true : false,
+        ];
     }
 }

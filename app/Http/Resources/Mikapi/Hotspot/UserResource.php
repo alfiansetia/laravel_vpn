@@ -14,6 +14,21 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            '.id'           => $this['.id'],
+            'name'          => $this['name'],
+            'password'      => $this['password'] ?? null,
+            'profile'       => $this['profile'] ?? null,
+            'uptime'        => $this['uptime'] ?? null,
+            'limit-uptime'  => $this['limit-uptime'] ?? null,
+            'bytes-in'      => (int) $this['bytes-in'] ?? '0',
+            'bytes-out'     => (int) $this['bytes-out'] ?? '0',
+            'packets-in'    => (int) $this['packets-in'] ?? '0',
+            'packets-out'   => (int) $this['packets-out'] ?? '0',
+            'default'       => ($this['default'] ?? false) == "true" ? true : false,
+            'dynamic'       => ($this['dynamic'] ?? false) == "true" ? true : false,
+            'disabled'      => ($this['disabled'] ?? false) == "true" ? true : false,
+            'comment'       => $this['comment'] ?? null,
+        ];
     }
 }

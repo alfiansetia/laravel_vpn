@@ -43,10 +43,6 @@ class CheckRouterExists
                     },
                 ]
             ],
-            [
-                'router.required'   => 'Router belum dipilih',
-                'router.exists'     => 'Router yang dipilih tidak ada!',
-            ],
         );
         if ($validator->fails()) {
             if ($request->ajax() || $request->expectsJson()) {

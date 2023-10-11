@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ProfileController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ServerController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\UserController as HotspotUserController;
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\RouterController;
 use App\Http\Controllers\Api\UserController;
@@ -39,5 +42,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
 
         Route::apiResource('ports', PortController::class)->only(['show']);
+
+        Route::get('mikapi/hotspot/profiles', [ProfileController::class, 'index']);
+
+        Route::get('mikapi/hotspot/users', [HotspotUserController::class, 'index']);
+
+        Route::get('mikapi/hotspot/servers', [ServerController::class, 'index']);
     });
 });
