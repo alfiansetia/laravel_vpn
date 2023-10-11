@@ -28,8 +28,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('profile', [UserController::class, 'profile']);
-    Route::post('profile', [UserController::class, 'profileUpdate']);
-    Route::post('password', [UserController::class, 'passwordUpdate']);
+    Route::put('profile', [UserController::class, 'profileUpdate']);
+    Route::put('password', [UserController::class, 'passwordUpdate']);
 
     Route::group(['middleware' => ['verified']], function () {
 
