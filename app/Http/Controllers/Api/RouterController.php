@@ -130,11 +130,14 @@ class RouterController extends Controller
         if (!$router) {
             return response()->json(['message' => 'Router Not Found!'], 404);
         }
+        if ($router->port->vpn->is_active == 'no') {
+            return response()->json(['mesage' => 'Your VPN Nonactive!'], 422);
+        }
         if (!$router->port) {
             return response()->json(['mesage' => 'Select VPN on Router'], 422);
         }
-        if ($router->port->vpn->is_active == 'no') {
-            return response()->json(['mesage' => 'Your VPN Nonactive!'], 422);
+        if ($router->port->vpn->user_id != auth()->id()) {
+            return response()->json(['mesage' => 'Warning! This Port is not Your VPN Account!'], 422);
         }
         if ($router->port->vpn->server->is_active == 'no') {
             return response()->json(['mesage' => 'Server OFF! Contact Admin.'], 422);

@@ -30,6 +30,9 @@ class CheckRouterExists
                             if (!$router->port) {
                                 return $fail('Select VPN on Router');
                             }
+                            if ($router->port->vpn->user_id != auth()->id()) {
+                                return response()->json(['mesage' => 'Warning! This Port is not Your VPN Account!'], 422);
+                            }
                             if ($router->port->vpn->is_active == 'no') {
                                 return $fail('Your VPN Nonactive!');
                             }

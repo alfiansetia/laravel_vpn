@@ -24,7 +24,11 @@ class RouterApiServices
     {
         $ip = $this->router->port->vpn->server->ip . ':' . $this->router->port->dst;
         $user = $this->router->username;
-        $pass = decrypt($this->router->password);
+        try {
+            $pass = decrypt($this->router->password);
+        } catch (\Throwable $th) {
+            $pass = '';
+        }
         return $this->API->connect($ip, $user, $pass);
     }
 
@@ -36,7 +40,7 @@ class RouterApiServices
     public function ping()
     {
         if ($this->connect()) {
-            return handle_data([], 'OK');
+            return handle_data([], 'Connected');
         } else {
             return handle_fail_login($this->API);
         }

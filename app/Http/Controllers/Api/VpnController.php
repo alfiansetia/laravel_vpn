@@ -21,7 +21,7 @@ class VpnController extends Controller
 
     public function show(string $id)
     {
-        $vpn = Vpn::where('user_id', 'id', auth()->id())->find($id);
+        $vpn = Vpn::where('user_id', auth()->id())->find($id);
         if (!$vpn) {
             return response()->json(['message' => 'Data Not Found!'], 404);
         }

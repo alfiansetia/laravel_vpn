@@ -15,6 +15,6 @@ class PortController extends Controller
         if (!$port) {
             return response()->json(['message' => 'Data Not Found!'], 404);
         }
-        return new PortResource($port->load('vpn.server', 'vpn.user'));
+        return new PortResource($port->load('vpn.server'));
     }
 }
