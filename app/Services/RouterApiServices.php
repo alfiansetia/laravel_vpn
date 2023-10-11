@@ -24,12 +24,21 @@ class RouterApiServices
     {
         $ip = $this->router->port->vpn->server->ip . ':' . $this->router->port->dst;
         $user = $this->router->username;
-        $pass = Crypt::decrypt($this->router->password);
+        $pass = decrypt($this->router->password);
         return $this->API->connect($ip, $user, $pass);
     }
 
     protected function disconnect()
     {
         return $this->API->disconnect();
+    }
+
+    public function ping()
+    {
+        if ($this->connect()) {
+            return handle_data([], 'OK');
+        } else {
+            return handle_fail_login($this->API);
+        }
     }
 }

@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('profile', [UserController::class, 'profileUpdate']);
 
     Route::apiResource('routers', RouterController::class);
+    Route::get('routers/{routers}/ping', [RouterController::class, 'ping']);
 
     Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
 

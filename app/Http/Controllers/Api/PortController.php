@@ -11,7 +11,7 @@ class PortController extends Controller
 {
     public function show(string $id)
     {
-        $port = Port::whereRelation('vpn.user', 'id', auth()->id())->find($id);
+        $port = Port::whereRelation('vpn', 'user_id', auth()->id())->find($id);
         if (!$port) {
             return response()->json(['message' => 'Data Not Found!'], 404);
         }
