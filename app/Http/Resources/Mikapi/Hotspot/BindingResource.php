@@ -14,6 +14,16 @@ class BindingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
+        return [
+            '.id'           => $this['.id'],
+            'mac-address'   => $this['mac-address'] ?? null,
+            'address'       => $this['address'] ?? null,
+            'to-address'    => $this['to-address'] ?? null,
+            'server'        => $this['address'] ?? 'all',
+            'disabled'      => ($this['disabled'] ?? false) == 'true' ? true : false,
+            'comment'       => $this['comment'] ?? null,
+            'type'          => $this['type'] ?? 'regular'
+        ];
     }
 }

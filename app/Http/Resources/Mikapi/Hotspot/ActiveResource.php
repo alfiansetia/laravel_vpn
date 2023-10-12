@@ -16,7 +16,7 @@ class ActiveResource extends JsonResource
     {
         return [
             '.id'           => $this['.id'],
-            'server'        => $this['server'],
+            'server'        => $this['server'] ?? 'all',
             'user'          => $this['user'],
             'address'       => $this['address'],
             'mac-address'   => $this['mac-address'],
