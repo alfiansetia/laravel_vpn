@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Router;
 use App\RouterOs\RouterosAPI;
-use Illuminate\Support\Facades\Crypt;
 
 class RouterApiServices
 {

@@ -44,10 +44,41 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
+        $this->setRouter($request->router, ProfileServices::class);
+        $this->validate($request, [
+            'name'              => 'required|min:2|max:25',
+            'shared-users'      => 'integer',
+            'rate-limit'        => 'nullable',
+            'session-timeout'   => 'nullable',
+        ]);
+        $param = [
+            'name'              => $request->input('name'),
+            'shared-users'      => $request->input('shared-users'),
+            'rate-limit'        => $request->input('rate-limit'),
+            'session-timeout'   => $request->input('session-timeout') ?? '00:00:00',
+        ];
+        $data = $this->conn->store($param);
+        return response()->json($data, $data['status'] ? 200 : 422);
     }
 
     public function update(Request $request, string $id)
     {
+        $this->setRouter($request->router, ProfileServices::class);
+        $this->validate($request, [
+            'name'              => 'required|min:2|max:25',
+            'shared-users'      => 'integer',
+            'rate-limit'        => 'nullable',
+            'session-timeout'   => 'nullable',
+        ]);
+        $param = [
+            '.id'               => $id,
+            'name'              => $request->input('name'),
+            'shared-users'      => $request->input('shared-users'),
+            'rate-limit'        => $request->input('rate-limit'),
+            'session-timeout'   => $request->input('session-timeout') ?? '00:00:00',
+        ];
+        $data = $this->conn->update($param);
+        return response()->json($data, $data['status'] ? 200 : 422);
     }
 
     public function destroy(Request $request, string $id)
