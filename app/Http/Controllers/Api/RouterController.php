@@ -59,7 +59,7 @@ class RouterController extends Controller
                 'desc'      => 'nullable|max:30',
             ]);
             $router = Router::create([
-                'user_id'       => auth()->user()->id,
+                'user_id'       => auth()->id(),
                 'port_id'       => $request->vpn_port,
                 'name'          => $request->name,
                 'hsname'        => $request->hsname,

@@ -11,7 +11,7 @@ trait RouterTrait
 
     private function setRouter(string $id, string $serviceClass)
     {
-        $this->router = Router::where('user_id', auth()->user()->id)->find($id);
+        $this->router = Router::where('user_id', auth()->id())->find($id);
         $this->conn = new $serviceClass($this->router);
         return $this->conn;
     }

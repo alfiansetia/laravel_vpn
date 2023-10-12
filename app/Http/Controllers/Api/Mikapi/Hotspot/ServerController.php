@@ -12,6 +12,11 @@ class ServerController extends Controller
 {
     use RouterTrait;
 
+    public function __construct(Request $request)
+    {
+        $this->middleware('checkRouterExists');
+    }
+
     public function index(Request $request)
     {
         $this->setRouter($request->router, ServerServices::class);
