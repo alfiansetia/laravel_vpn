@@ -9,12 +9,12 @@ class UserServices extends RouterApiServices
     private $name = 'hotspot';
     private $command = '/ip/hotspot/user/';
 
-    public function get()
+    public function get(array $query = [])
     {
         if ($this->connect()) {
             $packages = $this->API->comm("/system/package/print");
             if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm($this->command . "print");
+                $data = $this->API->comm($this->command . "print", $query);
                 return handle_data($data);
             }
             $this->disconnect();
@@ -24,7 +24,7 @@ class UserServices extends RouterApiServices
         }
     }
 
-    public function getById($id)
+    public function show(string $id)
     {
         if ($this->connect()) {
             $packages = $this->API->comm("/system/package/print");
@@ -86,6 +86,23 @@ class UserServices extends RouterApiServices
                     'disabled'           => $param->is_active == 1 ? 'no' : 'yes',
                 ]);
                 return handle_data($data, 'Success Update Data!');
+            }
+            $this->disconnect();
+            return handle_no_package($this->name);
+        } else {
+            return handle_fail_login($this->API);
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        if ($this->connect()) {
+            $packages = $this->API->comm("/system/package/print");
+            if (cek_package($packages, $this->name)) {
+                $data = $this->API->comm($this->command . "remove", [
+                    '.id' => $id
+                ]);
+                return handle_data($data, 'Success deleted data!');
             }
             $this->disconnect();
             return handle_no_package($this->name);

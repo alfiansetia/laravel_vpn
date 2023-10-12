@@ -43,9 +43,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::apiResource('ports', PortController::class)->only(['show']);
 
-        Route::get('mikapi/hotspot/profiles', [ProfileController::class, 'index']);
+        Route::apiResource('mikapi/hotspot/profiles', ProfileController::class)->only(['index', 'show', 'store', 'destroy']);
 
-        Route::get('mikapi/hotspot/users', [HotspotUserController::class, 'index']);
+        Route::apiResource('mikapi/hotspot/users', HotspotUserController::class)->only(['index', 'show', 'store', 'destroy']);
 
         Route::get('mikapi/hotspot/servers', [ServerController::class, 'index']);
     });
