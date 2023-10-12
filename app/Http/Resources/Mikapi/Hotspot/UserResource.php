@@ -18,6 +18,8 @@ class UserResource extends JsonResource
             '.id'           => $this['.id'],
             'name'          => $this['name'],
             'password'      => $this['password'] ?? null,
+            'address'       => $this['address'] ?? null,
+            'mac-address'   => $this['mac-address'] ?? null,
             'profile'       => $this['profile'] ?? null,
             'uptime'        => $this['uptime'] ?? null,
             'limit-uptime'  => $this['limit-uptime'] ?? null,
