@@ -24,11 +24,14 @@ class UserController extends Controller
         if ($request->filled('name')) {
             $query['?name'] = $request->name;
         }
+        if ($request->filled('server')) {
+            $query['?server'] = $request->input('server');
+        }
         if ($request->filled('profile')) {
-            $query['?profile'] = $request->profile;
+            $query['?profile'] = $request->input('profile');
         }
         if ($request->filled('comment')) {
-            $query['?comment'] = $request->comment;
+            $query['?comment'] = $request->input('comment');
         }
         $data = $this->conn->get($query);
         if (!$data['status']) {
@@ -51,11 +54,11 @@ class UserController extends Controller
     {
         $this->setRouter($request->router, UserServices::class);
         $this->validate($request, [
-            'server'        => 'nullable',
+            'server'        => 'required',
             'name'          => 'required|min:2|max:30',
             'password'      => 'nullable|max:30',
             'profile'       => 'required',
-            'address'       => 'nullable|vali_ip',
+            'address'       => 'nullable|ip',
             'mac-address'   => 'nullable|mac_address',
             // 'time_limit'    => 'number',
             // 'data_limit'    => 'number',
@@ -81,11 +84,11 @@ class UserController extends Controller
     {
         $this->setRouter($request->router, UserServices::class);
         $this->validate($request, [
-            'server'        => 'nullable',
+            'server'        => 'required',
             'name'          => 'required|min:2|max:30',
             'password'      => 'nullable|max:30',
             'profile'       => 'required',
-            'address'       => 'nullable|vali_ip',
+            'address'       => 'nullable|ip',
             'mac-address'   => 'nullable|mac_address',
             // 'time_limit'    => 'number',
             // 'data_limit'    => 'number',
