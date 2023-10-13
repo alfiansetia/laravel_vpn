@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Mikapi\Hotspot\BindingController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\HostController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ProfileController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ServerController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ServerProfileController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\UserController as HotspotUserController;
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\RouterController;
@@ -56,6 +57,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::apiResource('mikapi/hotspot/bindings', BindingController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
 
-        Route::get('mikapi/hotspot/servers', [ServerController::class, 'index']);
+        Route::apiResource('mikapi/hotspot/servers', ServerController::class)->only(['index', 'show', 'update']);
+
+        Route::apiResource('mikapi/hotspot/serverprofiles', ServerProfileController::class)->only(['index', 'show', 'update']);
     });
 });
