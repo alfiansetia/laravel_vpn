@@ -20,7 +20,11 @@ class ServerProfileController extends Controller
     public function index(Request $request)
     {
         $this->setRouter($request->router, ServerProfileServices::class);
-        $data = $this->conn->get();
+        $query = [];
+        if ($request->filled('name')) {
+            $query['?name'] = $request->name;
+        }
+        $data = $this->conn->get($query);
         if (!$data['status']) {
             return response()->json($data, 422);
         }

@@ -20,10 +20,43 @@ class ServerController extends Controller
     public function index(Request $request)
     {
         $this->setRouter($request->router, ServerServices::class);
-        $data = $this->conn->get();
+        $query = [];
+        if ($request->filled('name')) {
+            $query['?name'] = $request->name;
+        }
+        $data = $this->conn->get($query);
         if (!$data['status']) {
             return response()->json($data, 422);
         }
         return ServerResource::collection($data['data']);
+    }
+
+    public function show(Request $request, string $id)
+    {
+        $this->setRouter($request->router, ServerServices::class);
+        $data = $this->conn->show($id);
+        if (!$data['status']) {
+            return response()->json($data, 422);
+        }
+        return new ServerResource($data['data']);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $this->setRouter($request->router, ServerServices::class);
+        $disabled = filter_var($request->input('disabled'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $this->validate($request, [
+            'name'              => 'required|min:2|max:25',
+            'addresses-per-mac' => 'required|integer',
+            'disabled'          => 'required|boolean',
+        ]);
+        $param = [
+            '.id'               => $id,
+            'name'              => $request->input('name'),
+            'addresses-per-mac' => $request->input('addresses-per-mac'),
+            'disabled'          => $request->input('disabled') ? 'yes' : 'no',
+        ];
+        $data = $this->conn->update($param);
+        return response()->json($data, $data['status'] ? 200 : 422);
     }
 }
