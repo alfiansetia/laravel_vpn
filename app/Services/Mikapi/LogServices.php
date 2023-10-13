@@ -2,43 +2,18 @@
 
 namespace App\Services\Mikapi;
 
+use App\Models\Router;
 use App\Services\RouterApiServices;
+use App\Traits\CrudApiTrait;
 
 class LogServices extends RouterApiServices
 {
-    private $name = 'system';
+    use CrudApiTrait;
 
-    public function get()
+    public function __construct(Router $router)
     {
-        if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm("/log/print", [
-                    '?topics' => 'hotspot,info,debug',
-                ]);
-                return handle_data($data);
-            }
-            $this->disconnect();
-            return handle_no_package($this->name);
-        } else {
-            return handle_fail_login($this->API);
-        }
-    }
-
-    public function getByTopics(array $topics = [])
-    {
-        if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm("/log/print", [
-                    '?topics' => implode(',', $topics),
-                ]);
-                return handle_data($data);
-            }
-            $this->disconnect();
-            return handle_no_package($this->name);
-        } else {
-            return handle_fail_login($this->API);
-        }
+        parent::__construct($router);
+        $this->name = 'system';
+        $this->command = '/log/';
     }
 }

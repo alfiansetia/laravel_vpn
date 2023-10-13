@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api\Mikapi\System;
+namespace App\Http\Controllers\Api\Mikapi;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Mikapi\System\PackageResource;
-use App\Services\Mikapi\System\PackageServices;
+use App\Http\Resources\Mikapi\LogResource;
+use App\Services\Mikapi\LogServices;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
 
-class PackageController extends Controller
+class LogController extends Controller
 {
     use RouterTrait;
 
@@ -19,28 +19,25 @@ class PackageController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, PackageServices::class);
+        $this->setRouter($request->router, LogServices::class);
         $query = [];
-        if ($request->filled('name')) {
-            $query['?name'] = $request->name;
-        }
-        if ($request->filled('bundle')) {
-            $query['?bundle'] = $request->input('bundle');
+        if ($request->filled('topics')) {
+            $query['?topics'] = $request->input('topics');
         }
         $data = $this->conn->get($query);
         if (!$data['status']) {
             return response()->json($data, 422);
         }
-        return PackageResource::collection($data['data']);
+        return LogResource::collection($data['data']);
     }
 
     public function show(Request $request, string $id)
     {
-        $this->setRouter($request->router, PackageServices::class);
+        $this->setRouter($request->router, LogServices::class);
         $data = $this->conn->show($id);
         if (!$data['status']) {
             return response()->json($data, 422);
         }
-        return new PackageResource($data['data']);
+        return new LogResource($data['data']);
     }
 }
