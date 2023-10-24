@@ -17,11 +17,11 @@ class RouterFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->firstName(),
-            'hsname' => fake()->company(),
-            'dnsname' => fake()->domainName(),
-            'username' => fake()->userName(),
-            'password' => fake()->password(),
+            'name'      => fake()->firstName(),
+            'hsname'    => fake()->company(),
+            'dnsname'   => fake()->domainName(),
+            'username'  => fake()->userName(),
+            'password'  => fake()->password(),
             'desc'      => fake()->text(15),
         ];
     }
