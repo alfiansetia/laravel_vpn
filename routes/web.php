@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::resource('user', UserController::class)->except(['edit', 'destroy']);
-    Route::delete('users', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::resource('user', UserController::class)->except(['create', 'edit']);
+    Route::delete('users/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
 
     Route::resource('vpn', UserController::class)->except(['edit', 'destroy']);
     Route::resource('server', UserController::class)->except(['edit', 'destroy']);

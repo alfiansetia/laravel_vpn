@@ -47,37 +47,37 @@ function handleResponseCode(code) {
     }
 }
 
-function handleResponseStatus(jqXHR) {
-    if (jqXHR.status === 404) {
+function handleResponse(jqXHR) {
+    let message = jqXHR.responseJSON.message
+    swal({
+        title: 'Failed!',
+        text: message,
+        type: 'error',
+    })
+    // if (jqXHR.status === 401) {
+    //     window.location.reload();
+    // }
+}
+
+function handleResponseForm(jqXHR) {
+    let message = jqXHR.responseJSON.message
+
+    if (jqXHR.status != 422) {
         swal({
             title: 'Failed!',
-            text: "Not Found!",
+            text: message,
             type: 'error',
         })
-    } else if (jqXHR.status === 500) {
-        swal({
-            title: 'Failed!',
-            text: "Server Error!",
-            type: 'error',
-        })
-    } else if (jqXHR.status === 403) {
-        swal({
-            title: 'Failed!',
-            text: "Unauthorize!",
-            type: 'error',
-        })
-    } else if (jqXHR.status === 401) {
-        swal({
-            title: 'Failed!',
-            text: "Unauthenticate!",
-            type: 'error',
-        })
-        window.location.reload();
+        // window.location.reload();
     } else {
-        swal({
-            title: 'Failed!',
-            text: "Error! Code : " + jqXHR.status,
-            type: 'error',
-        })
+        er = jqXHR.responseJSON.errors
+        erlen = Object.keys(er).length
+        for (i = 0; i < erlen; i++) {
+            obname = Object.keys(er)[i];
+            $('#' + obname).addClass('is-invalid');
+            $('#err_' + obname).text(er[obname][0]);
+            $('#err_' + obname).show();
+        }
     }
+
 }

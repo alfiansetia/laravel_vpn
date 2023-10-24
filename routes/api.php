@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Mikapi\LogController;
 use App\Http\Controllers\Api\Mikapi\System\PackageController;
 use App\Http\Controllers\Api\Mikapi\System\ResourceController;
 use App\Http\Controllers\Api\Mikapi\System\RouterboardController;
+use App\Http\Controllers\Api\Mikapi\System\UserController as SystemUserController;
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\RouterController;
 use App\Http\Controllers\Api\UserController;
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('mikapi/system/packages', PackageController::class)->only(['index', 'show']);
         Route::apiResource('mikapi/system/resources', ResourceController::class)->only(['index']);
         Route::apiResource('mikapi/system/routerboards', RouterboardController::class)->only(['index']);
+        Route::apiResource('mikapi/system/users', SystemUserController::class)->only(['index']);
 
         Route::apiResource('mikapi/logs', LogController::class)->only(['index', 'show']);
     });

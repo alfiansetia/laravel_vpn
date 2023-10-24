@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
+    use CrudTrait;
+
     private $comp;
 
     public function __construct()
     {
         $this->middleware('roleAdmin');
         $this->comp = Company::first();
+        $this->model = User::class;
+        $this->table = 'users';
     }
 
     public function index(Request $request)
@@ -53,20 +58,7 @@ class UserController extends Controller
             'password'  => Hash::make($request->password),
             'role'      => $request->role,
         ]);
-        if ($user) {
-            return response()->json(['status' => true, 'message' => 'Success Insert Data', 'data' => '']);
-        } else {
-            return response()->json(['status' => false, 'message' => 'Failed Insert Data', 'data' => '']);
-        }
-    }
-
-    public function show(Request $request, User $user)
-    {
-        if ($request->ajax()) {
-            return response()->json(['status' => true, 'message' => '', 'data' => $user]);
-        } else {
-            abort(404);
-        }
+        return response()->json(['message' => 'Success Insert Data', 'data' => $user]);
     }
 
     public function update(Request $request, User $user)
@@ -87,27 +79,6 @@ class UserController extends Controller
             'address'       => $request->address,
             'role'          => $request->role,
         ]);
-        if ($user) {
-            return response()->json(['status' => true, 'message' => 'Success Update Data', 'data' => '']);
-        } else {
-            return response()->json(['status' => false, 'message' => 'Failed Update Data', 'data' => '']);
-        }
-    }
-
-    public function destroy(Request $request)
-    {
-        $this->validate($request, [
-            'id' => 'required|array|min:1'
-        ]);
-        $deleted = 0;
-        foreach ($request->id as $id) {
-            $user = User::findOrFail($id);
-            $user->delete();
-            if ($user) {
-                $deleted++;
-            }
-        }
-        $data = ['status' => true, 'message' => 'Success Delete : ' . $deleted . ' & Fail : ' . (count($request->id) - $deleted), 'data' => ''];
-        return response()->json($data);
+        return response()->json(['message' => 'Success Update Data', 'data' => '']);
     }
 }
