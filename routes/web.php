@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VpnController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -43,7 +44,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('user', UserController::class)->except(['create', 'edit']);
     Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
 
-    Route::resource('vpn', UserController::class)->except(['edit', 'destroy']);
+    Route::resource('vpn', VpnController::class)->except(['edit']);
 
     Route::resource('server', ServerController::class)->except(['edit']);
     Route::delete('server/batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
