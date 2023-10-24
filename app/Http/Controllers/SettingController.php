@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Setting;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +13,7 @@ use Illuminate\Validation\Rules\Password;
 class SettingController extends Controller
 {
     private $comp;
+    private $base_url_telegram = 'https://api.telegram.org/';
     public function __construct()
     {
         $this->middleware('roleAdmin')->only(['company', 'companyupdate']);
@@ -120,6 +123,110 @@ class SettingController extends Controller
             } else {
                 return redirect()->route('setting.password')->with(['error' => 'Failed Update Password!']);
             }
+        }
+    }
+
+    public function telegram()
+    {
+        $setting = Setting::first();
+        $comp = $this->comp;
+        if (!$setting) {
+            $setting = Setting::factory()->create();
+        }
+        return view('setting.telegram', compact(['setting', 'comp']))->with('title', 'Setting Telegram');
+    }
+
+    public function telegramUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'telegram_token'    => 'required',
+            'telegram_bot_name' => 'required',
+            'telegram_group_id' => 'required',
+        ]);
+        $setting = Setting::first();
+        if (!$setting) {
+            $setting = Setting::factory()->create();
+        }
+        $setting->update([
+            'telegram_token'    => $request->telegram_token,
+            'telegram_bot_name' => $request->telegram_bot_name,
+            'telegram_group_id' => $request->telegram_group_id,
+        ]);
+        if ($setting) {
+            return redirect()->route('setting.telegram')->with(['success' => 'Success Update Telegram!']);
+        } else {
+            return redirect()->route('setting.telegram')->with(['error' => 'Failed Update Telegram!']);
+        }
+    }
+
+    public function telegramSet(Request $request)
+    {
+        $this->validate($request, [
+            'action'    => 'required|in:set,unset,info',
+        ]);
+        $setting = Setting::first();
+        if (!$setting) {
+            $setting = Setting::factory()->create();
+        }
+        $botToken = $setting->telegram_token;
+        if ($request->action === 'info') {
+            return $this->getInfoWebhook($botToken);
+        } elseif ($request->action === 'set') {
+            return $this->setWebhook($botToken);
+        } else {
+            return $this->unSetWebhook($botToken);
+        }
+    }
+
+    private function setWebhook(string $token)
+    {
+        $client = new Client();
+        $url_webhook = url("api/telegram/$token/webhook");
+        $url = $this->base_url_telegram . "bot{$token}/setWebhook?url=$url_webhook";
+        try {
+            $response = $client->get($url);
+            if ($response->getStatusCode() == 200) {
+                $webhookInfo = json_decode($response->getBody());
+                return response()->json(['data' => $webhookInfo, 'message' => $webhookInfo->description]);
+            } else {
+                return response()->json(['message' => 'Error get Webhook Info!'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error Request! ' . $e->getMessage()], 500);
+        }
+    }
+
+    private function unSetWebhook(string $token)
+    {
+        $client = new Client();
+        $url = $this->base_url_telegram . "bot{$token}/deleteWebhook";
+        try {
+            $response = $client->get($url);
+            if ($response->getStatusCode() == 200) {
+                $webhookInfo = json_decode($response->getBody());
+                return response()->json(['data' => $webhookInfo, 'message' => $webhookInfo->description]);
+            } else {
+                return response()->json(['message' => 'Error get Webhook Info!'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error Request! ' . $e->getMessage()], 500);
+        }
+    }
+
+    private function getInfoWebhook(string $token)
+    {
+        $client = new Client();
+        $url = $this->base_url_telegram . "bot{$token}/getWebhookInfo";
+        try {
+            $response = $client->get($url);
+            if ($response->getStatusCode() == 200) {
+                $webhookInfo = json_decode($response->getBody());
+                return response()->json(['data' => $webhookInfo, 'message' => '']);
+            } else {
+                return response()->json(['message' => 'Error get Webhook Info!'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error Request!' . $e->getMessage()], 500);
         }
     }
 }
