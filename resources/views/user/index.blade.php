@@ -433,6 +433,13 @@
                         $('#edit_phone').val(result.data.phone);
                         $('#edit_address').val(result.data.address);
                         $('#edit_role').val(result.data.role).change();
+                        $('#edit_password').val('');
+                        if (result.data.email_verified_at === null) {
+                            $('#edit_verified').prop('checked', false).change();
+                        } else {
+                            $('#edit_verified').prop('checked', true).change();
+                        }
+
                         if (show) {
                             $('#modalEdit').modal('show');
                         }

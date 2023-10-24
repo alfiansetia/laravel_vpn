@@ -20,7 +20,6 @@ class UserController extends Controller
         $this->middleware('roleAdmin');
         $this->comp = Company::first();
         $this->model = User::class;
-        $this->table = 'users';
     }
 
     public function index(Request $request)
@@ -47,7 +46,8 @@ class UserController extends Controller
             'phone'     => 'required|max:15|min:3',
             'address'   => 'required|max:100|min:3',
             'password'  => 'required',
-            'role'      => 'required|in:Admin,User'
+            'role'      => 'required|in:Admin,User',
+            'verified'  => 'nullable|in:on,off',
         ]);
         $user = User::create([
             'name'      => $request->name,
@@ -57,6 +57,7 @@ class UserController extends Controller
             'address'   => $request->address,
             'password'  => Hash::make($request->password),
             'role'      => $request->role,
+            'email_verified_at' => $request->verified === 'on' ? now() : null,
         ]);
         return response()->json(['message' => 'Success Insert Data', 'data' => $user]);
     }
@@ -69,16 +70,23 @@ class UserController extends Controller
             'gender'    => 'required|in:Male,Female',
             'phone'     => 'required|max:15|min:3',
             'address'   => 'required|max:100|min:3',
-            'role'      => 'required|in:Admin,User'
+            'role'      => 'required|in:Admin,User',
+            'password'  => 'nullable|min:5',
+            'verified'  => 'nullable|in:on,off',
         ]);
-        $user->update([
+        $data = [
             'name'          => $request->name,
             'email'         => $request->email,
             'gender'        => $request->gender,
             'phone'         => $request->phone,
             'address'       => $request->address,
             'role'          => $request->role,
-        ]);
+            'email_verified_at' => $request->verified === 'on' ? now() : null,
+        ];
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+        $user->update($data);
         return response()->json(['message' => 'Success Update Data', 'data' => '']);
     }
 }

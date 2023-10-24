@@ -64,6 +64,15 @@
                             minlength="3" maxlength="100" required></textarea>
                         <span id="err_address" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
+
+                    <div class="form-group d-flex align-items-center">
+                        <label class="switch s-primary mr-2">
+                            <input id="verified" name="verified" type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="align-self-center">Verified</span>
+                    </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
@@ -98,14 +107,14 @@
                         <label class="control-label" for="edit_name"><i class="far fa-user mr-1"
                                 data-toggle="tooltip" title="Full Name User"></i>Name :</label>
                         <input type="hidden" name="id" id="edit_id">
-                        <input type="text" name="name" class="form-control" id="edit_name"
+                        <input type="text" name="name" class="form-control maxlength" id="edit_name"
                             placeholder="Please Enter Name" minlength="3" maxlength="25" required>
                         <span id="err_edit_name" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="edit_email"><i class="far fa-envelope mr-1"
                                 data-toggle="tooltip" title="Email User"></i>Email :</label>
-                        <input type="email" name="email" class="form-control" id="edit_email"
+                        <input type="email" name="email" class="form-control maxlength" id="edit_email"
                             placeholder="Please Enter Email" minlength="3" maxlength="50" required>
                         <span id="err_edit_email" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
@@ -121,9 +130,17 @@
                     <div class="form-group">
                         <label class="control-label" for="edit_phone"><i class="fas fa-phone-alt mr-1"
                                 data-toggle="tooltip" title="Phone User"></i>Phone :</label>
-                        <input type="text" name="phone" class="form-control" id="edit_phone"
+                        <input type="text" name="phone" class="form-control maxlength" id="edit_phone"
                             placeholder="Please Enter Phone" minlength="3" maxlength="15" required>
                         <span id="err_edit_phone" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="edit_password"><i class="fas fa-lock mr-1"
+                                data-toggle="tooltip" title="Password User"></i>Password :</label>
+                        <input type="password" name="edit_password" class="form-control maxlength"
+                            id="edit_password" placeholder="Please Enter Password" minlength="0" maxlength="100">
+                        <span id="err_edit_password" class="error invalid-feedback" style="display: hide;"></span>
+                        <small id="sh-text1" class="form-text text-muted">Leave blank if not change password.</small>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="edit_role"><i class="fas fa-user-tag mr-1"
@@ -138,9 +155,16 @@
                     <div class="form-group">
                         <label class="control-label" for="edit_address"><i class="fas fa-map-marker mr-1"
                                 data-toggle="tooltip" title="Address User"></i>Address :</label>
-                        <textarea name="address" class="form-control" id="edit_address" placeholder="Please Enter Address" minlength="3"
-                            maxlength="100" required></textarea>
+                        <textarea name="address" class="form-control maxlength" id="edit_address" placeholder="Please Enter Address"
+                            minlength="3" maxlength="100" required></textarea>
                         <span id="err_edit_address" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="switch s-primary mr-2">
+                            <input id="edit_verified" name="verified" type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="align-self-center">Verified</span>
                     </div>
             </div>
             <div class="modal-footer">

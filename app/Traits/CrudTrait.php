@@ -7,13 +7,12 @@ use Illuminate\Http\Request;
 trait CrudTrait
 {
     protected $model;
-    protected $table;
 
     public function destroyBatch(Request $request)
     {
         $this->validate($request, [
             'id'    => 'required|array|min:1',
-            'id.*'  => 'required|integer|exists:' . $this->table . ',id',
+            'id.*'  => 'required|integer|exists:' . $this->model . ',id',
         ]);
         $deleted = 0;
         foreach ($request->id as $id) {
