@@ -24,6 +24,15 @@ class VpnController extends Controller
             if ($request->filled('username')) {
                 $data->where('username', 'like', "%{$request->username}%");
             }
+            if ($request->filled('status')) {
+                $data->where('is_active', '=', $request->status);
+            }
+            if ($request->filled('trial')) {
+                $data->where('is_trial', '=', $request->trial);
+            }
+            if ($request->filled('dst') && is_numeric($request->dst) && $request->dst > 0) {
+                $data->whereRelation('port', 'dst', '=', $request->dst);
+            }
             if (isAdmin()) {
                 $data->with('user', 'server');
             } else {

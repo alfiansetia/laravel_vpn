@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             CompanySeeder::class,
+            SettingSeeder::class,
             UserSeeder::class,
             ServerSeeder::class,
             VpnSeeder::class,

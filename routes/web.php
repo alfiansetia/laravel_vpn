@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PortController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
@@ -41,17 +42,19 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::resource('user', UserController::class)->except(['create', 'edit']);
+    Route::resource('user', UserController::class)->except(['edit', 'create']);
     Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
 
     Route::resource('vpn', VpnController::class)->except(['edit']);
     Route::post('vpn/autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
 
-    Route::resource('server', ServerController::class)->except(['edit']);
+    Route::resource('server', ServerController::class)->except(['edit', 'create']);
     Route::delete('server/batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
     Route::get('server/{server}/ping', [ServerController::class, 'ping'])->name('server.ping');
 
-    Route::resource('port', UserController::class)->except(['edit', 'destroy']);
+    Route::resource('port', PortController::class)->except(['edit', 'create']);
+    Route::delete('port/batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
+
     Route::resource('bill', UserController::class)->except(['edit', 'destroy']);
     Route::resource('bank', UserController::class)->except(['edit', 'destroy']);
     Route::resource('router', UserController::class)->except(['edit', 'destroy']);

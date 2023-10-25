@@ -25,7 +25,33 @@
 @endpush
 
 @section('content')
-    <div class="row layout-top-spacing layout-spacing">
+    <div class="row layout-top-spacing layout-spacing pb-0">
+        <div class="col-md-4">
+            <select class="form-control" name="status" id="select_status">
+                <option value="">All</option>
+                <option value="yes">Active</option>
+                <option value="no">Nonactive</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" name="trial" id="select_trial">
+                <option value="">All</option>
+                <option value="yes">Trial</option>
+                <option value="no">Paid</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="search_port" id="search_port" min="0"
+                placeholder="DST Port">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-block btn-primary" id="btn_filter">
+                <i class="fas fa-filter mr-1"></i>Filter
+            </button>
+        </div>
+    </div>
+
+    <div class="row layout-top-spacing layout-spacing pt-0">
         <div class="col-lg-12">
             <div class="statbox widget box box-shadow">
                 <div class="widget-content widget-content-area">
@@ -256,12 +282,20 @@
                 $('#edit_reset').click()
             })
 
+            $('#btn_filter').click(function() {
+                table.ajax.url("{{ route('vpn.index') }}?status=" + $('#select_status').val() + '&dst=' +
+                    $('#search_port').val() + '&trial=' +
+                    $('#select_trial').val()).load();
+            })
+
+
             var table = $('#tableData').DataTable({
                 processing: true,
                 serverSide: true,
                 rowId: 'id',
                 ajax: {
-                    url: "{{ route('vpn.index') }}",
+                    url: "{{ route('vpn.index') }}?status=" + $('#select_status').val() + '&trial=' + $(
+                        '#select_trial').val() + '&dst=' + $('#search_port').val(),
                     error: function(jqXHR, textStatus, errorThrown) {
                         handleResponseCode(jqXHR, textStatus, errorThrown)
                     },
