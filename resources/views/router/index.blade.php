@@ -125,11 +125,10 @@
             })
 
             $('#btnOpen').on('click', function() {
-                block();
+                // block();
                 id = $(this).val();
-                var btn = $(this)
                 let url = "{{ route('mikapi.dashboard') }}?router=" + id;
-                window.location.href = url;
+                window.open(url, '_blank');
             });
 
             $("#vpn").select2({
@@ -182,32 +181,6 @@
                         };
                     },
                 }
-            });
-
-            $('#btnPing').on('click', function() {
-                id = $(this).val();
-                var s = $(this)
-                let url = "{{ route('router.ping', ':id') }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    beforeSend: function() {
-                        block();
-                    },
-                    success: function(res) {
-                        unblock();
-                        swal(
-                            'Success!',
-                            res.message,
-                            'success'
-                        )
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        handleResponse(xhr)
-                    }
-                });
             });
 
             var table = $('#tableData').DataTable({
@@ -483,7 +456,6 @@
                     success: function(result) {
                         unblock();
                         $('#edit_reset').val(result.data.id);
-                        $('#btnPing').val(result.data.id);
                         $('#btnOpen').val(result.data.id);
                         $('#edit_name').val(result.data.name);
                         $('#edit_hsname').val(result.data.hsname);

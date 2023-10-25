@@ -153,8 +153,6 @@
                         data-toggle="tooltip" title="Close"></i>Close</button>
                 <button type="button" class="btn btn-warning" id="edit_reset"><i class="fas fa-undo mr-1"
                         data-toggle="tooltip" title="Reset"></i>Reset</button>
-                <button type="button" class="btn btn-info" id="btnPing"><i class="fas fa-rocket mr-1"
-                        data-toggle="tooltip" title="Ping"></i>Ping</button>
                 <button type="button" class="btn btn-info" id="btnOpen"><i class="fas fa-rocket mr-1"
                         data-toggle="tooltip" title="Open"></i>Open</button>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
