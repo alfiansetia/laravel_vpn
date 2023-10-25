@@ -288,3 +288,10 @@ function handle_data_edit($response)
         return  ['status' => false, 'message' => 'Server Error', 'data' => $response];
     }
 }
+
+function generateUsername(string $string)
+{
+    $username = strtolower($string);
+    $username = preg_replace('/[^a-zA-Z0-9_]/', '', $username);
+    return $username;
+}

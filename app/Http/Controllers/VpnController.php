@@ -9,6 +9,7 @@ use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class VpnController extends Controller
@@ -40,34 +41,40 @@ class VpnController extends Controller
 
     public function create(Request $request)
     {
-        $user = Auth::user();
         $comp = $this->getCompany();
-        return view('vpn.create', compact(['user', 'comp']))->with('title', 'Order Vpn');
+        return view('vpn.create', compact(['comp']))->with('title', 'Order Vpn');
     }
 
     public function autoCreate(Request $request)
     {
-        $user = Auth::user();
-        $count = Vpn::where('user_id', '=', $user->id)->where('masa', '=', 0)->count();
-        $count2 = Vpn::with('server')->where('user_id', '=', $user->id)->whereRelation('server', 'paid', '=', 0)->count();
+        $user = $this->getUser();
+        $count_trial = Vpn::where('user_id', '=', $user->id)->where('is_trial', '=', 'yes')->count();
+        $count_free = Vpn::with('server')->where('user_id', '=', $user->id)->whereRelation('server', 'type', '=', 'free')->count();
         if (isAdmin()) {
-            $count = 0;
-            $count2 = 0;
+            $count_trial = 0;
+            $count_free = 0;
         }
-        if ($count > 0) {
-            $data = ['status' => false, 'message' => 'Trial Sudah Ada, Silahkan Selesaikan Pembayaran Dahulu Untuk membuat Trial Lagi!', 'data' => ''];
-        } elseif ($count2 > 0) {
-            $data = ['status' => false, 'message' => 'Free Akun Sudah Ada, Satu User hanya mendapat 1 Free Akun !', 'data' => ''];
+        if ($count_trial > 0) {
+            $data = ['message' => 'Trial Sudah Ada, Silahkan Selesaikan Pembayaran Dahulu Untuk membuat Trial Lagi!', 'data' => ''];
+        } elseif ($count_free > 0) {
+            $data = ['message' => 'Free Akun Sudah Ada, Satu User hanya mendapat 1 Free Akun !', 'data' => ''];
         } else {
             $this->validate($request, [
-                'server'    => 'required',
+                'vpn'       => '',
+                'server'    => [
+                    'required',
+                    'integer',
+                    Rule::exists('servers', 'id')->where(function ($query) {
+                        $query->where('is_active', 'yes');
+                    }),
+                ],
                 'username'  => 'required|string|max:50|min:4|unique:vpns,username,' . $request->username . ',id,server_id,' . $request->input('server'),
                 'password'  => 'required|string|max:50|min:4',
             ]);
             $reg = date('Y-m-d');
             $exp = date('Y-m-d', strtotime('+1 day', strtotime($reg)));
-            $server = Server::with('account')->find($request->input('server'));
-            if ($server->is_active == 1) {
+            $server = Server::find($request->input('server'));
+            if ($server->is_active == 'yes') {
                 $netw = $server->netwatch;
                 $last_ip = $server->last_ip;
                 $last_count = $server->count_ip;
@@ -138,15 +145,15 @@ class VpnController extends Controller
                         ]);
                     }
                     if ($vpn) {
-                        $data = ['status' => true, 'message' => 'Success Insert Data', 'data' => ''];
+                        $data = ['message' => 'Success Insert Data', 'data' => ''];
                     } else {
-                        $data = ['status' => false, 'message' => 'Failed Insert Data', 'data' => ''];
+                        $data = ['message' => 'Failed Insert Data', 'data' => ''];
                     }
                 } else {
                     $data = $createApi;
                 }
             } else {
-                $data = ['status' => false, 'message' => 'Server Nonactive', 'data' => ''];
+                $data = ['message' => 'Server Nonactive', 'data' => ''];
             }
         }
         return response()->json($data);
@@ -155,7 +162,7 @@ class VpnController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'email'        => 'required|integer|exists:users,id',
+            'email'     => 'required|integer|exists:users,id',
             'server'    => [
                 'required',
                 'integer',
@@ -233,9 +240,9 @@ class VpnController extends Controller
                 'is_active' => $request->input('is_active'),
             ]);
             if ($vpn) {
-                $data = ['status' => true, 'message' => 'Success Insert Data', 'data' => ''];
+                $data = ['message' => 'Success Insert Data', 'data' => ''];
             } else {
-                $data = ['status' => false, 'message' => 'Failed Insert Data', 'data' => ''];
+                $data = ['message' => 'Failed Insert Data', 'data' => ''];
             }
         } else {
             $data = $createApi;
@@ -334,9 +341,9 @@ class VpnController extends Controller
                 'is_active' => $request->input('is_active'),
             ]);
             if ($vpn) {
-                $data = ['status' => true, 'message' => 'Success Update Data', 'data' => ''];
+                $data = ['message' => 'Success Update Data', 'data' => ''];
             } else {
-                $data = ['status' => false, 'message' => 'Failed Update Data', 'data' => ''];
+                $data = ['message' => 'Failed Update Data', 'data' => ''];
             }
         } else {
             $data = $updateApi;
@@ -348,7 +355,7 @@ class VpnController extends Controller
     {
         if ($request->ajax()) {
             $data = Vpn::where('is_active', '=', 'yes')->where('expired', '<=', date('Y-m-d'))->get();
-            $api = ['status' => false, 'message' => 'No VPN Expired', 'data' => ''];
+            $api = ['message' => 'No VPN Expired', 'data' => ''];
             foreach ($data as $d) {
                 $vpn = Vpn::with('server')->findOrFail($d->id);
                 $ip = ($vpn->server->ip . ($vpn->server->port != 0 ? (':' . $vpn->server->port) : ''));
@@ -410,7 +417,7 @@ class VpnController extends Controller
                 }
             }
         }
-        $data = ['status' => true, 'message' => 'Success Delete : ' . $deleted . ' & Fail : ' . (count($request->id) - $deleted), 'data' => ''];
+        $data = ['message' => 'Success Delete : ' . $deleted . ' & Fail : ' . (count($request->id) - $deleted), 'data' => ''];
         return response()->json($data);
     }
 }
