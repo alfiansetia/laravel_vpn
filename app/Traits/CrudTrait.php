@@ -10,20 +10,24 @@ trait CrudTrait
 
     public function destroyBatch(Request $request)
     {
-        $this->validate($request, [
-            'id'    => 'required|array|min:1',
-            'id.*'  => 'required|integer|exists:' . $this->model . ',id',
-        ]);
-        $deleted = 0;
-        foreach ($request->id as $id) {
-            $model = $this->model::findOrFail($id);
-            $model->delete();
-            if ($model) {
-                $deleted++;
+        if ($request->ajax()) {
+            $this->validate($request, [
+                'id'    => 'required|array|min:1',
+                'id.*'  => 'required|integer|exists:' . $this->model . ',id',
+            ]);
+            $deleted = 0;
+            foreach ($request->id as $id) {
+                $model = $this->model::findOrFail($id);
+                $model->delete();
+                if ($model) {
+                    $deleted++;
+                }
             }
+            $data = ['message' => 'Success Delete : ' . $deleted . ' & Fail : ' . (count($request->id) - $deleted), 'data' => ''];
+            return response()->json($data);
+        } else {
+            abort(404);
         }
-        $data = ['message' => 'Success Delete : ' . $deleted . ' & Fail : ' . (count($request->id) - $deleted), 'data' => ''];
-        return response()->json($data);
     }
 
     public function destroy(Request $request, string $id)

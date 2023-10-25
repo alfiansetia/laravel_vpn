@@ -81,3 +81,31 @@ function handleResponseForm(jqXHR) {
     }
 
 }
+
+function handleResponseForm(jqXHR, form = 'add') {
+    let message = jqXHR.responseJSON.message
+
+    if (jqXHR.status != 422) {
+        swal({
+            title: 'Failed!',
+            text: message,
+            type: 'error',
+        })
+        // window.location.reload();
+    } else {
+        er = jqXHR.responseJSON.errors
+        erlen = Object.keys(er).length
+        for (i = 0; i < erlen; i++) {
+            obname = Object.keys(er)[i];
+            $('#' + obname).addClass('is-invalid');
+            if (form === 'add') {
+                $('#err_' + obname).text(er[obname][0]);
+                $('#err_' + obname).show();
+            } else if (form === 'edit') {
+                $('#err_edit_' + obname).text(er[obname][0]);
+                $('#err_edit_' + obname).show();
+            }
+        }
+    }
+
+}

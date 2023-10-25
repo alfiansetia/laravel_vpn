@@ -8,7 +8,6 @@ use App\Models\Port;
 use App\Models\Router;
 use App\Services\RouterApiServices;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 
 class RouterController extends Controller
 {
@@ -97,20 +96,23 @@ class RouterController extends Controller
             ],
             'name'      => 'required|min:3|max:20',
             'username'  => 'required|min:3',
-            'password'  => 'required|min:3',
+            'password'  => 'nullable|min:3',
             'hsname'    => 'required|min:3|max:30',
             'dnsname'   => 'required|min:3|max:30',
             'desc'      => 'nullable|max:30',
         ]);
-        $router->update([
+        $param = [
             'port_id'       => $request->vpn_port,
             'name'          => $request->name,
             'hsname'        => $request->hsname,
             'dnsname'       => $request->dnsname,
             'username'      => $request->username,
-            'password'      => encrypt($request->password),
             'desc'          => $request->desc,
-        ]);
+        ];
+        if ($request->filled('password')) {
+            $param['password'] = encrypt($request->password);
+        }
+        $router->update($param);
         return response()->json(['message' => "Router Update!", 'data' => new RouterResource($router)]);
     }
 

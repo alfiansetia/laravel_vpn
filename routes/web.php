@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Mikapi\DashboardController;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\RouterController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
@@ -52,12 +54,17 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::delete('server/batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
     Route::get('server/{server}/ping', [ServerController::class, 'ping'])->name('server.ping');
 
+    Route::get('port/getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
     Route::resource('port', PortController::class)->except(['edit', 'create']);
     Route::delete('port/batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
 
     Route::resource('bill', UserController::class)->except(['edit', 'destroy']);
     Route::resource('bank', UserController::class)->except(['edit', 'destroy']);
-    Route::resource('router', UserController::class)->except(['edit', 'destroy']);
+
+    Route::resource('router', RouterController::class)->except(['edit', 'create']);
+    Route::delete('router/batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
+    Route::get('router/open', [RouterController::class, 'open'])->name('router.open');
+    Route::get('router/ping', [RouterController::class, 'ping'])->name('router.ping');
 
     Route::get('setting/profile', [SettingController::class, 'profile'])->name('setting.profile');
     Route::post('setting/profile', [SettingController::class, 'profileUpdate'])->name('setting.profile.update');
@@ -73,4 +80,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::put('setting/telegram', [SettingController::class, 'telegramSet'])->name('setting.telegram.set');
 
     Route::get('setting/backup', [SettingController::class, 'backup'])->name('setting.backup');
+
+    Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
 });

@@ -129,6 +129,10 @@
                 ],
                 pageLength: 10,
                 lengthChange: false,
+                columnDefs: [{
+                    defaultContent: '',
+                    targets: "_all"
+                }],
                 columns: [{
                     title: 'Id',
                     data: 'id',
@@ -347,7 +351,7 @@
                         },
                         error: function(xhr, status, error) {
                             unblock();
-                            handleResponseForm(xhr)
+                            handleResponseForm(xhr, 'edit')
                         }
                     });
                 }

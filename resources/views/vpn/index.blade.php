@@ -560,7 +560,7 @@
                         },
                         error: function(xhr, status, error) {
                             unblock();
-                            handleResponseForm(xhr)
+                            handleResponseForm(xhr, 'edit')
                         }
                     });
                 }

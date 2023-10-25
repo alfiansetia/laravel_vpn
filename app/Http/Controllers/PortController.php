@@ -35,7 +35,11 @@ class PortController extends Controller
     public function getByUser(Request $request)
     {
         if ($request->ajax()) {
-            $data = Port::with('vpn:id,ip,is_active,username,server_id', 'vpn.server:id,domain,ip,location,name,netwatch,type,price,is_active,api')->whereRelation('vpn', 'user_id', '=', auth()->user()->id)->get();
+            $data = Port::with('vpn:id,ip,is_active,username,server_id', 'vpn.server:id,domain,ip,location,name,netwatch,type,price,is_active,api')
+                ->whereRelation('vpn', 'is_active', '=', 'yes')
+                // ->whereRelation('vpn.server', 'is_active', '=', 'yes')
+                ->whereRelation('vpn', 'user_id', '=', auth()->user()->id)
+                ->get();
             return DataTables::of($data)->toJson();
         } else {
             abort(404);
