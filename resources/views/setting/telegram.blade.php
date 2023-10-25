@@ -29,7 +29,7 @@
                             <input type="text" name="telegram_token"
                                 class="form-control maxlength @error('telegram_token') is-invalid @enderror"
                                 id="telegram_token" placeholder="Please Enter Telegram Token"
-                                value="{{ $setting->telegram_token }}" minlength="3" maxlength="100" required autofocus>
+                                value="{{ $setting->telegram_token }}" minlength="3" maxlength="250" required autofocus>
                             @error('telegram_token')
                                 <div class="alert alert-danger mb-3 mt-2" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

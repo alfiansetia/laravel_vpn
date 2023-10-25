@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('ip');
             $table->string('username');
             $table->string('password');
-            $table->date('regist');
-            $table->integer('masa');
+            // $table->date('regist');
+            // $table->integer('masa');
             $table->date('expired');
             $table->enum('is_active', ['yes', 'no'])->default('yes');
+            $table->enum('is_trial', ['yes', 'no'])->default('yes');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('server_id')->references('id')->on('servers')->cascadeOnDelete()->cascadeOnUpdate();

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use App\Models\User;
+use App\Traits\CompanyTrait;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,14 +11,12 @@ use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-    use CrudTrait;
+    use CrudTrait, CompanyTrait;
 
-    private $comp;
 
     public function __construct()
     {
         $this->middleware('roleAdmin');
-        $this->comp = Company::first();
         $this->model = User::class;
     }
 
@@ -32,7 +30,7 @@ class UserController extends Controller
             $result = $data->get();
             return DataTables::of($result)->toJson();
         }
-        $comp = $this->comp;
+        $comp = $this->getCompany();
         return view('user.index', compact(['comp']))->with('title', 'Data User');
     }
 

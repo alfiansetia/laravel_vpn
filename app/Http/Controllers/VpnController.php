@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use App\Models\Port;
 use App\Models\Server;
 use App\Models\Vpn;
+use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,30 +13,22 @@ use Yajra\DataTables\Facades\DataTables;
 
 class VpnController extends Controller
 {
-    private $comp;
-
-    public function __construct()
-    {
-        $this->comp = Company::first();
-    }
+    use CompanyTrait;
 
     public function index(Request $request)
     {
-        $comp = $this->comp;
+        $comp = $this->getCompany();
         if ($request->ajax()) {
-            if (isAdmin()) {
-                if ($request->username) {
-                    $data = Vpn::where('username', 'like', "%{$request->username}%")->get();
-                } else {
-                    $data = Vpn::with('user', 'server')->get();
-                }
-            } else {
-                if ($request->username) {
-                    $data = Vpn::where('user_id', '=', auth()->user()->id)->where('username', 'like', "%{$request->username}%")->get();
-                } else {
-                    $data = Vpn::where('user_id', '=', auth()->user()->id)->with('server:id,name,ip,domain,netwatch,location,price,is_active')->get();
-                }
+            $data = Vpn::query();
+            if ($request->filled('username')) {
+                $data->where('username', 'like', "%{$request->username}%");
             }
+            if (isAdmin()) {
+                $data->with('user', 'server');
+            } else {
+                $data->where('user_id', '=', auth()->id())->with('server:id,name,ip,domain,netwatch,location,price,is_active,is_trial');
+            }
+            $result = $data->get();
             return DataTables::of($data)->toJson();
         }
         if (isAdmin()) {
@@ -49,7 +41,7 @@ class VpnController extends Controller
     public function create(Request $request)
     {
         $user = Auth::user();
-        $comp = $this->comp;
+        $comp = $this->getCompany();
         return view('vpn.create', compact(['user', 'comp']))->with('title', 'Order Vpn');
     }
 

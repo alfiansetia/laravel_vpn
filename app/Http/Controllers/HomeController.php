@@ -30,8 +30,8 @@ class HomeController extends Controller
         $user = Auth::user();
         if (isAdmin()) {
             $data_vpn = [
-                'active'    => Vpn::where('masa', '>', 0)->where('is_active', 1)->count(),
-                'trial'     => Vpn::where('masa', '=', 0)->where('is_active', 1)->count(),
+                'active'    => Vpn::where('is_trial', '=', 'no')->where('is_active', 1)->count(),
+                'trial'     => Vpn::where('is_trial', '=', 'yes')->where('is_active', 1)->count(),
                 'nonactive' => Vpn::where('is_active', '=', 0)->count()
             ];
             // $dataVpn = Vpn::whereIn()

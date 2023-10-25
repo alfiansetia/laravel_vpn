@@ -17,13 +17,12 @@ class VpnFactory extends Factory
     public function definition(): array
     {
         return [
-            'ip' => fake()->ipv4(),
+            'ip'        => fake()->ipv4(),
             'username'  => fake()->userName(),
             'password'  => fake()->password(),
-            'regist'    => fake()->date(),
-            'masa'      => fake()->numberBetween(1, 12),
             'expired'   => fake()->date(),
             'is_active' => fake()->randomElement(['yes', 'no']),
+            'is_trial'  => fake()->randomElement(['yes', 'no']),
         ];
     }
 }

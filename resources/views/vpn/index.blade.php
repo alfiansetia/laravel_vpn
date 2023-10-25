@@ -39,7 +39,6 @@
                                     <th>Password</th>
                                     <th>Server</th>
                                     <th>IP</th>
-                                    <th>Regist</th>
                                     <th>Expired</th>
                                 </tr>
                             </thead>
@@ -286,6 +285,10 @@
                 ],
                 pageLength: 10,
                 lengthChange: false,
+                columnDefs: [{
+                    defaultContent: '',
+                    targets: "_all"
+                }],
                 columns: [{
                     title: 'Id',
                     data: 'id',
@@ -303,17 +306,17 @@
                     title: "Username",
                     data: 'username',
                     render: function(data, type, row, meta) {
-                        if (row.is_active == 'yes' && row.masa == 0) {
+                        if (row.is_active === 'yes' && row.is_trial === 'yes') {
                             text =
                                 `<i class="fas fa-circle text-warning" data-toggle="tooltip" title="Active Trial"></i> ${data}`;
-                        } else if (row.is_active == 'yes' && row.masa > 0) {
+                        } else if (row.is_active === 'yes' && row.is_trial === 'no') {
                             text =
                                 `<i class="fas fa-circle text-success" data-toggle="tooltip" title="Active"></i> ${data}`;
                         } else {
                             text =
                                 `<i class="fas fa-circle text-danger" data-toggle="tooltip" title="Nonactive"></i> ${data}`;
                         }
-                        if (type == 'display') {
+                        if (type === 'display') {
                             return text
                         } else {
                             return data
@@ -329,10 +332,6 @@
                 }, {
                     title: "IP",
                     data: 'ip',
-                }, {
-                    title: "Regist",
-                    data: 'regist',
-                    visible: false,
                 }, {
                     title: "Expired",
                     data: 'expired',
@@ -623,7 +622,7 @@
                         $('#detail_server_ip').html(result.data.server.ip);
                         $('#detail_server_domain').html(result.data.server.domain);
                         $('#detail_server_netwatch').html(result.data.server.netwatch);
-                        if (result.data.server.paid == 1) {
+                        if (result.data.server.type === 'paid') {
                             $('#detail_server_type').html(
                                 `<span class="badge badge-success">Paid</span>`);
                         } else {
@@ -641,9 +640,9 @@
                         $('#detail_acc_expired').html(expired);
 
                         let status = $('#account_status');
-                        if (result.data.is_active == 'yes' && result.data.masa > 0) {
+                        if (result.data.is_active == 'yes' && result.data.is_trial === 'no') {
                             status.html('<span class="badge badge-success">Active</span>')
-                        } else if (result.data.is_active == 'yes' && result.data.masa == 0) {
+                        } else if (result.data.is_active == 'yes' && result.data.is_trial === 'yes') {
                             status.html('<span class="badge badge-warning">Trial</span>')
                         } else {
                             status.html('<span class="badge badge-danger">Nonactive</span>')

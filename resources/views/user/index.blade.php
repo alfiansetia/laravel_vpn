@@ -132,18 +132,15 @@
                 pageLength: 10,
                 lengthChange: false,
                 columnDefs: [{
-                    targets: 0,
-                    width: "30px",
-                    className: "dt-no-sorting",
-                    orderable: !1,
-                }, {
-                    targets: 5,
-                    className: "text-center",
+                    defaultContent: '',
+                    targets: "_all"
                 }],
                 columns: [{
+                    width: "30px",
                     title: 'Id',
                     data: 'id',
-                    data: 'id',
+                    className: "dt-no-sorting",
+                    orderable: !1,
                     render: function(data, type, row, meta) {
                         return `<label class="new-control new-checkbox checkbox-outline-primary  m-auto">\n<input type="checkbox" name="id[]" value="${data}" class="new-control-input child-chk select-customers-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>`
                     }
@@ -176,6 +173,7 @@
                 }, {
                     title: 'Role',
                     data: 'role',
+                    className: "text-center",
                     render: function(data, type, row, meta) {
                         if (type == 'display') {
                             return `<span class="badge badge-${data == 'Admin' ? 'success' : 'danger'}">${data}</span>`
