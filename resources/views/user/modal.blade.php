@@ -29,6 +29,7 @@
                         <label class="control-label" for="gender"><i class="fas fa-venus-mars mr-1"
                                 data-toggle="tooltip" title="Gender User"></i>Gender :</label>
                         <select name="gender" id="gender" class="form-control" style="width: 100%;" required>
+                            <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
@@ -52,6 +53,7 @@
                         <label class="control-label" for="role"><i class="fas fa-user-tag mr-1"
                                 data-toggle="tooltip" title="Role User"></i>Role :</label>
                         <select name="role" id="role" class="form-control" style="width: 100%;" required>
+                            <option value="">Select Role</option>
                             <option value="Admin">Admin</option>
                             <option value="User">User</option>
                         </select>
@@ -106,7 +108,6 @@
                     <div class="form-group">
                         <label class="control-label" for="edit_name"><i class="far fa-user mr-1"
                                 data-toggle="tooltip" title="Full Name User"></i>Name :</label>
-                        <input type="hidden" name="id" id="edit_id">
                         <input type="text" name="name" class="form-control maxlength" id="edit_name"
                             placeholder="Please Enter Name" minlength="3" maxlength="25" required>
                         <span id="err_edit_name" class="error invalid-feedback" style="display: hide;"></span>
@@ -122,6 +123,7 @@
                         <label class="control-label" for="edit_gender"><i class="fas fa-venus-mars mr-1"
                                 data-toggle="tooltip" title="Gender User"></i>Gender :</label>
                         <select name="gender" id="edit_gender" class="form-control" style="width: 100%;" required>
+                            <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
@@ -168,14 +170,18 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
-                        data-toggle="tooltip" title="Close"></i>Close</button>
-                <button type="button" id="edit_reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
-                        data-toggle="tooltip" title="Reset"></i>Reset</button>
-                <button type="button" id="edit_delete" class="btn btn-danger"><i class="fas fa-trash mr-1"
-                        data-toggle="tooltip" title="Delete"></i>Delete</button>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
-                        data-toggle="tooltip" title="Save"></i>Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times mr-1" data-toggle="tooltip" title="Close"></i>Close
+                </button>
+                <button type="button" id="edit_reset" class="btn btn-warning">
+                    <i class="fas fa-undo mr-1" data-toggle="tooltip" title="Reset"></i>Reset
+                </button>
+                <button type="button" id="edit_delete" class="btn btn-danger">
+                    <i class="fas fa-trash mr-1" data-toggle="tooltip" title="Delete"></i>Delete
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane mr-1" data-toggle="tooltip" title="Save"></i>Save
+                </button>
             </div>
             </form>
         </div>

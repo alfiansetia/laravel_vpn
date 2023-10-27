@@ -44,27 +44,28 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::resource('user', UserController::class)->except(['edit', 'create']);
     Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
+    Route::resource('user', UserController::class)->except(['edit', 'create']);
 
-    Route::resource('vpn', VpnController::class)->except(['edit']);
+    Route::delete('vpn/batch', [VpnController::class, 'destroyBatch'])->name('vpn.destroy.batch');
     Route::post('vpn/autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
+    Route::resource('vpn', VpnController::class)->except(['edit']);
 
-    Route::resource('server', ServerController::class)->except(['edit', 'create']);
     Route::delete('server/batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
     Route::get('server/{server}/ping', [ServerController::class, 'ping'])->name('server.ping');
+    Route::resource('server', ServerController::class)->except(['edit', 'create']);
 
     Route::get('port/getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
-    Route::resource('port', PortController::class)->except(['edit', 'create']);
     Route::delete('port/batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
+    Route::resource('port', PortController::class)->except(['edit', 'create']);
 
     Route::resource('bill', UserController::class)->except(['edit', 'destroy']);
     Route::resource('bank', UserController::class)->except(['edit', 'destroy']);
 
-    Route::resource('router', RouterController::class)->except(['edit', 'create']);
     Route::delete('router/batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
     Route::get('router/open', [RouterController::class, 'open'])->name('router.open');
     Route::get('router/ping', [RouterController::class, 'ping'])->name('router.ping');
+    Route::resource('router', RouterController::class)->except(['edit', 'create']);
 
     Route::get('setting/profile', [SettingController::class, 'profile'])->name('setting.profile');
     Route::post('setting/profile', [SettingController::class, 'profileUpdate'])->name('setting.profile.update');

@@ -41,37 +41,36 @@ class ServerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|unique:servers,name',
-            'ip'        => 'required|ip',
-            'domain'    => 'required|min:3|max:20|url',
-            'netwatch'  => 'required|ip',
-            'location'  => 'required|min:3|max:20',
-            'sufiks'    => 'required|min:3|max:20',
-            'last_ip'   => 'required|integer',
-            'price'     => 'required|integer',
-            'count_ip'  => 'required|integer',
-            'last_port' => 'required|integer',
-            'is_active' => 'required|in:yes,no',
-            'type'      => 'required|in:paid,free',
-            'time'      => 'required_if:type,free|integer',
-            'api'       => 'required|in:active,nonactive',
+            'name'          => 'required|unique:servers,name',
+            'username'      => 'required|min:4|max:100',
+            'password'      => 'required|min:5|max:100',
+            'ip'            => 'required|ip',
+            'domain'        => 'required',
+            'netwatch'      => 'required|ip',
+            'location'      => 'required|min:3|max:20',
+            'sufiks'        => 'nullable|max:20',
+            'last_ip'       => 'required|integer|gte:0',
+            'price'         => 'required|integer|gte:0',
+            'count_ip'      => 'required|integer|gte:0',
+            'last_port'     => 'required|integer|gte:0',
+            'port'          => 'required|integer|gte:0',
+            'is_active'     => 'required|in:yes,no',
         ]);
         $server = Server::create([
             'name'       => $request->name,
+            'username'   => $request->username,
+            'password'   => encrypt($request->password),
             'ip'         => $request->ip,
             'domain'     => $request->domain,
             'netwatch'   => $request->netwatch,
             'location'   => $request->location,
             'sufiks'     => $request->sufiks,
-            'port'       => $request->port ?? 0,
+            'port'       => $request->port,
             'last_ip'    => $request->last_ip,
             'price'      => $request->price,
             'count_ip'   => $request->count_ip,
             'last_port'  => $request->last_port,
             'is_active'  => $request->is_active,
-            'type'       => $request->type,
-            'time_free'  => $request->time,
-            'api'        => $request->api,
         ]);
         if ($server) {
             return response()->json(['message' => 'Success Insert Data', 'data' => '']);
@@ -84,39 +83,40 @@ class ServerController extends Controller
     {
         $this->validate($request, [
             'name'          => 'required|unique:servers,name,' . $server->id,
-            'ip'            => 'required',
+            'username'      => 'required|min:4|max:100',
+            'password'      => 'nullable|min:5|max:100',
+            'ip'            => 'required|ip',
             'domain'        => 'required',
-            'netwatch'      => 'required',
+            'netwatch'      => 'required|ip',
             'location'      => 'required|min:3|max:20',
-            'sufiks'        => 'required|min:3|max:20',
-            'last_ip'       => 'required',
-            'price'         => 'required',
-            'count_ip'      => 'required',
-            'last_port'     => 'required',
-            'account'       => 'required',
-            'is_active'     => 'required',
-            'type'          => 'required',
-            'time'          => 'required',
-            'api'           => 'required',
+            'sufiks'        => 'nullable|max:20',
+            'last_ip'       => 'required|integer|gte:0',
+            'price'         => 'required|integer|gte:0',
+            'count_ip'      => 'required|integer|gte:0',
+            'last_port'     => 'required|integer|gte:0',
+            'port'          => 'required|integer|gte:0',
+            'is_active'     => 'required|in:yes,no',
         ]);
 
-        $server->update([
+        $param = [
             'name'       => $request->name,
+            'username'   => $request->username,
             'ip'         => $request->ip,
             'domain'     => $request->domain,
             'netwatch'   => $request->netwatch,
             'location'   => $request->location,
             'sufiks'     => $request->sufiks,
-            'port'       => $request->port == NULL ? 0 : $request->port,
+            'port'       => $request->port,
             'last_ip'    => $request->last_ip,
             'price'      => $request->price,
             'count_ip'   => $request->count_ip,
             'last_port'  => $request->last_port,
             'is_active'  => $request->is_active,
-            'type'       => $request->type,
-            'time_free'  => $request->time,
-            'api'        => $request->api,
-        ]);
+        ];
+        if ($request->filled('password')) {
+            $param['password'] = encrypt($request->password);
+        }
+        $server->update($param);
         return response()->json(['message' => 'Success Update Data', 'data' => '']);
     }
 

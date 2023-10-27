@@ -87,7 +87,6 @@
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-
     <script src="{{ asset('plugins/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-maxlength/custom-bs-maxlength.js') }}"></script>
 
@@ -96,6 +95,7 @@
 
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/custom-select2.js') }}"></script>
+
     <!-- InputMask -->
     <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
 
@@ -157,631 +157,451 @@
             return text;
         }
 
-        $(document).ready(function() {
+        // $(document).ready(function() {
 
-            $('[data-mask]').inputmask();
+        $('[data-mask]').inputmask();
 
-            $('.maxlength').maxlength({
-                placement: "top",
-                alwaysShow: true
-            });
+        $('.maxlength').maxlength({
+            placement: "top",
+            alwaysShow: true
+        });
 
-            $("#email").select2({
-                dropdownParent: $("#modalAdd"),
-                ajax: {
-                    delay: 1000,
-                    url: "{{ route('user.index') }}",
-                    data: function(params) {
-                        return {
-                            email: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.data, function(item) {
-                                return {
-                                    text: item.email,
-                                    id: item.id,
-                                    disabled: item.email_verified_at == null ? true : false,
-                                }
-                            })
-                        };
-                    },
-                }
-            });
-
-            $("#server").select2({
-                dropdownParent: $("#modalAdd"),
-                ajax: {
-                    delay: 1000,
-                    url: "{{ route('server.index') }}",
-                    data: function(params) {
-                        return {
-                            name: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.data, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                    disabled: item.is_active == 'no' ? true : false,
-                                }
-                            })
-                        };
-                    },
-                }
-            });
-
-            $("#masa, #is_active, #sync").select2({
-                dropdownParent: $("#modalAdd"),
-            });
-
-            $("#edit_email").select2({
-                dropdownParent: $("#modalEdit"),
-                ajax: {
-                    delay: 1000,
-                    url: "{{ route('user.index') }}",
-                    data: function(params) {
-                        return {
-                            email: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.data, function(item) {
-                                return {
-                                    text: item.email,
-                                    id: item.id,
-                                    disabled: item.email_verified_at == null ? true : false,
-                                }
-                            })
-                        };
-                    },
-                }
-            });
-
-            $("#edit_server").select2({
-                dropdownParent: $("#modalEdit"),
-                ajax: {
-                    delay: 1000,
-                    url: "{{ route('server.index') }}",
-                    data: function(params) {
-                        return {
-                            name: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.data, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                    disabled: item.is_active == 'no' ? true : false,
-                                }
-                            })
-                        };
-                    },
-                }
-            });
-
-            $("#edit_masa, #edit_is_active, #edit_sync").select2({
-                dropdownParent: $("#modalEdit"),
-            });
-
-            // $("#select_script").select2({
-            //     dropdownParent: $("#modalEdit"),
-            // });
-
-            $('#border-home-tab').click(function() {
-                $('#edit_reset').click()
-            })
-
-            $('#btn_filter').click(function() {
-                table.ajax.url("{{ route('vpn.index') }}?status=" + $('#select_status').val() + '&dst=' +
-                    $('#search_port').val() + '&trial=' +
-                    $('#select_trial').val()).load();
-            })
-
-
-            var table = $('#tableData').DataTable({
-                processing: true,
-                serverSide: true,
-                rowId: 'id',
-                ajax: {
-                    url: "{{ route('vpn.index') }}?status=" + $('#select_status').val() + '&trial=' + $(
-                        '#select_trial').val() + '&dst=' + $('#search_port').val(),
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        handleResponseCode(jqXHR, textStatus, errorThrown)
-                    },
+        $("#email").select2({
+            dropdownParent: $("#modalAdd"),
+            ajax: {
+                delay: 1000,
+                url: "{{ route('user.index') }}",
+                data: function(params) {
+                    return {
+                        email: params.term,
+                        page: params.page
+                    };
                 },
-                dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-                    "<'table-responsive'tr>" +
-                    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-                oLanguage: {
-                    "oPaginate": {
-                        "sPrevious": '<i data-feather="arrow-left"></i>',
-                        "sNext": '<i data-feather="arrow-right"></i>'
-                    },
-                    // "sInfo": "Showing page _PAGE_ of _PAGES_",
-                    "sSearch": '<i data-feather="search"></i>',
-                    "sSearchPlaceholder": "Search...",
-                    "sLengthMenu": "Results :  _MENU_",
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.email,
+                                id: item.id,
+                                disabled: item.email_verified_at == null ? true : false,
+                            }
+                        })
+                    };
                 },
-                lengthMenu: [
-                    [10, 50, 100, 500, 1000],
-                    ['10 rows', '50 rows', '100 rows', '500 rows', '1000 rows']
-                ],
-                pageLength: 10,
-                lengthChange: false,
-                columnDefs: [{
-                    defaultContent: '',
-                    targets: "_all"
-                }],
-                columns: [{
-                    title: 'Id',
-                    data: 'id',
-                    width: "30px",
-                    className: "",
-                    orderable: false,
-                    render: function(e, a, t, n) {
-                        return `<label class="new-control new-checkbox checkbox-outline-primary  m-auto">\n<input type="checkbox" name="id[]" value="${e}" class="new-control-input child-chk select-customers-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>`
-                    }
-                }, {
-                    title: "Email",
-                    data: 'user.email',
-                    visible: false,
-                }, {
-                    title: "Username",
-                    data: 'username',
-                    render: function(data, type, row, meta) {
-                        if (row.is_active === 'yes' && row.is_trial === 'yes') {
-                            text =
-                                `<i class="fas fa-circle text-warning" data-toggle="tooltip" title="Active Trial"></i> ${data}`;
-                        } else if (row.is_active === 'yes' && row.is_trial === 'no') {
-                            text =
-                                `<i class="fas fa-circle text-success" data-toggle="tooltip" title="Active"></i> ${data}`;
-                        } else {
-                            text =
-                                `<i class="fas fa-circle text-danger" data-toggle="tooltip" title="Nonactive"></i> ${data}`;
-                        }
-                        if (type === 'display') {
-                            return text
-                        } else {
-                            return data
-                        }
-                    }
-                }, {
-                    title: "password",
-                    data: 'password',
-                    visible: false,
-                }, {
-                    title: "Server",
-                    data: 'server.name',
-                }, {
-                    title: "IP",
-                    data: 'ip',
-                }, {
-                    title: "Expired",
-                    data: 'expired',
-                }, ],
-                buttons: [{
-                    text: '<i class="fas fa-plus-circle"></i>Add',
-                    className: 'btn btn-sm btn-primary bs-tooltip',
-                    attr: {
-                        'data-toggle': 'tooltip',
-                        'title': 'Add Data'
-                    },
-                    action: function(e, dt, node, config) {
-                        $('#modalAdd').modal('show');
-                        $('#username').focus();
-                    }
-                }, {
-                    text: '<i class="fas fa-trash"></i>Del',
-                    className: 'btn btn-sm btn-danger',
-                    attr: {
-                        'data-toggle': 'tooltip',
-                        'title': 'Delete Selected Data',
-                        'id': 'btndel'
-                    },
-                    action: function(e, dt, node, config) {
-                        deleteData()
-                    }
-                }, {
-                    extend: "colvis",
-                    attr: {
-                        'data-toggle': 'tooltip',
-                        'title': 'Column Visible'
-                    },
-                    className: 'btn btn-sm btn-primary'
-                }, {
-                    extend: "pageLength",
-                    attr: {
-                        'data-toggle': 'tooltip',
-                        'title': 'Page Length'
-                    },
-                    className: 'btn btn-sm btn-info'
-                }],
-                headerCallback: function(e, a, t, n, s) {
-                    e.getElementsByTagName("th")[0].innerHTML =
-                        '<label class="new-control new-checkbox checkbox-outline-primary m-auto">\n<input type="checkbox" class="new-control-input chk-parent select-customers-info" id="customer-all-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>'
+            }
+        });
+
+        $("#server").select2({
+            dropdownParent: $("#modalAdd"),
+            ajax: {
+                delay: 1000,
+                url: "{{ route('server.index') }}",
+                data: function(params) {
+                    return {
+                        name: params.term,
+                        page: params.page
+                    };
                 },
-                drawCallback: function(settings) {
-                    feather.replace();
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id,
+                                disabled: item.is_active == 'no' ? true : false,
+                            }
+                        })
+                    };
                 },
-                initComplete: function() {
-                    $('#tableData').DataTable().buttons().container().appendTo(
-                        '#tableData_wrapper .col-md-6:eq(0)');
-                    feather.replace();
+            }
+        });
+
+        $("#masa, #is_active, #sync").select2({
+            dropdownParent: $("#modalAdd"),
+        });
+
+        $("#edit_email").select2({
+            dropdownParent: $("#modalEdit"),
+            ajax: {
+                delay: 1000,
+                url: "{{ route('user.index') }}",
+                data: function(params) {
+                    return {
+                        email: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.email,
+                                id: item.id,
+                                disabled: item.email_verified_at == null ? true : false,
+                            }
+                        })
+                    };
+                },
+            }
+        });
+
+        $("#edit_server").select2({
+            dropdownParent: $("#modalEdit"),
+            ajax: {
+                delay: 1000,
+                url: "{{ route('server.index') }}",
+                data: function(params) {
+                    return {
+                        name: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id,
+                                disabled: item.is_active == 'no' ? true : false,
+                            }
+                        })
+                    };
+                },
+            }
+        });
+
+        $("#edit_masa, #edit_is_active, #edit_sync").select2({
+            dropdownParent: $("#modalEdit"),
+        });
+
+        // $("#select_script").select2({
+        //     dropdownParent: $("#modalEdit"),
+        // });
+
+        $('#border-home-tab').click(function() {
+            $('#edit_reset').click()
+        })
+
+        $('#btn_filter').click(function() {
+            table.ajax.reload()
+        })
+
+        var table = $('#tableData').DataTable({
+            processing: true,
+            serverSide: true,
+            rowId: 'id',
+            ajax: {
+                url: "{{ route('vpn.index') }}",
+                data: function(d) {
+                    d.status = $('#select_status').val();
+                    d.trial = $('#select_trial').val();
+                    d.dst = $('#search_port').val();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    handleResponseCode(jqXHR, textStatus, errorThrown)
+                },
+            },
+            dom: dom,
+            oLanguage: o_lang,
+            lengthMenu: length_menu,
+            pageLength: 10,
+            lengthChange: false,
+            columnDefs: [{
+                defaultContent: '',
+                targets: "_all"
+            }],
+            columns: [{
+                title: 'Id',
+                data: 'id',
+                width: "30px",
+                className: "",
+                orderable: false,
+                render: function(e, a, t, n) {
+                    return `<label class="new-control new-checkbox checkbox-outline-primary  m-auto">\n<input type="checkbox" name="id[]" value="${e}" class="new-control-input child-chk select-customers-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>`
                 }
-            });
-            multiCheck(table);
+            }, {
+                title: "Email",
+                data: 'user.email',
+                visible: false,
+            }, {
+                title: "Username",
+                data: 'username',
+                render: function(data, type, row, meta) {
+                    if (row.is_active === 'yes' && row.is_trial === 'yes') {
+                        text =
+                            `<i class="fas fa-circle text-warning" data-toggle="tooltip" title="Active Trial"></i> ${data}`;
+                    } else if (row.is_active === 'yes' && row.is_trial === 'no') {
+                        text =
+                            `<i class="fas fa-circle text-success" data-toggle="tooltip" title="Active"></i> ${data}`;
+                    } else {
+                        text =
+                            `<i class="fas fa-circle text-danger" data-toggle="tooltip" title="Nonactive"></i> ${data}`;
+                    }
+                    if (type === 'display') {
+                        return text
+                    } else {
+                        return data
+                    }
+                }
+            }, {
+                title: "password",
+                data: 'password',
+                visible: false,
+            }, {
+                title: "Server",
+                data: 'server.name',
+            }, {
+                title: "IP",
+                data: 'ip',
+            }, {
+                title: "Expired",
+                data: 'expired',
+            }, ],
+            buttons: [{
+                text: '<i class="fas fa-plus-circle"></i>Add',
+                className: 'btn btn-sm btn-primary bs-tooltip',
+                attr: {
+                    'data-toggle': 'tooltip',
+                    'title': 'Add Data'
+                },
+                action: function(e, dt, node, config) {
+                    $('#modalAdd').modal('show');
+                }
+            }, {
+                text: '<i class="fas fa-trash"></i>Del',
+                className: 'btn btn-sm btn-danger',
+                attr: {
+                    'data-toggle': 'tooltip',
+                    'title': 'Delete Selected Data',
+                    'id': 'btndel'
+                },
+                action: function(e, dt, node, config) {
+                    delete_batch("{{ route('vpn.destroy.batch') }}")
+                }
+            }, {
+                extend: "colvis",
+                attr: {
+                    'data-toggle': 'tooltip',
+                    'title': 'Column Visible'
+                },
+                className: 'btn btn-sm btn-primary'
+            }, {
+                extend: "pageLength",
+                attr: {
+                    'data-toggle': 'tooltip',
+                    'title': 'Page Length'
+                },
+                className: 'btn btn-sm btn-info'
+            }],
+            headerCallback: function(e, a, t, n, s) {
+                e.getElementsByTagName("th")[0].innerHTML =
+                    '<label class="new-control new-checkbox checkbox-outline-primary m-auto">\n<input type="checkbox" class="new-control-input chk-parent select-customers-info" id="customer-all-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>'
+            },
+            drawCallback: function(settings) {
+                feather.replace();
+            },
+            initComplete: function() {
+                $('#tableData').DataTable().buttons().container().appendTo(
+                    '#tableData_wrapper .col-md-6:eq(0)');
+                feather.replace();
+            }
+        });
 
-            var id;
+        multiCheck(table);
 
-            $('#share').click(function() {
-                id = $(this).val();
-                $.ajax({
-                    url: "{{ route('vpn.show', '') }}/" + id,
-                    method: 'GET',
-                    success: function(result) {
-                        unblock();
-                        let text = share(result.data);
-                        if (navigator.share) {
-                            navigator.share({
-                                title: result.data.username,
-                                text: text,
-                            }).then(() => {
-                                swal(
-                                    'Success!',
-                                    'Thanks For Sharing!',
-                                    'success'
-                                )
-                            }).catch(err => {
-                                swal(
-                                    'Failed!',
-                                    "Error while using Web share API:",
-                                    'error'
-                                )
-                                console.log("Error while using Web share API:");
-                                console.log(err);
-                            });
-                        } else {
+        $('#modalAdd, #modalEdit').on('shown.bs.modal', function() {
+            $('input[name="username"]').focus();
+        });
+
+        var id;
+        var url_post = "{{ route('vpn.store') }}";
+        var url_put = "{{ route('vpn.update', '') }}/" + id;
+        var url_delete = "{{ route('vpn.destroy', '') }}/" + id;
+
+        $('#share').click(function() {
+            id = $(this).val();
+            $.ajax({
+                url: "{{ route('vpn.show', '') }}/" + id,
+                method: 'GET',
+                success: function(result) {
+                    unblock();
+                    let text = share(result.data);
+                    if (navigator.share) {
+                        navigator.share({
+                            title: result.data.username,
+                            text: text,
+                        }).then(() => {
+                            swal(
+                                'Success!',
+                                'Thanks For Sharing!',
+                                'success'
+                            )
+                        }).catch(err => {
                             swal(
                                 'Failed!',
-                                "Browser doesn't support this API !",
+                                "Error while using Web share API:",
                                 'error'
                             )
-                        }
-                    },
-                    beforeSend: function() {
-                        block();
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        handleResponse(xhr)
-                    }
-                });
-            })
-
-            $('#wa').click(function() {
-                // id = $(this).val();
-                $.ajax({
-                    url: "{{ route('vpn.show', '') }}/" + id,
-                    method: 'GET',
-                    success: function(result) {
-                        unblock();
-                        let text = share(result.data);
-                        var win = window.open('https://api.whatsapp.com/send/?phone=&text=' +
-                            encodeURIComponent(text), '_blank');
-                        win.focus();
-                    },
-                    beforeSend: function() {
-                        block();
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        er = xhr.responseJSON.errors
+                            console.log("Error while using Web share API:");
+                            console.log(err);
+                        });
+                    } else {
                         swal(
                             'Failed!',
-                            'Server Error',
+                            "Browser doesn't support this API !",
                             'error'
                         )
                     }
-                });
-            })
-
-            $('#edit_reset').click(function() {
-                // id = $(this).val();
-                edit(id, false)
-            })
-
-            $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
-                $('#formEdit .error.invalid-feedback').each(function(i) {
-                    $(this).hide();
-                });
-                $('#formEdit input.is-invalid').each(function(i) {
-                    $(this).removeClass('is-invalid');
-                });
-                id = table.row(this).id()
-                edit(id, true)
-            });
-
-            $('#formEdit').submit(function(event) {
-                event.preventDefault();
-            }).validate({
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
                 },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
+                beforeSend: function() {
+                    block();
                 },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                    $(element).addClass('is-valid');
-                },
-                submitHandler: function(form) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        }
-                    });
-                    let url = "{{ route('vpn.update', ':id') }}";
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: $(form).serialize(),
-                        beforeSend: function() {
-                            block();
-                            $('#formEdit .error.invalid-feedback').each(function(i) {
-                                $(this).hide();
-                            });
-                            $('#formEdit input.is-invalid').each(function(i) {
-                                $(this).removeClass('is-invalid');
-                            });
-                        },
-                        success: function(res) {
-                            unblock();
-                            table.ajax.reload();
-                            $('#reset').click();
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        },
-                        error: function(xhr, status, error) {
-                            unblock();
-                            handleResponseForm(xhr, 'edit')
-                        }
-                    });
+                error: function(xhr, status, error) {
+                    unblock();
+                    handleResponse(xhr)
                 }
             });
+        })
 
-            $('#reset').click(function() {
-                $('#form .error.invalid-feedback').each(function(i) {
-                    $(this).hide();
-                });
-                $('#form input.is-invalid').each(function(i) {
-                    $(this).removeClass('is-invalid');
-                });
-                $('#email, #server, #masa, #is_active, #sync').val('').change();
-            })
-
-            $('#form').submit(function(event) {
-                event.preventDefault();
-            }).validate({
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
+        $('#wa').click(function() {
+            // id = $(this).val();
+            $.ajax({
+                url: "{{ route('vpn.show', '') }}/" + id,
+                method: 'GET',
+                success: function(result) {
+                    unblock();
+                    let text = share(result.data);
+                    var win = window.open('https://api.whatsapp.com/send/?phone=&text=' +
+                        encodeURIComponent(text), '_blank');
+                    win.focus();
                 },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
+                beforeSend: function() {
+                    block();
                 },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                    $(element).addClass('is-valid');
-                },
-                submitHandler: function(form) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{ route('vpn.store') }}",
-                        data: $(form).serialize(),
-                        beforeSend: function() {
-                            block();
-                            $('#form .error.invalid-feedback').each(function(i) {
-                                $(this).hide();
-                            });
-                            $('#form input.is-invalid').each(function(i) {
-                                $(this).removeClass('is-invalid');
-                            });
-                        },
-                        success: function(res) {
-                            unblock();
-                            table.ajax.reload();
-                            $('#reset').click();
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        },
-                        error: function(xhr, status, error) {
-                            unblock();
-                            handleResponseForm(xhr)
-                        }
-                    });
+                error: function(xhr, status, error) {
+                    unblock();
+                    er = xhr.responseJSON.errors
+                    swal(
+                        'Failed!',
+                        'Server Error',
+                        'error'
+                    )
                 }
             });
+        })
 
-            function edit(id, show = false) {
-                $.ajax({
-                    url: "{{ route('vpn.show', '') }}/" + id,
-                    method: 'GET',
-                    success: function(result) {
-                        unblock();
-                        $('#edit_reset').val(result.data.id);
-                        $('#share').val(result.data.id);
-                        $('#wa').val(result.data.id);
-                        $('#download').val(result.data.id);
-                        $('#edit_username').val(result.data.username);
-                        $('#edit_password').val(result.data.password);
-                        $('#edit_ip').val(result.data.ip);
-                        f2.setDate(result.data.regist);
-                        let option1 = new Option(result.data.user.email, result.data.user_id,
-                            true, true);
-                        let option2 = new Option(result.data.server.name, result.data.server_id,
-                            true, true);
-                        $('#edit_email').append(option1).trigger('change');
-                        $('#edit_server').append(option2).trigger('change');
-                        $('#edit_masa').val(result.data.masa).change();
-                        $('#edit_is_active').val(result.data.is_active).change();
-                        $('#edit_sync').val('').change();
+        $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
+            id = table.row(this).id()
+            edit(true)
+            url_put = "{{ route('vpn.update', '') }}/" + id;
+            url_delete = "{{ route('vpn.destroy', '') }}/" + id;
+        });
 
-                        $('#detail_server_name').html(result.data.server.name);
-                        $('#detail_server_ip').html(result.data.server.ip);
-                        $('#detail_server_domain').html(result.data.server.domain);
-                        $('#detail_server_netwatch').html(result.data.server.netwatch);
-                        if (result.data.server.type === 'paid') {
-                            $('#detail_server_type').html(
-                                `<span class="badge badge-success">Paid</span>`);
-                        } else {
-                            $('#detail_server_type').html(
-                                `<span class="badge badge-danger">Free</span>`);
-                        }
+        function edit(show = false) {
+            clear_validate($('#formEdit'))
+            $.ajax({
+                url: "{{ route('vpn.show', '') }}/" + id,
+                method: 'GET',
+                success: function(result) {
+                    unblock();
+                    $('#share').val(result.data.id);
+                    $('#wa').val(result.data.id);
+                    $('#download').val(result.data.id);
+                    $('#edit_username').val(result.data.username);
+                    $('#edit_password').val(result.data.password);
+                    $('#edit_ip').val(result.data.ip);
+                    f2.setDate(result.data.regist);
+                    let option1 = new Option(result.data.user.email, result.data.user_id,
+                        true, true);
+                    let option2 = new Option(result.data.server.name, result.data.server_id,
+                        true, true);
+                    $('#edit_email').append(option1).trigger('change');
+                    $('#edit_server').append(option2).trigger('change');
+                    $('#edit_masa').val(result.data.masa).change();
+                    $('#edit_is_active').val(result.data.is_active).change();
+                    $('#edit_sync').val('').change();
 
-                        $('#detail_acc_username').html(result.data.username);
-                        $('#detail_acc_password').html(result.data.password);
-                        $('#detail_acc_ip').html(result.data.ip);
-                        let create = moment.utc(result.data.created_at,
-                            "YYYY-MM-DD\THH:mm:ss\Z").format('DD MMM YYYY');
-                        let expired = moment(result.data.expired).format('DD MMM YYYY');
-                        $('#detail_acc_create').html(create);
-                        $('#detail_acc_expired').html(expired);
-
-                        let status = $('#account_status');
-                        if (result.data.is_active == 'yes' && result.data.is_trial === 'no') {
-                            status.html('<span class="badge badge-success">Active</span>')
-                        } else if (result.data.is_active == 'yes' && result.data.is_trial === 'yes') {
-                            status.html('<span class="badge badge-warning">Trial</span>')
-                        } else {
-                            status.html('<span class="badge badge-danger">Nonactive</span>')
-                        }
-
-                        $('#table_port').html('');
-                        if (result.data.port.length > 0) {
-                            let a;
-                            for (let i = 0; i < result.data.port.length; i++) {
-                                a += `<tr><td>`;
-                                a +=
-                                    `<span class="badge badge-success clipboard" data-toggle="tooltip" id="detail_port_${i}" title="Click to copy!" data-clipboard-action="copy" data-clipboard-target="#detail_port_${i}">${result.data.server.domain}:${result.data.port[i].dst}</span><i class="fas fa-exchange-alt ml-1 mr-1"></i><span class="badge badge-info">${result.data.port[i].to}</span>`;
-                                a += `</td></tr>`;
-                            }
-                            $('#table_port').html(a);
-                        }
-                        var select_script = $('#select_script');
-                        var script = $('#script');
-                        select_script.val('').change();
-                        select_script.change(function() {
-                            let type = $(this).val();
-                            if (type == 'PPTP') {
-                                script.val(
-                                    `/interface pptp-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
-                                );
-                            } else if (type == 'L2TP') {
-                                script.val(
-                                    `/interface l2tp-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
-                                );
-                            } else if (type == 'SSTP') {
-                                script.val(
-                                    `/interface sstp-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
-                                );
-                            } else if (type == 'OVPN') {
-                                script.val(
-                                    `/interface ovpn-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
-                                );
-                            } else {
-                                script.val('');
-                            }
-                        })
-
-                        if (show) {
-                            $('#modalEdit').modal('show');
-                        }
-                    },
-                    beforeSend: function() {
-                        block();
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        handleResponse(xhr)
+                    $('#detail_server_name').html(result.data.server.name);
+                    $('#detail_server_ip').html(result.data.server.ip);
+                    $('#detail_server_domain').html(result.data.server.domain);
+                    $('#detail_server_netwatch').html(result.data.server.netwatch);
+                    if (result.data.server.type === 'paid') {
+                        $('#detail_server_type').html(
+                            `<span class="badge badge-success">Paid</span>`);
+                    } else {
+                        $('#detail_server_type').html(
+                            `<span class="badge badge-danger">Free</span>`);
                     }
-                });
-            }
 
-            function deleteData() {
-                if (selected()) {
-                    swal({
-                        title: 'Delete Selected Data?',
-                        text: "You won't be able to revert this!",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
-                        confirmButtonAriaLabel: 'Thumbs up, Yes!',
-                        cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
-                        cancelButtonAriaLabel: 'Thumbs down',
-                        padding: '2em',
-                        animation: false,
-                        customClass: 'animated tada',
-                    }).then(function(result) {
-                        if (result.value) {
-                            let form = $("#formSelected");
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
-                            $.ajax({
-                                type: 'DELETE',
-                                url: "{{ route('vpn.destroy', '') }}",
-                                data: $(form).serialize(),
-                                beforeSend: function() {
-                                    block();
-                                },
-                                success: function(res) {
-                                    unblock();
-                                    table.ajax.reload();
-                                    swal(
-                                        'Success!',
-                                        res.message,
-                                        'success'
-                                    )
-                                },
-                                error: function(xhr, status, error) {
-                                    unblock();
-                                    handleResponse(xhr)
-                                }
-                            });
+                    $('#detail_acc_username').html(result.data.username);
+                    $('#detail_acc_password').html(result.data.password);
+                    $('#detail_acc_ip').html(result.data.ip);
+                    let create = moment.utc(result.data.created_at,
+                        "YYYY-MM-DD\THH:mm:ss\Z").format('DD MMM YYYY');
+                    let expired = moment(result.data.expired).format('DD MMM YYYY');
+                    $('#detail_acc_create').html(create);
+                    $('#detail_acc_expired').html(expired);
+
+                    let status = $('#account_status');
+                    if (result.data.is_active == 'yes' && result.data.is_trial === 'no') {
+                        status.html('<span class="badge badge-success">Active</span>')
+                    } else if (result.data.is_active == 'yes' && result.data.is_trial === 'yes') {
+                        status.html('<span class="badge badge-warning">Trial</span>')
+                    } else {
+                        status.html('<span class="badge badge-danger">Nonactive</span>')
+                    }
+
+                    $('#table_port').html('');
+                    if (result.data.port.length > 0) {
+                        let a;
+                        for (let i = 0; i < result.data.port.length; i++) {
+                            a += `<tr><td>`;
+                            a +=
+                                `<span class="badge badge-success clipboard" data-toggle="tooltip" id="detail_port_${i}" title="Click to copy!" data-clipboard-action="copy" data-clipboard-target="#detail_port_${i}">${result.data.server.domain}:${result.data.port[i].dst}</span><i class="fas fa-exchange-alt ml-1 mr-1"></i><span class="badge badge-info">${result.data.port[i].to}</span>`;
+                            a += `</td></tr>`;
+                        }
+                        $('#table_port').html(a);
+                    }
+                    var select_script = $('#select_script');
+                    var script = $('#script');
+                    select_script.val('').change();
+                    select_script.change(function() {
+                        let type = $(this).val();
+                        if (type == 'PPTP') {
+                            script.val(
+                                `/interface pptp-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
+                            );
+                        } else if (type == 'L2TP') {
+                            script.val(
+                                `/interface l2tp-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
+                            );
+                        } else if (type == 'SSTP') {
+                            script.val(
+                                `/interface sstp-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
+                            );
+                        } else if (type == 'OVPN') {
+                            script.val(
+                                `/interface ovpn-client add connect-to="${result.data.server.domain}" name="${result.data.server.name}:${result.data.username}" user="${result.data.username}" password="${result.data.password}" disabled="no" comment="<<==${result.data.server.domain}==>"; /tool netwatch add host="${result.data.server.netwatch}" comment="<<==${result.data.server.domain}==>"`
+                            );
+                        } else {
+                            script.val('');
                         }
                     })
+
+                    if (show) {
+                        $('#modalEdit').modal('show');
+                    }
+                },
+                beforeSend: function() {
+                    block();
+                },
+                error: function(xhr, status, error) {
+                    unblock();
+                    handleResponse(xhr)
                 }
-            }
+            });
+        }
 
-
-        });
+        // });
     </script>
 @endpush

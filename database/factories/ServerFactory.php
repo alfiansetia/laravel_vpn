@@ -25,8 +25,9 @@ class ServerFactory extends Factory
             'password'  => encrypt(fake()->password()),
             'location'  => fake()->locale(),
             'is_active' => fake()->randomElement(['Yes', 'No']),
-            'type'      => fake()->randomElement(['free', 'paid']),
-            'api'       => fake()->randomElement(['active', 'nonactive']),
+            'price'     => fake()->numberBetween(10000, 100000),
+            // 'type'      => fake()->randomElement(['free', 'paid']),
+            // 'api'       => fake()->randomElement(['active', 'nonactive']),
         ];
     }
 }
