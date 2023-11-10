@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('count_ip')->default(0);
             $table->integer('last_port')->default(0);
             $table->enum('is_active', ['yes', 'no'])->default('yes');
+            $table->enum('is_available', ['yes', 'no'])->default('yes');
             // $table->integer('time_free')->default(0);
             // $table->enum('type', ['free', 'paid'])->default('paid');
             // $table->enum('api', ['active', 'nonactive'])->default('active');

@@ -32,6 +32,7 @@
                                     <th>Netwatch</th>
                                     <th>Price</th>
                                     <th>Location</th>
+                                    <th>Available</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -132,6 +133,16 @@
             }, {
                 title: "Location",
                 data: 'location',
+            }, {
+                title: "Available",
+                data: 'is_available',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return `<span class="badge badge-${data == 'yes' ? 'success' : 'danger'}">${data == 'yes' ? 'Available' : 'Unvailable'}</span>`;
+                    } else {
+                        return data
+                    }
+                }
             }],
             buttons: [{
                 text: '<i class="fa fa-plus"></i>Add',
@@ -194,8 +205,10 @@
         var url_delete = "{{ route('server.destroy', '') }}/" + id;
 
         $('#btnPing').on('click', function() {
+            let url = "{{ route('server.ping', ':id') }}";
+            url = url.replace(':id', id);
             $.ajax({
-                url: "{{ route('server.ping', '') }}/" + id,
+                url: url,
                 method: 'GET',
                 beforeSend: function() {
                     block();
@@ -231,6 +244,7 @@
                     unblock();
                     $('#edit_name').val(result.data.name);
                     $('#edit_username').val(result.data.username);
+                    $('#edit_password').val('');
                     $('#edit_ip').val(result.data.ip);
                     $('#edit_domain').val(result.data.domain);
                     $('#edit_netwatch').val(result.data.netwatch);

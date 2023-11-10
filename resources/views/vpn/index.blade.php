@@ -111,12 +111,12 @@
 @push('js')
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
-        var f1 = flatpickr(document.getElementById('regist'), {
+        var f1 = flatpickr(document.getElementById('expired'), {
             defaultDate: "today",
             disableMobile: true
         });
 
-        var f2 = flatpickr(document.getElementById('edit_regist'), {
+        var f2 = flatpickr(document.getElementById('edit_expired'), {
             disableMobile: true
         });
 
@@ -245,30 +245,30 @@
             }
         });
 
-        $("#edit_server").select2({
-            dropdownParent: $("#modalEdit"),
-            ajax: {
-                delay: 1000,
-                url: "{{ route('server.index') }}",
-                data: function(params) {
-                    return {
-                        name: params.term,
-                        page: params.page
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: $.map(data.data, function(item) {
-                            return {
-                                text: item.name,
-                                id: item.id,
-                                disabled: item.is_active == 'no' ? true : false,
-                            }
-                        })
-                    };
-                },
-            }
-        });
+        // $("#edit_server").select2({
+        //     dropdownParent: $("#modalEdit"),
+        //     ajax: {
+        //         delay: 1000,
+        //         url: "{{ route('server.index') }}",
+        //         data: function(params) {
+        //             return {
+        //                 name: params.term,
+        //                 page: params.page
+        //             };
+        //         },
+        //         processResults: function(data) {
+        //             return {
+        //                 results: $.map(data.data, function(item) {
+        //                     return {
+        //                         text: item.name,
+        //                         id: item.id,
+        //                         disabled: item.is_active == 'no' ? true : false,
+        //                     }
+        //                 })
+        //             };
+        //         },
+        //     }
+        // });
 
         $("#edit_masa, #edit_is_active, #edit_sync").select2({
             dropdownParent: $("#modalEdit"),
@@ -510,14 +510,13 @@
                     $('#edit_username').val(result.data.username);
                     $('#edit_password').val(result.data.password);
                     $('#edit_ip').val(result.data.ip);
-                    f2.setDate(result.data.regist);
+                    f2.setDate(result.data.expired);
                     let option1 = new Option(result.data.user.email, result.data.user_id,
                         true, true);
                     let option2 = new Option(result.data.server.name, result.data.server_id,
                         true, true);
                     $('#edit_email').append(option1).trigger('change');
                     $('#edit_server').append(option2).trigger('change');
-                    $('#edit_masa').val(result.data.masa).change();
                     $('#edit_is_active').val(result.data.is_active).change();
                     $('#edit_sync').val('').change();
 
@@ -525,12 +524,12 @@
                     $('#detail_server_ip').html(result.data.server.ip);
                     $('#detail_server_domain').html(result.data.server.domain);
                     $('#detail_server_netwatch').html(result.data.server.netwatch);
-                    if (result.data.server.type === 'paid') {
-                        $('#detail_server_type').html(
-                            `<span class="badge badge-success">Paid</span>`);
+                    if (result.data.server.is_active === 'yes') {
+                        $('#detail_server_status').html(
+                            `<span class="badge badge-success">Active</span>`);
                     } else {
-                        $('#detail_server_type').html(
-                            `<span class="badge badge-danger">Free</span>`);
+                        $('#detail_server_status').html(
+                            `<span class="badge badge-danger">Nonactive</span>`);
                     }
 
                     $('#detail_acc_username').html(result.data.username);

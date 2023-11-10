@@ -48,17 +48,17 @@
                         <span class="d-inline">1 User Hanya Bisa create 1 akun VPN Trial. Untuk Menambah akun VPN maka
                             silahkan lakukan pembayaran akun trial tsb.</span>
                     </li>
-                    <li>
+                    {{-- <li>
                         <i data-feather="arrow-right"></i>
                         <span class="d-inline">1 User Hanya Mendapat 1 Free Akun. Untuk Menambah akun VPN silahkan Pilih
                             Server berbayar.</span>
-                    </li>
+                    </li> --}}
                 </ul>
             </blockquote>
 
             <div class="statbox widget box box-shadow">
                 <div class="widget-content widget-content-area">
-                    <form id="form" action="" method="POST" enctype="multipart/form-data">
+                    <form id="formcreate" action="" method="POST" enctype="multipart/form-data">
                         <div class="form-row mb-2">
                             <div class="form-group col-12">
                                 <label for="server"><i class="fas fa-server mr-1" data-toggle="tooltip"
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                         <div class="form-row mb-2">
-                            <button type="reset" id="reset" class="btn btn-warning ml-auto"><i
+                            <button type="button" id="btn_reset" class="btn btn-warning ml-auto"><i
                                     class="fas fa-undo mr-1" data-toggle="tooltip" title="Reset"></i>Reset</button>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
                                     data-toggle="tooltip" title="Save"></i>Order</button>
@@ -151,113 +151,106 @@
 @push('js')
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
-        $(document).ready(function() {
+        // $(document).ready(function() {
 
-            $('.maxlength').maxlength({
-                placement: "top",
-                alwaysShow: true
-            });
-
-            var select = $("#server").select2({
-                ajax: {
-                    delay: 1000,
-                    url: "{{ route('server.index') }}",
-                    dataType: 'json',
-                    data: function(params) {
-                        return {
-                            name: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.data, function(item) {
-                                return {
-                                    text: `${item.name} ${item.price === 0 || item.type === 'free' ? ('Free ' + ' ' + item.time_free + ' Bulan'): ('Rp.'+item.price)} ${item.location} ${item.is_active === 'no' ? "<Nonactive>" : "<Active>"}`,
-                                    id: item.id,
-                                    sufiks: item.sufiks,
-                                    // disabled: item.is_active === 'no' ? true : false,
-                                }
-                            })
-                        };
-                    },
-                }
-            }).on('change', function() {
-                let data = $(this).select2('data');
-                $('#sufiks').text(data[0].sufiks);
-                $('#input_sufiks').val(data[0].sufiks);
-            });
-
-            $('#reset').click(function() {
-                $('#form .error.invalid-feedback').each(function(i) {
-                    $(this).hide();
-                });
-                $('#form input.is-invalid').each(function(i) {
-                    $(this).removeClass('is-invalid');
-                });
-                $('#server').val('').change();
-            })
-
-            $('#form').submit(function(event) {
-                event.preventDefault();
-            }).validate({
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                    $(element).addClass('is-valid');
-                },
-                submitHandler: function(formArray) {
-                    let form = $(formArray).serializeArray()
-                    let d = {
-                        name: 'username',
-                        value: $('#username').val() + $('#sufiks').text(),
-                    };
-                    form[1] = d;
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{ route('vpn.autocreate') }}",
-                        data: form,
-                        beforeSend: function() {
-                            block();
-                            $('button[type="submit"]').prop('disabled', true);
-                            console.log('loading bro');
-                            $('#form .error.invalid-feedback').each(function(i) {
-                                $(this).hide();
-                            });
-                            $('#form input.is-invalid').each(function(i) {
-                                $(this).removeClass('is-invalid');
-                            });
-                        },
-                        success: function(res) {
-                            unblock();
-                            $('button[type="submit"]').prop('disabled', false);
-                            $('#reset').click();
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        },
-                        error: function(xhr, status, error) {
-                            unblock();
-                            handleResponseForm(xhr)
-
-                        }
-                    });
-                }
-            });
+        $('.maxlength').maxlength({
+            placement: "top",
+            alwaysShow: true
         });
+
+        var select = $("#server").select2({
+            allowClear: true,
+            placeholder: 'Please Select Server',
+            ajax: {
+                delay: 1000,
+                url: "{{ route('server.index') }}",
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        name: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: `${item.name} Rp.${item.price} ${item.location} ${item.is_active === 'no' ? "<Nonactive>" : "<Active>"}`,
+                                id: item.id,
+                                sufiks: item.sufiks,
+                                disabled: item.is_active === 'no' ? true : item.is_available === 'no' ?
+                                    true : false,
+                            }
+                        })
+                    };
+                },
+            }
+        }).on('change', function() {
+            let data = $(this).select2('data');
+            $('#sufiks').text(data[0].sufiks);
+            $('#input_sufiks').val(data[0].sufiks);
+        });
+
+
+        $('#formcreate').submit(function(event) {
+            event.preventDefault();
+        }).validate({
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+            submitHandler: function(form) {
+                ajax_setup();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('vpn.autocreate') }}",
+                    data: $(form).serialize(),
+                    beforeSend: function() {
+                        block();
+                        clear_validate($('#formcreate'))
+                        // $('#formcreate .error.invalid-feedback').each(function(i) {
+                        //     $(this).hide();
+                        // });
+                        // $('#formcreate input.is-invalid').each(function(i) {
+                        //     $(this).removeClass('is-invalid');
+                        // });
+                    },
+                    success: function(res) {
+                        unblock();
+                        btn_reset();
+                        swal(
+                            'Success!',
+                            res.message,
+                            'success'
+                        )
+                    },
+                    error: function(xhr, status, error) {
+                        unblock();
+                        handleResponseForm(xhr)
+
+                    }
+                });
+            }
+        });
+
+        $('#btn_reset').click(function() {
+            btn_reset()
+        })
+
+        function btn_reset() {
+            clear_validate($('#formcreate'))
+            $('#username').val('')
+            $('#password').val('')
+            $('#server').val('').change()
+        }
+        // });
     </script>
 @endpush

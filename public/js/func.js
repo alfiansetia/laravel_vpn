@@ -180,11 +180,11 @@ $('#form').submit(function (event) {
         ajax_setup()
         $.ajax({
             type: 'POST',
-            url: url,
+            url: url_post,
             data: $(form).serialize(),
             beforeSend: function () {
                 block();
-                clear_validate(form)
+                clear_validate($(form))
             },
             success: function (res) {
                 unblock();

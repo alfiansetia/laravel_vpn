@@ -54,30 +54,16 @@
                             <span id="err_ip" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="regist"><i class="fas fa-calendar mr-1" data-toggle="tooltip"
-                                    title="Regist"></i>Regist :</label>
-                            <input type="text" id="regist" name="regist"
+                            <label for="expired"><i class="fas fa-calendar mr-1" data-toggle="tooltip"
+                                    title="Expired"></i>Expired :</label>
+                            <input type="text" id="expired" name="expired"
                                 class="form-control form-control-solid flatpickr flatpickr-input active"
                                 placeholder="Select Date.." required>
-                            <span id="err_regist" class="error invalid-feedback" style="display: hide;"></span>
+                            <span id="err_expired" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                     </div>
                     <div class="form-row mb-2">
-                        <div class="form-group col-md-4">
-                            <label for="masa"><i class="far fa-clock mr-1" data-toggle="tooltip"
-                                    title="Option Masa"></i>Masa :</label>
-                            <select name="masa" id="masa" class="form-control" style="width: 100%;">
-                                <option value="">Trial</option>
-                                <option value="1">1 Month</option>
-                                <option value="2">2 Month</option>
-                                <option value="3">3 Month</option>
-                                <option value="4">4 Month</option>
-                                <option value="5">5 Month</option>
-                                <option value="6">6 Month</option>
-                                <option value="12">1 Years</option>
-                            </select>
-                            <span id="err_masa" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
+
                         <div class="form-group col-md-4">
                             <label for="is_active"><i class="fas fa-check mr-1" data-toggle="tooltip"
                                     title="Option Active"></i>Active :</label>
@@ -189,13 +175,13 @@
                                                     id="detail_server_netwatch">Loading..</td>
                                             </tr>
                                             <tr>
-                                                <td>Server Type</td>
+                                                <td>Server Status</td>
                                                 <td style="width: 10px;text-align: center;">:</td>
                                                 <td style="word-wrap: break-word;white-space: normal;text-align: left;"
                                                     class="clipboard bs-tooltip" title="Click to copy!"
                                                     data-clipboard-action="copy"
-                                                    data-clipboard-target="#detail_server_type"
-                                                    id="detail_server_type"><span
+                                                    data-clipboard-target="#detail_server_status"
+                                                    id="detail_server_status"><span
                                                         class="badge badge-success">Loading..</span></td>
                                             </tr>
                                         </table>
@@ -307,7 +293,7 @@
                                             <label for="edit_server"><i class="fas fa-server mr-1"
                                                     data-toggle="tooltip" title="Option Server"></i>Server :</label>
                                             <select name="server" id="edit_server" class="form-control"
-                                                style="width: 100%;" required>
+                                                style="width: 100%;" disabled readonly>
                                                 <option value="">Please Select Server</option>
                                             </select>
                                             <span id="err_edit_server" class="error invalid-feedback"
@@ -347,33 +333,16 @@
                                                 style="display: hide;"></span>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="edit_regist"><i class="fas fa-calendar mr-1"
-                                                    data-toggle="tooltip" title="Regist"></i>Regist :</label>
-                                            <input type="text" id="edit_regist" name="regist"
+                                            <label for="edit_expired"><i class="fas fa-calendar mr-1"
+                                                    data-toggle="tooltip" title="Expired"></i>Expired :</label>
+                                            <input type="text" id="edit_expired" name="expired"
                                                 class="form-control form-control-solid flatpickr flatpickr-input active"
                                                 placeholder="Select Date.." required>
-                                            <span id="err_edit_regist" class="error invalid-feedback"
+                                            <span id="err_edit_expired" class="error invalid-feedback"
                                                 style="display: hide;"></span>
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-md-4">
-                                            <label for="edit_masa"><i class="far fa-clock mr-1" data-toggle="tooltip"
-                                                    title="Option Masa"></i>Masa :</label>
-                                            <select name="masa" id="edit_masa" class="form-control"
-                                                style="width: 100%;">
-                                                <option value="0">Trial</option>
-                                                <option value="1">1 Month</option>
-                                                <option value="2">2 Month</option>
-                                                <option value="3">3 Month</option>
-                                                <option value="4">4 Month</option>
-                                                <option value="5">5 Month</option>
-                                                <option value="6">6 Month</option>
-                                                <option value="12">1 Years</option>
-                                            </select>
-                                            <span id="err_edit_masa" class="error invalid-feedback"
-                                                style="display: hide;"></span>
-                                        </div>
                                         <div class="form-group col-md-4">
                                             <label for="edit_is_active"><i class="fas fa-check mr-1"
                                                     data-toggle="tooltip" title="Option Active"></i>Active :</label>

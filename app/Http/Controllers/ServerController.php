@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Server;
+use App\Services\ServerApiServices;
 use App\Traits\CrudTrait;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -124,16 +126,13 @@ class ServerController extends Controller
     public function ping(Request $request, Server $server)
     {
         if ($request->ajax()) {
-            $server = Server::find($server->id);
-            if ($server) {
-                $ip = ($server->ip . ($server->port != 0 ? (':' . $server->port) : ''));
-                $u = $server->username;
-                $p = decrypt($server->password);
-                $data = Server::cek_login($ip, $u, $p);
-            } else {
-                $data = ['message' => 'Data Not Found!', 'data' => ''];
+            $service  = new ServerApiServices($server);
+            try {
+                $service->ping();
+                return response()->json(['message' => 'Connected']);
+            } catch (Exception $e) {
+                return response()->json(['message' => $e->getMessage()], 500);
             }
-            return response()->json($data);
         } else {
             abort(404);
         }

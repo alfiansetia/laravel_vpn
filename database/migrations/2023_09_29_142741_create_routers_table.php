@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('desc')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign('port_id')->references('id')->on('ports')->cascadeOnUpdate();
+            $table->foreign('port_id')->references('id')->on('ports')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
