@@ -8,6 +8,12 @@ trait CrudTrait
 {
     protected $model;
 
+    public function paginate()
+    {
+        $data = $this->model->paginate(10);
+        return response()->json($data);
+    }
+
     public function destroyBatch(Request $request)
     {
         if ($request->ajax()) {
@@ -44,7 +50,7 @@ trait CrudTrait
         }
     }
 
-    public function show(Request $request, string $id)
+    public function show(Request $request, string $id,)
     {
         if ($request->ajax()) {
             $data = $this->model::find($id);

@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Port;
 use App\Models\Vpn;
 use App\Traits\CompanyTrait;
+use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class PortController extends Controller
 {
-    use CompanyTrait;
+    use CompanyTrait, CrudTrait;
+
+    public function __construct()
+    {
+        $this->model = Port::class;
+    }
 
     public function index(Request $request)
     {
-        $comp = $this->getCompany();
         if ($request->ajax()) {
             $data = Port::query();
             if (isAdmin()) {
@@ -25,7 +30,7 @@ class PortController extends Controller
             return DataTables::of($data)->toJson();
         } else {
             if (isAdmin()) {
-                return view('port.index', compact(['comp']))->with('title', 'Data Port');
+                return view('port.index');
             } else {
                 abort(404);
             }
@@ -35,11 +40,10 @@ class PortController extends Controller
     public function getByUser(Request $request)
     {
         if ($request->ajax()) {
-            $data = Port::with('vpn:id,ip,is_active,username,server_id', 'vpn.server:id,domain,ip,location,name,netwatch,type,price,is_active,api')
+            $data = Port::with('vpn:id,ip,is_active,username,server_id', 'vpn.server:id,domain,ip,location,name,netwatch,price,is_active')
                 ->whereRelation('vpn', 'is_active', '=', 'yes')
                 // ->whereRelation('vpn.server', 'is_active', '=', 'yes')
-                ->whereRelation('vpn', 'user_id', '=', auth()->user()->id)
-                ->get();
+                ->whereRelation('vpn', 'user_id', '=', auth()->user()->id);
             return DataTables::of($data)->toJson();
         } else {
             abort(404);
@@ -62,21 +66,7 @@ class PortController extends Controller
             ],
             'dst'    => 'required|integer|gt:1|lt:10000',
             'to'     => 'required|integer|gt:1|lt:10000',
-            'sync'          =>  [
-                'required',
-                'in:yes,no',
-                function ($attribute, $value, $fail) use ($request) {
-                    $vpn = Vpn::with('server')->find($request->input('vpn'));
-                    if ($vpn->server->api == 'active') {
-                        $vpnActive = true;
-                    } else {
-                        $vpnActive = false;
-                    }
-                    if ($value === 'yes' && !$vpnActive) {
-                        $fail('API Server OFF! Sync can only be "yes" when API server is active.');
-                    }
-                },
-            ],
+            'sync'   => 'nullable|in:on',
         ]);
         $createApi['status'] = true;
         if ($request->sync == 'yes') {
@@ -133,21 +123,7 @@ class PortController extends Controller
         $this->validate($request, [
             'dst'    => 'required|integer|gt:1|lt:10000',
             'to'     => 'required|integer|gt:1|lt:10000',
-            'sync'   =>  [
-                'required',
-                'in:yes,no',
-                function ($attribute, $value, $fail) use ($port) {
-                    $port = Port::with('vpn.server')->find($port->id);
-                    if ($port->vpn->server->api == 'active') {
-                        $vpnActive = true;
-                    } else {
-                        $vpnActive = false;
-                    }
-                    if ($value === 'yes' && !$vpnActive) {
-                        $fail('API Server OFF! Sync can only be "yes" when API server is active.');
-                    }
-                },
-            ],
+            'sync'   => 'nullable|in:on',
         ]);
         $port = Port::with('vpn.server')->findOrFail($port->id);
         $updateApi['status'] = true;

@@ -22,7 +22,6 @@ class RouterFactory extends Factory
             'dnsname'   => fake()->domainName(),
             'username'  => fake()->userName(),
             'password'  => fake()->password(),
-            'desc'      => fake()->text(15),
         ];
     }
 }

@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('vpns', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('server_id');
             $table->string('ip');
             $table->string('username');
             $table->string('password');
             // $table->date('regist');
-            // $table->integer('masa');
+            $table->dateTime('last_renew')->useCurrent();
             $table->date('expired');
             $table->enum('is_active', ['yes', 'no'])->default('yes');
             $table->enum('is_trial', ['yes', 'no'])->default('yes');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('server_id')->references('id')->on('servers')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }

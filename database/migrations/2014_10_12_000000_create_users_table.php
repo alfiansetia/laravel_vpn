@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('gender', ['Male', 'Female'])->default('Male');
+            $table->enum('gender', ['male', 'female'])->default('male');
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -23,7 +23,12 @@ return new class extends Migration
             $table->datetime('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
             $table->string('avatar')->nullable();
-            $table->enum('role', ['Admin', 'User'])->default('User');
+            $table->enum('role', ['admin', 'user'])->default('user');
+            $table->enum('status', ['active', 'nonactive'])->default('nonactive');
+            $table->string('instagram')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('github')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

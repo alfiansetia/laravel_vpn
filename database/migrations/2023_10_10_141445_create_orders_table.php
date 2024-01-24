@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->dateTime('date');
-            $table->integer('due_date')->default(0);
-            $table->bigInteger('number')->unique();
-            $table->bigInteger('credit')->default(0);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('bank_id')->nullable();
+            $table->dateTime('date')->useCurrent();
+            $table->string('number')->unique();
+            $table->bigInteger('total')->default(0);
             $table->enum('status', ['paid', 'unpaid', 'cancel'])->default('unpaid');
-            $table->string('payment_method')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('bank_id')->references('id')->on('banks')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

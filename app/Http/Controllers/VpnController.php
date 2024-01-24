@@ -11,8 +11,11 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Throwable;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class VpnController extends Controller
 {
@@ -20,7 +23,6 @@ class VpnController extends Controller
 
     public function index(Request $request)
     {
-        $comp = $this->getCompany();
         if ($request->ajax()) {
             $data = Vpn::query();
             if ($request->filled('username')) {
@@ -40,20 +42,20 @@ class VpnController extends Controller
             } else {
                 $data->where('user_id', '=', auth()->id())->with('server:id,name,ip,domain,netwatch,location,price,is_active,is_trial');
             }
-            $result = $data->get();
-            return DataTables::of($data)->toJson();
+            $result = $data;
+            return DataTables::of($result)->toJson();
         }
         if (isAdmin()) {
-            return view('vpn.index', compact(['comp']))->with('title', 'Data Vpn');
+            return view('vpn.index');
         } else {
-            return view('vpn.user', compact(['comp']))->with('title', 'Data Vpn');
+            return view('vpn.user');
         }
     }
 
     public function create(Request $request)
     {
-        $comp = $this->getCompany();
-        return view('vpn.create', compact(['comp']))->with('title', 'Order Vpn');
+        $servers = Server::where('is_active', 'yes')->where('is_available', 'yes')->get();
+        return view('vpn.create', compact('servers'));
     }
 
     public function autoCreate(Request $request)
@@ -64,7 +66,10 @@ class VpnController extends Controller
             $count_trial = 0;
         }
         if ($count_trial > 0) {
-            return response()->json(['message' => 'Trial Sudah Ada, Silahkan Selesaikan Pembayaran Dahulu Untuk membuat Trial Lagi!', 'data' => ''], 403);
+            return response()->json([
+                'message'   => 'Trial Sudah Ada, Silahkan Selesaikan Pembayaran Dahulu Untuk membuat Trial Lagi!',
+                'data'      => ''
+            ], 403);
         }
         $this->validate($request, [
             'server'    => [
@@ -81,15 +86,18 @@ class VpnController extends Controller
                 'min:4',
                 function ($attribute, $value, $fail) use ($request) {
                     $server = Server::find($request->input('server'));
-                    $vpn = Vpn::where('server_id', '=', $server->id)
-                        ->where('username', '=', generateUsername($value) . ($server->sufiks ?? ''))->first();
-                    if ($vpn) {
-                        $fail('Selected username is invalid!');
+                    if ($server) {
+                        $vpn = Vpn::where('server_id', $server->id)
+                            ->where('username', (generateUsername($value) . ($server->sufiks ?? '')))->first();
+                        if ($vpn) {
+                            $fail('Username is invalid!');
+                        }
                     }
                 },
             ],
             'password'  => 'required|string|max:50|min:4',
         ]);
+        DB::beginTransaction();
         try {
             $server = Server::find($request->input('server'));
             $reg = date('Y-m-d');
@@ -137,8 +145,10 @@ class VpnController extends Controller
                 ]);
             }
             $data = ['message' => 'Success Insert Data', 'data' => ''];
+            DB::commit();
             return response()->json($data);
         } catch (Exception $e) {
+            DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
@@ -162,33 +172,33 @@ class VpnController extends Controller
             'password'     => 'required|max:50|min:4',
             'ip'           => 'required|ip|unique:vpns,ip,' . $request->input('ip') . ',id,server_id,' . $request->input('server'),
             'expired'      => 'required|date_format:Y-m-d',
-            'is_active'    => 'required|in:yes,no',
-            'sync'         => 'required|in:yes,no',
+            'is_active'    => 'nullable|in:on',
+            'sync'         => 'nullable|in:on',
         ]);
-        $expired = Carbon::parse($request->expired)->format('Y-m-d');
-        $param = [
-            'user_id'   => $request->input('email'),
-            'server_id' => $request->input('server'),
-            'username'  => $request->input('username'),
-            'password'  => $request->input('password'),
-            'ip'        => $request->input('ip'),
-            'expired'   => $expired,
-            'is_active' => $request->input('is_active'),
-        ];
-        if ($request->sync == 'yes') {
-            $server = Server::find($request->input('server'));
-            $service = new ServerApiServices($server);
-            $service->store($param, []);
+        DB::beginTransaction();
+        try {
+            $expired = Carbon::parse($request->expired)->format('Y-m-d');
+            $param = [
+                'user_id'   => $request->input('email'),
+                'server_id' => $request->input('server'),
+                'username'  => $request->input('username'),
+                'password'  => $request->input('password'),
+                'ip'        => $request->input('ip'),
+                'expired'   => $expired,
+                'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
+            ];
+            if ($request->sync == 'on') {
+                $server = Server::find($request->input('server'));
+                $service = new ServerApiServices($server);
+                $service->store($param, []);
+            }
+            $vpn = Vpn::create($param);
+            DB::commit();
+            return response()->json(['message' => 'Success Insert Data', 'data' => '']);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Failed Insert Data : ' . $e->getMessage(), 'data' => ''], 500);
         }
-
-        $vpn = Vpn::create($param);
-        if ($vpn) {
-            $data = ['message' => 'Success Insert Data', 'data' => ''];
-        } else {
-            $data = ['message' => 'Failed Insert Data', 'data' => ''];
-        }
-
-        return response()->json($data);
     }
 
     public function show(Request $request, Vpn $vpn)
@@ -214,43 +224,31 @@ class VpnController extends Controller
     {
         $this->validate($request, [
             'email'     => 'required|integer|exists:users,id',
-            // 'server'    => [
-            //     'required',
-            //     'integer',
-            //     'exists:servers,id',
-            //     function ($attribute, $value, $fail) {
-            //         $server = Server::where('id', $value)->where('is_active', 'yes')->first();
-            //         if (!$server) {
-            //             $fail('The selected server is not active.');
-            //         }
-            //     }
-            // ],
-            'username'      => 'required|max:50|min:4|unique:vpns,username,' . $vpn->id . ',id,server_id,' . $request->input('server'),
+            'username'      => 'required|max:50|min:4|unique:vpns,username,' . $vpn->id . ',id,server_id,' . $vpn->server_id,
             'password'      => 'required|max:50|min:4',
-            'ip'            => 'required|ip|unique:vpns,ip,' . $vpn->id . ',id,server_id,' . $request->input('server'),
+            'ip'            => 'required|ip|unique:vpns,ip,' . $vpn->id . ',id,server_id,' . $vpn->server_id,
             'expired'       => 'required|date_format:Y-m-d',
-            'is_active'     => 'required|in:yes,no',
-            'sync'          => 'required|in:yes,no',
+            'is_active'     => 'nullable|in:on',
+            'sync'          => 'nullable|in:on',
         ]);
         $expired = $request->input('expired');
         try {
             $param = [
                 'user_id'   => $request->input('email'),
-                // 'server_id' => $request->input('server'),
                 'username'  => $request->input('username'),
                 'password'  => $request->input('password'),
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
-                'is_active' => $request->input('is_active'),
+                'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
             ];
-            if ($request->sync == 'yes') {
+            if ($request->sync == 'on') {
                 $service = $this->setServer($vpn);
                 $service->update($vpn, $param);
             }
             $vpn->update($param);
             return response()->json(['message' => 'Success Update Data', 'data' => '']);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+        } catch (Throwable $e) {
+            return response()->json(['message' => 'Failed Update Data : ' . $e->getMessage()], 500);
         }
     }
 

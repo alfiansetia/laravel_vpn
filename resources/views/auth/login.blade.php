@@ -1,79 +1,104 @@
-@extends('layouts.auth')
+@extends('layouts.auth', ['title' => 'Sign In'])
 
 @section('content')
-    <h1 class="">Sign In</h1>
-    <p class="">Log in to your account to continue.</p>
-    <form class="text-left" method="POST" action="{{ route('login') }}">
-        @csrf
-        <div class="form">
-            <div id="email-field" class="field-wrapper input">
-                <label for="email">EMAIL</label>
-                <i data-feather="user"></i>
-                <input id="email" name="email" type="email"
-                    class="form-control maxlength  @error('email') is-invalid @enderror" value="{{ old('email') }}"
-                    placeholder="xxx@mail.com" required minlength="3" maxlength="100" autocomplete="email" autofocus>
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div id="password-field" class="field-wrapper input mb-2">
-                <div class="d-flex justify-content-between">
-                    <label for="password">PASSWORD</label>
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="forgot-pass-link">Forgot Password?</a>
-                    @endif
+    <div class="row">
+
+        @include('components.auth.cover')
+
+        <div
+            class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center ms-lg-auto me-lg-0 mx-auto">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <form action="{{ route('login') }}" method="POST">
+                            @csrf
+                            <div class="col-md-12 mb-3">
+                                <h2>Sign In</h2>
+                                <p>Enter your email and password to login</p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bs-tooltip" title="Email" id="basic-addon1">
+                                            <i data-feather="at-sign"></i>
+                                        </span>
+                                        <input type="email" name="email" id="email"
+                                            class="form-control maxlength @error('email') is-invalid @enderror"
+                                            value="{{ old('email') }}" placeholder="Input Your Email"
+                                            aria-describedby="basic-addon1" minlength="5" maxlength="100" required
+                                            autofocus>
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bs-tooltip" title="Password" id="basic-addon2">
+                                            <i data-feather="lock"></i>
+                                        </span>
+                                        <input type="password"
+                                            class="form-control maxlength @error('password') is-invalid @enderror"
+                                            name="password" id="password" minlength="5" maxlength="150"
+                                            autocomplete="current-password" placeholder="Input Your Password" required>
+                                        <span class="input-group-text bs-tooltip" title="Show/Hide" id="toggle-password"
+                                            onclick="pw();"><i data-feather="eye-off"></i></span>
+                                        @error('password')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <div class="form-check form-check-primary form-check-inline">
+                                        <input class="form-check-input me-3" type="checkbox" name="remember" id="remember"
+                                            {{ old('remember') ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="remember">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    @if (Route::has('password.request'))
+                                        <a href="{{ route('password.request') }}">Forgot
+                                            Password?</a>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <button type="submit" class="btn btn-secondary w-100">SIGN IN</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        @include('components.auth.social')
+
+                        @if (Route::has('register'))
+                            <div class="col-12">
+                                <div class="text-center">
+                                    <p class="mb-0">Dont't have an account ? <a href="{{ route('register') }}"
+                                            class="text-warning">Sign
+                                            Up</a></p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @include('components.auth.ontap')
+
+                    </div>
+
                 </div>
-                <i data-feather="lock"></i>
-                <input id="password" name="password" type="password"
-                    class="form-control maxlength @error('password') is-invalid @enderror" placeholder="Password" required
-                    minlength="5" maxlength="100" autocomplete="current-password">
-                <i data-feather="eye" id="toggle-password" onclick="pw();"></i>
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
             </div>
-            <div class="field-wrapper terms_condition">
-                <div class="n-chk">
-                    <label class="new-control new-checkbox checkbox-primary">
-                        <input type="checkbox" class="new-control-input" name="remember" id="remember"
-                            {{ old('remember') ? 'checked' : '' }}>
-                        <span class="new-control-indicator"></span><span>Remember Me</span>
-                    </label>
-                </div>
-            </div>
-            <div class="d-sm-flex justify-content-between">
-                <div class="field-wrapper">
-                    <button type="submit" class="btn btn-primary" value="">Log In</button>
-                </div>
-            </div>
-            <div class="division">
-                <span>OR</span>
-            </div>
-            <div class="social">
-                <a href="{{ route('auth.redirect') }}" class="btn social-fb">
-                    <i class="fab fa-google"></i>
-                    <span class="brand-name">Google</span>
-                </a>
-                <a href="{{ route('auth.fb.redirect') }}" class="btn social-fb">
-                    <i class="fab fa-facebook-f"></i>
-                    <span class="brand-name">Facebook</span>
-                </a>
-            </div>
-            {{-- @if (Route::has('register')) --}}
-            <p class="signup-link">Not registered ? <a href="{{ route('auth.redirect') }}">Create an account</a></p>
-            {{-- @endif --}}
         </div>
-    </form>
-    <div id="g_id_onload" data-client_id="{{ env('GOOGLE_CLIENT_ID') }}" data-login_uri="{{ route('auth.onetap') }}"
-        data-_token="{{ csrf_token() }}" data-auto_prompt="true"> >
-    </div>
-    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
-        data-shape="rectangular" data-logo_alignment="left">
-    </div>
     </div>
 @endsection
 

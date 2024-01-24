@@ -14,12 +14,11 @@ class RouterController extends Controller
     use CompanyTrait;
     public function index(Request $request)
     {
-        $comp = $this->getCompany();
         if ($request->ajax()) {
-            $data = Router::with('port.vpn:id,ip,is_active,username')->where('user_id', '=', $this->getUser()->id)->get();
+            $data = Router::with('port.vpn:id,ip,is_active,username')->where('user_id', '=', $this->getUser()->id);
             return DataTables::of($data)->toJson();
         }
-        return view('router.index', compact(['comp']))->with('title', 'Data Router');
+        return view('router.index');
     }
 
     public function ping(Request $request, $id)
@@ -97,7 +96,6 @@ class RouterController extends Controller
                 'password'  => 'required|min:3|max:100',
                 'hsname'    => 'required|min:3|max:50',
                 'dnsname'   => 'required|min:3|max:50',
-                'desc'      => 'nullable|max:100',
             ]);
             $router = Router::create([
                 'user_id'       => auth()->id(),
@@ -107,11 +105,10 @@ class RouterController extends Controller
                 'dnsname'       => $request->dnsname,
                 'username'      => $request->username,
                 'password'      => encrypt($request->password),
-                'desc'          => $request->desc,
             ]);
             return response()->json(['message' => "Router Created!", 'data' => $router]);
         } else {
-            return response()->json(['status' => false, 'message' => 'User only limit 2 Router!', 'data' => ''], 403);
+            return response()->json(['message' => 'User only limit 2 Router!', 'data' => ''], 403);
         }
     }
 
@@ -173,6 +170,7 @@ class RouterController extends Controller
 
     public function destroyBatch(Request $request)
     {
+        $user = $this->getUser();
         if ($request->ajax()) {
             $this->validate($request, [
                 'id'    => 'required|array|min:1',
@@ -180,7 +178,7 @@ class RouterController extends Controller
             ]);
             $deleted = 0;
             foreach ($request->id as $id) {
-                $model = Router::where('user_id', '=', $this->getUser()->id)->findOrFail($id);
+                $model = Router::where('user_id', '=', $user->id)->findOrFail($id);
                 $model->delete();
                 if ($model) {
                     $deleted++;

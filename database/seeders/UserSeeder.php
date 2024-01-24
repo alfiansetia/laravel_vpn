@@ -20,10 +20,11 @@ class UserSeeder extends Seeder
             'gender'    => 'Male',
             'address'   => 'Bks',
             'phone'     => '085222555885',
+            'role'      => 'admin',
+            'avatar'    => 'boy.png',
+            'status'    => 'active',
             'password'  => Hash::make('admin12345'),
             'email_verified_at' => now(),
-            'role'      => 'Admin',
-            'avatar'    => 'boy.png',
         ]);
 
         User::factory(50)->create();

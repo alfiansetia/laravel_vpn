@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             VpnSeeder::class,
             PortSeeder::class,
             RouterSeeder::class,
+            BankSeeder::class,
         ]);
     }
 }

@@ -28,6 +28,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_login_at',
         'last_login_ip',
         'email_verified_at',
+        'status',
+        'gender',
+        'instagram',
+        'facebook',
+        'linkedin',
+        'github'
     ];
 
     /**
@@ -54,5 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function vpn()
     {
         return $this->hasMany(Vpn::class);
+    }
+
+    public function getAvatarAttribute($value)
+    {
+        if ($value && file_exists(public_path('/images/avatar/' . $value))) {
+            return url('/images/avatar/' . $value);
+        } else {
+            return url('/images/default/avatar-' . $this->gender . '.png');
+        }
     }
 }

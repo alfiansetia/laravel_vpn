@@ -1,10 +1,11 @@
 function selected() {
     let id = $('input[name="id[]"]:checked').length;
+
     if (id <= 0) {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: "No Selected Data!",
-            type: 'error',
+            icon: 'error',
         })
         return false
     }
@@ -13,45 +14,45 @@ function selected() {
 
 function handleResponseCode(code) {
     if (code === 404) {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: "Not Found!",
-            type: 'error',
+            icon: 'error',
         })
     } else if (code === 500) {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: "Server Error!",
-            type: 'error',
+            icon: 'error',
         })
     } else if (code === 403) {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: "Unauthorize!",
-            type: 'error',
+            icon: 'error',
         })
     } else if (code === 401) {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: "Unauthenticate!",
-            type: 'error',
+            icon: 'error',
         })
         window.location.reload();
     } else {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: "Error! Code : " + code,
-            type: 'error',
+            icon: 'error',
         })
     }
 }
 
 function handleResponse(jqXHR) {
     let message = jqXHR.responseJSON.message
-    swal({
+    Swal.fire({
         title: 'Failed!',
         text: message,
-        type: 'error',
+        icon: 'error',
     })
     // if (jqXHR.status === 401) {
     //     window.location.reload();
@@ -62,10 +63,10 @@ function handleResponseForm(jqXHR, form = 'add') {
     let message = jqXHR.responseJSON.message
 
     if (jqXHR.status != 422) {
-        swal({
+        Swal.fire({
             title: 'Failed!',
             text: message,
-            type: 'error',
+            icon: 'error',
         })
         // window.location.reload();
     } else {
@@ -88,20 +89,24 @@ function handleResponseForm(jqXHR, form = 'add') {
 
 function delete_batch(url) {
     if (selected()) {
-        swal({
-            title: 'Delete Selected Data?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Data Will be Lost!",
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
             confirmButtonAriaLabel: 'Thumbs up, Yes!',
             cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
             cancelButtonAriaLabel: 'Thumbs down',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
             padding: '2em',
-            animation: false,
             customClass: 'animated tada',
-        }).then(function (result) {
-            if (result.value) {
+            showClass: {
+                popup: `animated tada`
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
                 let form = $("#formSelected");
                 ajax_setup()
                 $.ajax({
@@ -114,7 +119,7 @@ function delete_batch(url) {
                     success: function (res) {
                         unblock();
                         table.ajax.reload();
-                        swal(
+                        Swal.fire(
                             'Success!',
                             res.message,
                             'success'
@@ -152,7 +157,8 @@ function reset() {
 function ajax_setup() {
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Accept': 'application/json'
         }
     });
 }
@@ -161,113 +167,121 @@ $('#reset').click(function () {
     action_reset()
 })
 
-$('#form').submit(function (event) {
-    event.preventDefault();
-}).validate({
-    errorElement: 'span',
-    errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
-    },
-    highlight: function (element, errorClass, validClass) {
-        $(element).addClass('is-invalid');
-    },
-    unhighlight: function (element, errorClass, validClass) {
-        $(element).removeClass('is-invalid');
-        $(element).addClass('is-valid');
-    },
-    submitHandler: function (form) {
-        ajax_setup()
-        $.ajax({
-            type: 'POST',
-            url: url_post,
-            data: $(form).serialize(),
-            beforeSend: function () {
-                block();
-                clear_validate($(form))
-            },
-            success: function (res) {
-                unblock();
-                table.ajax.reload();
-                reset();
-                swal(
-                    'Success!',
-                    res.message,
-                    'success'
-                )
-            },
-            error: function (xhr, status, error) {
-                unblock();
-                handleResponseForm(xhr, 'add')
-            }
-        });
-    }
-});
+if($('#form').length > 0){
+    $('#form').submit(function (event) {
+        event.preventDefault();
+    }).validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+            $(element).addClass('is-valid');
+        },
+        submitHandler: function (form) {
+            ajax_setup()
+            $.ajax({
+                type: 'POST',
+                url: url_post,
+                data: $(form).serialize(),
+                beforeSend: function () {
+                    block();
+                    clear_validate($(form))
+                },
+                success: function (res) {
+                    unblock();
+                    table.ajax.reload();
+                    reset();
+                    Swal.fire(
+                        'Success!',
+                        res.message,
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    unblock();
+                    handleResponseForm(xhr, 'add')
+                }
+            });
+        }
+    });
+}
 
-$('#formEdit').submit(function (event) {
-    event.preventDefault();
-}).validate({
-    errorElement: 'span',
-    errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
-    },
-    highlight: function (element, errorClass, validClass) {
-        $(element).addClass('is-invalid');
-    },
-    unhighlight: function (element, errorClass, validClass) {
-        $(element).removeClass('is-invalid');
-        $(element).addClass('is-valid');
-    },
-    submitHandler: function (form) {
-        ajax_setup()
-        $.ajax({
-            type: 'POST',
-            url: url_put,
-            data: $(form).serialize(),
-            beforeSend: function () {
-                block();
-                $('#formEdit .error.invalid-feedback').each(function (i) {
-                    $(this).hide();
-                });
-                $('#formEdit input.is-invalid').each(function (i) {
-                    $(this).removeClass('is-invalid');
-                });
-            },
-            success: function (res) {
-                unblock();
-                table.ajax.reload();
-                reset();
-                // action_reset()
-                swal(
-                    'Success!',
-                    res.message,
-                    'success'
-                )
-            },
-            error: function (xhr, status, error) {
-                unblock();
-                handleResponseForm(xhr, 'edit')
-            }
-        });
-    }
-});
+if($('#formEdit').length > 0){
+    $('#formEdit').submit(function (event) {
+        event.preventDefault();
+    }).validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+            $(element).addClass('is-valid');
+        },
+        submitHandler: function (form) {
+            ajax_setup()
+            $.ajax({
+                type: 'POST',
+                url: url_put,
+                data: $(form).serialize(),
+                beforeSend: function () {
+                    block();
+                    $('#formEdit .error.invalid-feedback').each(function (i) {
+                        $(this).hide();
+                    });
+                    $('#formEdit input.is-invalid').each(function (i) {
+                        $(this).removeClass('is-invalid');
+                    });
+                },
+                success: function (res) {
+                    unblock();
+                    table.ajax.reload();
+                    reset();
+                    // action_reset()
+                    Swal.fire(
+                        'Success!',
+                        res.message,
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    unblock();
+                    handleResponseForm(xhr, 'edit')
+                }
+            });
+        }
+    });
+}
 
 $('#edit_delete').click(function () {
-    swal({
-        title: 'Delete Selected Data?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Data Will be Lost!",
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
         confirmButtonAriaLabel: 'Thumbs up, Yes!',
         cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
         cancelButtonAriaLabel: 'Thumbs down',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
         padding: '2em',
-        animation: false,
         customClass: 'animated tada',
-    }).then(function (result) {
-        if (result.value) {
+        showClass: {
+            popup: `animated tada`
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
             ajax_setup();
             $.ajax({
                 type: 'DELETE',
@@ -278,7 +292,7 @@ $('#edit_delete').click(function () {
                 success: function (res) {
                     unblock();
                     table.ajax.reload();
-                    swal(
+                    Swal.fire(
                         'Success!',
                         res.message,
                         'success'
@@ -304,17 +318,27 @@ var length_menu = [
 ];
 
 var o_lang = {
-    "oPaginate": {
-        "sPrevious": '<i data-feather="arrow-left"></i>',
-        "sNext": '<i data-feather="arrow-right"></i>'
+    oPaginate: {
+        sPrevious: '<i data-feather="arrow-left"></i>',
+        sNext: '<i data-feather="arrow-right"></i>'
     },
     // "sInfo": "Showing page _PAGE_ of _PAGES_",
-    "sSearch": '<i data-feather="search"></i>',
-    "sSearchPlaceholder": "Search...",
-    "sLengthMenu": "Results :  _MENU_",
-};
+    sSearch: '<i data-feather="search"></i>',
+    sSearchPlaceholder: "Search...",
+    sLengthMenu: "Results :  _MENU_",
+}
 
-var dom = "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-    "<'table-responsive'tr>" +
-    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>";
+var dom = "<'inv-list-top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'l<'dt-action-buttons align-self-center'B>><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f<'toolbar align-self-center'>>>>" +
+"<'table-responsive'tr>" +
+"<'inv-list-bottom-section d-sm-flex justify-content-sm-between text-center'<'inv-list-pages-count  mb-sm-0 mb-3'i><'inv-list-pagination'p>>"
 
+var btn_element = `<div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                        <i data-feather="chevron-down"></i> 
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <li><button id="btn_add" type="button" class="dropdown-item bs-tooltip" title="Add Data">Add</button></li>
+                        <li><button id="btn_delete" type="button" class="dropdown-item bs-tooltip" title="Delete Selected Data">Delete</button></li>
+                    </ul>
+                </div>`

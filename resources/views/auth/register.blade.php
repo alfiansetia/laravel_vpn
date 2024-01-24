@@ -1,113 +1,164 @@
-@extends('layouts.auth')
+@extends('layouts.auth', ['title' => 'Sign Up'])
 
+@push('csslib')
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/light/elements/alert.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/dark/elements/alert.css') }}">
+    <!--  END CUSTOM STYLE FILE  -->
+@endpush
 @section('content')
-    <h1 class="">Register</h1>
-    @if (Route::has('login'))
-        <p class="signup-link register">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
-    @endif
-    <form class="text-left" method="POST" action="{{ route('register') }}">
-        @csrf
-        <div class="form">
-            <div id="name-field" class="field-wrapper input">
-                <label for="name">FULL NAME</label>
-                <i data-feather="user"></i>
-                <input id="name" name="name" type="text"
-                    class="form-control maxlength @error('name') is-invalid @enderror" value="{{ old('name') }}"
-                    autocomplete="name" placeholder="FULL NAME" minlength="3" maxlength="100" autofocus required />
-                @error('name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div id="email-field" class="field-wrapper input">
-                <label for="email">EMAIL</label>
-                <i data-feather="at-sign"></i>
-                <input id="email" name="email" type="email"
-                    class="form-control maxlength @error('email') is-invalid @enderror" value="{{ old('email') }}"
-                    autocomplete="email" placeholder="Email" minlength="3" maxlength="100" required />
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div id="password-field" class="field-wrapper input mb-2">
-                <div class="d-flex justify-content-between">
-                    <label for="password">PASSWORD</label>
+    <div class="row">
+
+        @include('components.auth.cover')
+
+        <div
+            class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center ms-lg-auto me-lg-0 mx-auto">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <form action="{{ route('register') }}" method="POST">
+                            @csrf
+                            <div class="col-md-12 mb-3">
+                                <h2>Sign Up</h2>
+                                <p>Enter your Name, email and password to Sign Up</p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bs-tooltip" title="Full Name" id="basic-addon10">
+                                            <i data-feather="at-sign"></i>
+                                        </span>
+                                        <input type="text" name="name" id="name"
+                                            class="form-control maxlength @error('name') is-invalid @enderror"
+                                            value="{{ old('name') }}" placeholder="Input Your Full Name"
+                                            aria-describedby="basic-addon10" minlength="3" maxlength="100" required
+                                            autofocus>
+                                        @error('name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bs-tooltip" title="Email" id="basic-addon1">
+                                            <i data-feather="at-sign"></i>
+                                        </span>
+                                        <input type="email" name="email" id="email"
+                                            class="form-control maxlength @error('email') is-invalid @enderror"
+                                            value="{{ old('email') }}" placeholder="Input Your Email"
+                                            aria-describedby="basic-addon1" minlength="5" maxlength="100" required>
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bs-tooltip" title="Password" id="basic-addon2">
+                                            <i data-feather="lock"></i>
+                                        </span>
+                                        <input type="password"
+                                            class="form-control maxlength @error('password') is-invalid @enderror"
+                                            name="password" id="password" minlength="8" maxlength="150"
+                                            autocomplete="current-password" placeholder="Input Password" required>
+                                        <span class="input-group-text bs-tooltip" title="Show/Hide" id="toggle-password"
+                                            onclick="pw();"><i data-feather="eye-off"></i></span>
+                                        @error('password')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label for="password_confirmation" class="form-label">Password Confirmation</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bs-tooltip" title="Password Confirmation"
+                                            id="basic-addon3">
+                                            <i data-feather="lock"></i>
+                                        </span>
+                                        <input type="password"
+                                            class="form-control maxlength @error('password') is-invalid @enderror"
+                                            name="password_confirmation" id="password_confirmation"
+                                            autocomplete="current-password" placeholder="Input Password Confirmation"
+                                            minlength="8" maxlength="150" required>
+                                        <span class="input-group-text bs-tooltip" title="Show/Hide" id="toggle-password2"
+                                            onclick="pw_con();"><i data-feather="eye-off"></i></span>
+                                        @error('password_confirmation')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <div class="form-check form-check-primary form-check-inline">
+                                        <input class="form-check-input me-3" type="checkbox" name="term[]"
+                                            id="form-check-default">
+                                        <label class="form-check-label" for="form-check-default">
+                                            I agree the <a href="javascript:void(0);" class="text-primary">Terms and
+                                                Conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <label for="captcha">CAPTCHA</label>
+                                    </div>
+                                    {!! htmlFormSnippet() !!}
+                                    @error('g-recaptcha-response')
+                                        <div class="alert alert-light-danger alert-dismissible fade show border-0 mb-4"
+                                            role="alert">
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"><i data-feather="x"></i></button>
+                                            <strong>Error!</strong> {{ $message }}</button>
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <button type="submit" class="btn btn-secondary w-100">SIGN UP</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        @include('components.auth.social')
+
+                        @if (Route::has('login'))
+                            <div class="col-12">
+                                <div class="text-center">
+                                    <p class="mb-0">Already have an account ? <a href="{{ route('login') }}"
+                                            class="text-warning">Sign In</a></p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @include('components.auth.ontap')
+                    </div>
+
                 </div>
-                <i data-feather="lock"></i>
-                <input id="password" name="password" type="password"
-                    class="form-control maxlength @error('password') is-invalid @enderror" autocomplete="new-password"
-                    placeholder="Password" minlength="5" maxlength="100" required />
-                <i data-feather="eye" id="toggle-password" onclick="pw();"></i>
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div id="password_confirm-field" class="field-wrapper input mb-2">
-                <div class="d-flex justify-content-between">
-                    <label for="password_confirm">CONFIRM PASSWORD</label>
-                </div>
-                <i data-feather="lock"></i>
-                <input id="password_confirm" name="password_confirmation" type="password" class="form-control maxlength"
-                    autocomplete="new-password" placeholder="Password" minlength="5" maxlength="100" required />
-                <i data-feather="eye" onclick="con_pw();"></i>
-            </div>
-            <div class="field-wrapper terms_condition">
-                <div class="n-chk">
-                    <label class="new-control new-checkbox checkbox-primary">
-                        <input type="checkbox" class="new-control-input" name="term[]">
-                        <span class="new-control-indicator"></span><span>I agree to the <a href="javascript:void(0);"> terms
-                                and conditions </a></span>
-                    </label>
-                </div>
-            </div>
-            <div id="captcha-field" class="field-wrapper input mb-2">
-                <div class="d-flex justify-content-between">
-                    <label for="captcha">CAPTCHA</label>
-                </div>
-                {!! htmlFormSnippet() !!}
-            </div>
-            @error('g-recaptcha-response')
-                <div class="alert alert-light-danger border-0 mb-4" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i data-feather="x" class="close"></i>
-                    </button>
-                    <strong>Error!</strong> {{ $message }}
-                </div>
-            @enderror
-            <div class="d-sm-flex justify-content-between">
-                <div class="field-wrapper">
-                    <button type="submit" class="btn btn-primary">Get Started!</button>
-                </div>
-            </div>
-            <div class="division">
-                <span>OR</span>
-            </div>
-            <div class="social">
-                <a href="javascript:void(0);" class="btn social-fb">
-                    <i class="fab fa-google"></i>
-                    <span class="brand-name">Google</span>
-                </a>
-                <a href="javascript:void(0);" class="btn social-fb">
-                    <i class="fab fa-facebook-f"></i>
-                    <span class="brand-name">Facebook</span>
-                </a>
             </div>
         </div>
-    </form>
-
-    <div id="g_id_onload" data-client_id="{{ env('GOOGLE_CLIENT_ID') }}" data-login_uri="{{ route('auth.onetap') }}"
-        data-_token="{{ csrf_token() }}" data-auto_prompt="true"> >
-    </div>
-    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
-        data-shape="rectangular" data-logo_alignment="left">
     </div>
 @endsection
-
 
 @push('js')
     <script src="https://accounts.google.com/gsi/client" async defer></script>

@@ -26,8 +26,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        //
-        $comp = $this->getCompany();
         $user = $this->getUser();
         if (isAdmin()) {
             $data_vpn = Vpn::selectRaw('
@@ -41,17 +39,17 @@ class HomeController extends Controller
                 SUM(CASE WHEN email_verified_at IS NULL THEN 1 ELSE 0 END) as nonactive
                 ')->first();
 
-            return view('dashboard.admin', compact('data_vpn', 'comp'))->with('title', 'Dashboard');
+            return view('dashboard.admin', compact('data_vpn'));
         } else {
             $data_vpn = Vpn::where('user_id', $user->id)
                 ->selectRaw('
-                    SUM(CASE WHEN masa > 0 AND is_active = "yes" THEN 1 ELSE 0 END) as active,
-                    SUM(CASE WHEN masa = 0 AND is_active = "yes" THEN 1 ELSE 0 END) as trial,
+                    SUM(CASE WHEN is_trial = "no" AND is_active = "yes" THEN 1 ELSE 0 END) as active,
+                    SUM(CASE WHEN is_trial = "yes" AND is_active = "yes" THEN 1 ELSE 0 END) as trial,
                     SUM(CASE WHEN is_active = "no" THEN 1 ELSE 0 END) as nonactive
                 ')
                 ->first();
 
-            return view('dashboard.user', compact(['user', 'data_vpn', 'comp']))->with('title', 'Dashboard');
+            return view('dashboard.user', compact(['user', 'data_vpn']));
         }
     }
 }

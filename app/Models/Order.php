@@ -14,9 +14,8 @@ class Order extends Model
     protected $casts = [
         'id'        => 'integer',
         'user_id'   => 'integer',
-        'number'    => 'integer',
-        'due_date'  => 'integer',
-        'credit'    => 'integer',
+        'bank_id'   => 'integer',
+        'total'     => 'integer',
     ];
 
     public function order_items()
@@ -24,8 +23,13 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function transaction_items()
+    public function bank()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->belongsTo(Bank::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

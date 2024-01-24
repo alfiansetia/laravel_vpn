@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('layouts.backend.template', ['title' => 'Setting Company'])
 
 @push('css')
     <link href="{{ asset('assets/css/users/user-profile.css') }}" rel="stylesheet" type="text/css" />

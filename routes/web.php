@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Mikapi\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RouterController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SettingController;
@@ -25,8 +29,11 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes([
     'verify' => true,
-    'register' => false,
+    'register' => true,
 ]);
+Route::get('tes', function () {
+    return view('tes');
+});
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -44,6 +51,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+    Route::resource('order', OrderController::class)->only(['index', 'show', 'store', 'destroy',]);
+
     Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
     Route::resource('user', UserController::class)->except(['edit', 'create']);
 
@@ -55,30 +64,40 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('server/{server}/ping', [ServerController::class, 'ping'])->name('server.ping');
     Route::resource('server', ServerController::class)->except(['edit', 'create']);
 
+    Route::get('port/paginate', [PortController::class, 'paginate'])->name('port.paginate');
     Route::get('port/getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
     Route::delete('port/batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
     Route::resource('port', PortController::class)->except(['edit', 'create']);
 
-    Route::resource('bill', UserController::class)->except(['edit', 'destroy']);
-    Route::resource('bank', UserController::class)->except(['edit', 'destroy']);
+    Route::delete('bank/batch', [BankController::class, 'destroyBatch'])->name('bank.destroy.batch');
+    Route::resource('bank', BankController::class)->except(['edit', 'create']);
 
     Route::delete('router/batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
     Route::get('router/open', [RouterController::class, 'open'])->name('router.open');
     Route::get('router/ping', [RouterController::class, 'ping'])->name('router.ping');
     Route::resource('router', RouterController::class)->except(['edit', 'create']);
 
-    Route::get('setting/profile', [SettingController::class, 'profile'])->name('setting.profile');
-    Route::post('setting/profile', [SettingController::class, 'profileUpdate'])->name('setting.profile.update');
+    Route::get('setting/profile', [ProfileController::class, 'profile'])->name('setting.profile');
+    Route::get('setting/profile/update', [ProfileController::class, 'profileEdit'])->name('setting.profile.edit');
+    Route::post('setting/profile/update', [ProfileController::class, 'profileUpdate'])->name('setting.profile.update');
 
-    Route::get('setting/password', [SettingController::class, 'password'])->name('setting.password');
-    Route::post('setting/password', [SettingController::class, 'passwordUpdate'])->name('setting.password.update');
+    Route::get('setting/social/', [ProfileController::class, 'social'])->name('setting.social');
+    Route::post('setting/social/', [ProfileController::class, 'socialUpdate'])->name('setting.social.update');
 
-    Route::get('setting/company', [SettingController::class, 'company'])->name('setting.company');
-    Route::post('setting/company', [SettingController::class, 'companyUpdate'])->name('setting.company.update');
+    Route::get('setting/password', [ProfileController::class, 'password'])->name('setting.password');
+    Route::post('setting/password', [ProfileController::class, 'passwordUpdate'])->name('setting.password.update');
+
+    Route::get('setting/company', [CompanyController::class, 'company'])->name('setting.company');
+    Route::post('setting/company', [CompanyController::class, 'companyUpdate'])->name('setting.company.update');
+
+    Route::get('setting/image', [CompanyController::class, 'image'])->name('setting.image');
+    Route::post('setting/image', [CompanyController::class, 'imageUpdate'])->name('setting.image.update');
 
     Route::get('setting/telegram', [SettingController::class, 'telegram'])->name('setting.telegram');
     Route::post('setting/telegram', [SettingController::class, 'telegramUpdate'])->name('setting.telegram.update');
     Route::put('setting/telegram', [SettingController::class, 'telegramSet'])->name('setting.telegram.set');
+
+
 
     Route::get('setting/backup', [SettingController::class, 'backup'])->name('setting.backup');
 

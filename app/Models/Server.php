@@ -16,6 +16,7 @@ class Server extends Model
     ];
 
     protected $hidden = [
+        'username',
         'password',
     ];
 

@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->string('desc');
-            $table->bigInteger('amount')->default(0);
+            $table->unsignedBigInteger('vpn_id')->nullable();
+            $table->integer('total')->default(0);
+            $table->integer('price')->default(0);
+            $table->integer('subtotal')->default(0);
             $table->timestamps();
+            $table->foreign('vpn_id')->references('id')->on('vpns')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

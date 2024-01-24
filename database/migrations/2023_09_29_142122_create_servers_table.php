@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('sufiks')->nullable();
             $table->integer('port')->default(0);
             $table->integer('price')->default(0);
+            $table->integer('annual_price')->default(0);
             $table->integer('last_ip')->default(0);
             $table->integer('count_ip')->default(0);
             $table->integer('last_port')->default(0);

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\CompanyTrait;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -27,25 +28,24 @@ class UserController extends Controller
             if ($request->filled('email')) {
                 $data->where('email', 'like', "%{$request->email}%");
             }
-            $result = $data->get();
+            $result = $data;
             return DataTables::of($result)->toJson();
         }
-        $comp = $this->getCompany();
-        return view('user.index', compact(['comp']))->with('title', 'Data User');
+        return view('user.index');
     }
-
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'name'      => 'required|max:25|min:3',
             'email'     => 'required|email|unique:users,email',
-            'gender'    => 'required|in:Male,Female',
+            'gender'    => 'required|in:male,female',
             'phone'     => 'required|max:15|min:3',
             'address'   => 'required|max:100|min:3',
             'password'  => 'required',
-            'role'      => 'required|in:Admin,User',
-            'verified'  => 'nullable|in:on,off',
+            'role'      => 'required|in:admin,user',
+            'status'    => 'nullable|in:on',
+            'verified'  => 'nullable|in:on',
         ]);
         $user = User::create([
             'name'      => $request->name,
@@ -55,7 +55,8 @@ class UserController extends Controller
             'address'   => $request->address,
             'password'  => Hash::make($request->password),
             'role'      => $request->role,
-            'email_verified_at' => $request->verified === 'on' ? now() : null,
+            'status'    => $request->status == 'on' ? 'active' : 'nonactive',
+            'email_verified_at' => $request->verified == 'on' ? now() : null,
         ]);
         return response()->json(['message' => 'Success Insert Data', 'data' => $user]);
     }
@@ -65,22 +66,27 @@ class UserController extends Controller
         $this->validate($request, [
             'name'      => 'required|max:25|min:3',
             'email'     => 'required|email|unique:users,email,' . $user->id,
-            'gender'    => 'required|in:Male,Female',
+            'gender'    => 'required|in:male,female',
             'phone'     => 'required|max:15|min:3',
             'address'   => 'required|max:100|min:3',
-            'role'      => 'required|in:Admin,User',
+            'role'      => 'required|in:admin,user',
+            'status'    => 'nullable|in:on',
             'password'  => 'nullable|min:5',
-            'verified'  => 'nullable|in:on,off',
+            'verified'  => 'nullable|in:on',
         ]);
         $data = [
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'gender'        => $request->gender,
-            'phone'         => $request->phone,
-            'address'       => $request->address,
-            'role'          => $request->role,
-            'email_verified_at' => $request->verified === 'on' ? now() : null,
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'gender'    => $request->gender,
+            'phone'     => $request->phone,
+            'address'   => $request->address,
+            'role'      => $request->role,
+            'status'    => $request->status == 'on' ? 'active' : 'nonactive',
+            'email_verified_at' => null,
         ];
+        if ($user->email_verified_at != null && $request->verified == 'on') {
+            $data['email_verified_at'] = now();
+        }
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }

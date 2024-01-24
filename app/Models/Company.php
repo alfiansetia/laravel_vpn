@@ -14,4 +14,22 @@ class Company extends Model
     protected $casts = [
         'id'        => 'integer',
     ];
+
+    public function getLogoLightAttribute($value)
+    {
+        if ($value && file_exists(public_path('images/logo/' . $value))) {
+            return url('images/logo/' . $value);
+        } else {
+            return url('images/default/logo2.svg');
+        }
+    }
+
+    public function getLogoDarkAttribute($value)
+    {
+        if ($value && file_exists(public_path('images/logo/' . $value))) {
+            return url('images/logo/' . $value);
+        } else {
+            return url('images/default/logo.svg');
+        }
+    }
 }

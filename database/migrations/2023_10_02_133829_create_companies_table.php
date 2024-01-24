@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('address');
-            $table->string('logo');
+            $table->string('logo_light')->nullable();
+            $table->string('logo_dark')->nullable();
             $table->string('slogan');
             $table->timestamps();
         });
