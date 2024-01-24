@@ -158,6 +158,9 @@
                                                     <span><i data-feather="check"></i></span> Api APP
                                                 </li>
                                                 <li>
+                                                    <span><i data-feather="check"></i></span> Speedtest Support
+                                                </li>
+                                                <li>
                                                     <span><i data-feather="check"></i></span> Server
                                                     {{ $item->location }}
                                                 </li>

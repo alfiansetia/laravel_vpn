@@ -51,12 +51,11 @@
 
                         @include('components.auth.social')
 
-                        @if (Route::has('register'))
+                        @if (Route::has('login'))
                             <div class="col-12">
                                 <div class="text-center">
-                                    <p class="mb-0">Dont't have an account ? <a href="{{ route('register') }}"
-                                            class="text-warning">Sign
-                                            Up</a></p>
+                                    <p class="mb-0">Already have an account ? <a href="{{ route('login') }}"
+                                            class="text-warning">Sign In</a></p>
                                 </div>
                             </div>
                         @endif

@@ -17,7 +17,7 @@ class ServerFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'          => fake()->name(),
+            'name'          => fake()->firstName(),
             'ip'            => fake()->ipv4(),
             'domain'        => fake()->domainName(),
             'netwatch'      => fake()->ipv4(),
@@ -27,6 +27,8 @@ class ServerFactory extends Factory
             'is_active'     => fake()->randomElement(['yes', 'no']),
             'is_available'  => fake()->randomElement(['yes', 'no']),
             'price'         => fake()->numberBetween(10000, 100000),
+            'annual_price'  => fake()->numberBetween(100000, 1000000),
+            'sufiks'        => fake()->domainName(),
             // 'type'      => fake()->randomElement(['free', 'paid']),
             // 'api'       => fake()->randomElement(['active', 'nonactive']),
         ];
