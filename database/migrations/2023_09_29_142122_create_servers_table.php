@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('ip');
             $table->string('domain');
             $table->string('netwatch');
-            $table->string('username');
-            $table->string('password');
+            $table->string('username')->default('admin');
+            $table->string('password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
             $table->string('location')->nullable();
             $table->string('sufiks')->nullable();
             $table->integer('port')->default(0);

@@ -15,10 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
+            $table->string('slogan');
+            $table->string('author');
             $table->string('address');
             $table->string('logo_light')->nullable();
             $table->string('logo_dark')->nullable();
-            $table->string('slogan');
+            $table->string('link_blog')->nullable();
+            $table->string('link_status')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('github')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('twitter')->nullable();
             $table->timestamps();
         });
     }

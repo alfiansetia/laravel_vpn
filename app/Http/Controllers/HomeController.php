@@ -38,8 +38,6 @@ class HomeController extends Controller
                 SUM(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END) as active,
                 SUM(CASE WHEN email_verified_at IS NULL THEN 1 ELSE 0 END) as nonactive
                 ')->first();
-
-            return view('dashboard.admin', compact('data_vpn'));
         } else {
             $data_vpn = Vpn::where('user_id', $user->id)
                 ->selectRaw('
@@ -48,8 +46,7 @@ class HomeController extends Controller
                     SUM(CASE WHEN is_active = "no" THEN 1 ELSE 0 END) as nonactive
                 ')
                 ->first();
-
-            return view('dashboard.user', compact(['user', 'data_vpn']));
         }
+        return view('dashboard.admin', compact('data_vpn'));
     }
 }

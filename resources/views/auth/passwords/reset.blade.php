@@ -33,7 +33,7 @@
                                         <input type="email" name="email" id="email"
                                             class="form-control maxlength @error('email') is-invalid @enderror"
                                             value="{{ $email ?? old('email') }}" placeholder="Input Your Email"
-                                            aria-describedby="basic-addon1" minlength="5" maxlength="100" required
+                                            aria-describedby="basic-addon1" minlength="8" maxlength="100" required
                                             readonly>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">

@@ -27,7 +27,8 @@ class PortController extends Controller
             } else {
                 $data->with('vpn:id,ip,is_active,username,server_id', 'vpn.server:id,domain,ip,location,name,netwatch,paid,price')->whereRelation('vpn', 'user_id', '=', auth()->user()->id);
             }
-            return DataTables::of($data)->toJson();
+            $result = $data->orderBy('vpn_id', 'ASC');
+            return DataTables::of($result)->toJson();
         } else {
             if (isAdmin()) {
                 return view('port.index');

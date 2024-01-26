@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('username');
             $table->string('password');
             // $table->date('regist');
-            $table->dateTime('last_renew')->useCurrent();
+            $table->dateTime('last_renew')->nullable();
             $table->date('expired');
             $table->enum('is_active', ['yes', 'no'])->default('yes');
             $table->enum('is_trial', ['yes', 'no'])->default('yes');

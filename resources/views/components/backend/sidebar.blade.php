@@ -49,10 +49,20 @@
                 </div>
             </li>
             <li class="menu">
-                <a href="./app-calendar.html" aria-expanded="false" class="dropdown-toggle">
+                <a target="_blank" href="{{ $company->link_blog ?? 'javascript:void(0);' }}" aria-expanded="false"
+                    class="dropdown-toggle">
                     <div class="">
-                        <i data-feather="calendar"></i>
-                        <span>Calendar</span>
+                        <i data-feather="book"></i>
+                        <span>Tutorial</span>
+                    </div>
+                </a>
+            </li>
+            <li class="menu">
+                <a target="_blank" href="{{ $company->link_status ?? 'javascript:void(0);' }}" aria-expanded="false"
+                    class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="bar-chart"></i>
+                        <span>Status Server</span>
                     </div>
                 </a>
             </li>

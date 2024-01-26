@@ -16,10 +16,13 @@ class CompanySeeder extends Seeder
     {
         File::cleanDirectory(public_path('assets/img/logo'));
         Company::create([
-            'name'      => 'KCNET',
-            'phone'     => '082324129752',
-            'address'   => 'JL. Kampung Pasar Kembang, Yogyakarta',
-            'slogan'    => 'Layanan VPN Remote Untuk Device Anda',
+            'name'          => 'KCNET',
+            'phone'         => '082324129752',
+            'slogan'        => 'Layanan VPN Remote Untuk Device Anda',
+            'author'        => 'ALfian',
+            'address'       => 'JL. Kampung Pasar Kembang, Yogyakarta',
+            'link_blog'     => 'https://blog.kacangan.net',
+            'link_status'   => 'https://stats.uptimerobot.com/Xkn03tnOPl',
         ]);
     }
 }

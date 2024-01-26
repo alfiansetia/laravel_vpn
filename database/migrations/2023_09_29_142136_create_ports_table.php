@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('ports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vpn_id')->nullable();
-            $table->integer('dst')->nullable();
-            $table->integer('to')->nullable();
+            $table->integer('dst')->default(0);
+            $table->integer('to')->default(0);
             $table->timestamps();
             $table->foreign('vpn_id')->references('id')->on('vpns')->cascadeOnDelete()->cascadeOnUpdate();
         });

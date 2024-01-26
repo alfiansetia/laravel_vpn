@@ -21,11 +21,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CompanySeeder::class,
             SettingSeeder::class,
-            UserSeeder::class,
-            ServerSeeder::class,
-            VpnSeeder::class,
-            PortSeeder::class,
-            RouterSeeder::class,
+            // UserSeeder::class,
+            // ServerSeeder::class,
+            // VpnSeeder::class,
+            // PortSeeder::class,
+            TestMigrateSeeder::class,
+            // RouterSeeder::class,
             BankSeeder::class,
         ]);
     }
