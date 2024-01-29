@@ -27,6 +27,8 @@ class HomeController extends Controller
     public function index()
     {
         $user = $this->getUser();
+        $new_users = User::latest()->paginate(5);
+        $new_expired_vpns = Vpn::where('expired', '<=', date('Y-m-d'))->latest('expired')->paginate(5);
         if (isAdmin()) {
             $data_vpn = Vpn::selectRaw('
                 SUM(CASE WHEN is_trial = "no" AND is_active = "yes" THEN 1 ELSE 0 END) as active,
@@ -47,6 +49,6 @@ class HomeController extends Controller
                 ')
                 ->first();
         }
-        return view('dashboard.admin', compact('data_vpn'));
+        return view('dashboard.admin', compact('data_vpn', 'new_users', 'new_expired_vpns'));
     }
 }

@@ -70,4 +70,9 @@ class User extends Authenticatable implements MustVerifyEmail
             return url('/images/default/avatar-' . $this->gender . '.png');
         }
     }
+
+    public function is_verified()
+    {
+        return $this->email_verified_at != null ? 'verified' : 'unverified';
+    }
 }
