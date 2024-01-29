@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Mikapi\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PortController;
@@ -51,7 +52,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::resource('order', OrderController::class)->only(['index', 'show', 'store', 'destroy',]);
+    Route::resource('invoice', InvoiceController::class)->only(['index', 'show', 'store', 'destroy',]);
 
     Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
     Route::resource('user', UserController::class)->except(['edit', 'create']);

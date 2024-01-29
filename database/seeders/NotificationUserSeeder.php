@@ -15,13 +15,15 @@ class NotificationUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::all();
+        $users = User::where('role', 'admin')->get();
         $notifs = Notification::all();
         foreach ($notifs as $item) {
-            NotificationUser::factory()->create([
-                'user_id'           => $users->random('id'),
-                'notification_id'   => $item->Id,
-            ]);
+            foreach ($users as $key => $value) {
+                NotificationUser::factory()->create([
+                    'user_id'           => $value->id,
+                    'notification_id'   => $item->id,
+                ]);
+            }
         }
     }
 }

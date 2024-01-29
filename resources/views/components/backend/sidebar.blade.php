@@ -131,12 +131,12 @@
                 </ul>
             </li>
 
-            <li class="menu {{ $title == 'Data Order' ? 'active' : '' }}">
-                <a href="{{ route('order.index') }}" aria-expanded="{{ $title == 'Data Order' ? 'true' : 'false' }}"
-                    class="dropdown-toggle">
+            <li class="menu {{ $title == 'Data Invoice' ? 'active' : '' }}">
+                <a href="{{ route('invoice.index') }}"
+                    aria-expanded="{{ $title == 'Data Invoice' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <i data-feather="shopping-cart"></i>
-                        <span>List Order</span>
+                        <span>List Invoice</span>
                     </div>
                 </a>
             </li>

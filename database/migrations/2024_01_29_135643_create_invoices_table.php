@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('bank_id')->nullable();
+            $table->unsignedBigInteger('vpn_id')->nullable();
             $table->dateTime('date')->useCurrent();
-            $table->string('number')->unique();
-            $table->bigInteger('total')->default(0);
+            $table->string('number');
+            $table->integer('price')->default(0);
+            $table->integer('total')->default(0);
+            $table->integer('amount')->default(0);
             $table->enum('status', ['paid', 'unpaid', 'cancel'])->default('unpaid');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->foreign('bank_id')->references('id')->on('banks')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('vpn_id')->references('id')->on('vpns')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('invoices');
     }
 };

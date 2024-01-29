@@ -1,4 +1,4 @@
-@extends('layouts.backend.template', ['title' => 'Data Order'])
+@extends('layouts.backend.template', ['title' => 'Data Invoice'])
 @push('csslib')
     <link href="{{ asset('backend/src/plugins/src/table/datatable/datatables.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/plugins/css/light/table/datatable/dt-global_style.css') }}" rel="stylesheet"
@@ -44,7 +44,7 @@
             serverSide: true,
             rowId: 'id',
             ajax: {
-                url: "{{ route('order.index') }}",
+                url: "{{ route('invoice.index') }}",
                 error: function(jqXHR, textStatus, errorThrown) {
                     handleResponseCode(jqXHR, textStatus, errorThrown)
                 },
@@ -78,15 +78,15 @@
                 title: "Number",
                 data: 'number',
             }, {
-                title: "Total",
-                data: 'total',
+                title: "Amount",
+                data: 'amount',
             }, {
                 title: 'Status',
                 data: 'status',
                 className: "text-center",
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        return `<span class="badge badge-${data === 'active' ? 'success' : 'danger'}">${data}</span>`
+                        return `<span class="badge badge-${data === 'success' ? 'success' : (ata === 'pending'? 'warning':'danger')}">${data}</span>`
                     } else {
                         return data
                     }

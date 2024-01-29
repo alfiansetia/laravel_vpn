@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Invoice extends Model
 {
     use HasFactory;
 
@@ -13,15 +13,11 @@ class Order extends Model
 
     protected $casts = [
         'id'        => 'integer',
+        'vpn_id'    => 'integer',
         'user_id'   => 'integer',
         'bank_id'   => 'integer',
         'total'     => 'integer',
     ];
-
-    public function order_items()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
 
     public function bank()
     {
@@ -31,5 +27,10 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function vpn()
+    {
+        return $this->belongsTo(Vpn::class);
     }
 }

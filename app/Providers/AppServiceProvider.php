@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,7 +31,9 @@ class AppServiceProvider extends ServiceProvider
             ],
             function ($view) {
                 $view->with('company', Company::first());
-                $view->with('user', auth()->user());
+                // $view->with('user', auth()->user());
+
+                $view->with('user', User::with('notification_unreads')->withCount('notification_unreads')->find(auth()->id()));
             }
         );
     }

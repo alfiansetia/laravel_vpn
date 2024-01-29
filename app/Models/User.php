@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -74,5 +75,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function is_verified()
     {
         return $this->email_verified_at != null ? 'verified' : 'unverified';
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(NotificationUser::class);
+    }
+
+    public function notification_unreads()
+    {
+        return $this->hasMany(NotificationUser::class)->where('is_read', 'no');
     }
 }

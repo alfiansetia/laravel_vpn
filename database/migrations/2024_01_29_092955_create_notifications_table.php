@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->dateTime('date')->useCurrent();
             $table->string('image')->nullable();
             $table->string('title');
             $table->text('body');
