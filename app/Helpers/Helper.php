@@ -2,11 +2,11 @@
 
 function isAdmin()
 {
-    if (strtolower(auth()->user()->role) == 'admin') {
-        return true;
-    } else {
+    $user = auth()->user();
+    if (!$user) {
         return false;
     }
+    return strtolower(auth()->user()->role) == 'admin';
 }
 
 function formatBytes($size, $decimals = 0)

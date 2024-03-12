@@ -78,7 +78,7 @@
                                     </a>
                                 </li>
                             </ul>
-                            <a href="{{ route('setting.password') }}" class="btn btn-danger btn-block mt-2">
+                            <a href="{{ route('setting.profile.password') }}" class="btn btn-danger btn-block mt-2">
                                 <i class="fas fa-fingerprint me-1 bs-tooltip" title="Change Password"></i>Change Password
                             </a>
                         </div>

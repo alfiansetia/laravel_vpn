@@ -17,7 +17,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('roleAdmin');
+        $this->middleware('is.admin');
         $this->model = User::class;
     }
 

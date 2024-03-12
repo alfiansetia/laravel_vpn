@@ -22,20 +22,32 @@
                     <ul class="nav nav-pills" id="animateLine">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="animated-underline-home-tab"
-                                onclick="redirect('{{ route('setting.company') }}')">
+                                onclick="redirect('{{ route('setting.company.general') }}')">
                                 <i data-feather="user"></i> General
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="animated-underline-home-tab"
+                                onclick="redirect('{{ route('setting.company.social') }}')">
+                                <i data-feather="at-sign"></i> Social
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="animated-underline-profile-tab"
-                                onclick="redirect('{{ route('setting.image') }}')">
-                                <i data-feather="at-sign"></i> Image
+                                onclick="redirect('{{ route('setting.company.image') }}')">
+                                <i data-feather="image"></i> Image
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="animated-underline-contact-tab"
-                                onclick="redirect('{{ route('setting.telegram') }}')">
+                                onclick="redirect('{{ route('setting.company.telegram') }}')">
                                 <i data-feather="send"></i> Telegram
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="animated-underline-database-tab"
+                                onclick="redirect('{{ route('database.index') }}')">
+                                <i data-feather="database"></i> Database
                             </button>
                         </li>
                     </ul>
@@ -44,8 +56,8 @@
 
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
-                    <form id="form_info" class="section general-info" action="{{ route('setting.telegram.update') }}"
-                        method="POST">
+                    <form id="form_info" class="section general-info"
+                        action="{{ route('setting.company.telegram.update') }}" method="POST">
                         @csrf
                         <div class="info">
                             <h6 class="">Telegram</h6>
@@ -237,7 +249,7 @@
                 });
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('setting.telegram.set') }}",
+                    url: "{{ route('setting.company.telegram.set') }}",
                     data: {
                         '_method': 'PUT',
                         'action': action,
@@ -302,7 +314,7 @@
                     });
                     $.ajax({
                         type: 'POST',
-                        url: "{{ route('setting.telegram.update') }}",
+                        url: "{{ route('setting.company.telegram.update') }}",
                         data: $(form).serialize(),
                         beforeSend: function() {
                             block();

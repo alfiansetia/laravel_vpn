@@ -193,7 +193,7 @@
                         <a href="{{ route('setting.profile.edit') }}"> Account </a>
                     </li>
                     <li class="{{ $title == 'Setting Company' ? 'active' : '' }}">
-                        <a href="{{ route('setting.company') }}"> Company </a>
+                        <a href="{{ route('setting.company.general') }}"> Company </a>
                     </li>
                 </ul>
             </li>

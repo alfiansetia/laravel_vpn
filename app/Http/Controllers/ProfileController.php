@@ -14,7 +14,8 @@ class ProfileController extends Controller
 
     public function profile()
     {
-        $orders = Order::with('bank')->where('user_id', $this->getUser()->id)->get();
+        // $orders = Order::with('bank')->where('user_id', $this->getUser()->id)->get();
+        $orders = [];
         return view('setting.profile', compact('orders'));
     }
 
@@ -66,9 +67,9 @@ class ProfileController extends Controller
             'github'    => $request->github,
         ]);
         if ($user) {
-            return redirect()->route('setting.social')->with(['success' => 'Success Update Profile!']);
+            return redirect()->route('setting.profile.social')->with(['success' => 'Success Update Profile!']);
         } else {
-            return redirect()->route('setting.social')->with(['error' => 'Failed Update Profile!']);
+            return redirect()->route('setting.profile.social')->with(['error' => 'Failed Update Profile!']);
         }
     }
 
@@ -85,15 +86,15 @@ class ProfileController extends Controller
             'password_confirmation' => 'required',
         ]);
         if (Hash::check($request->password, $user->password)) {
-            return redirect()->route('setting.password')->with(['error' => "Password can't be the same as before!"]);
+            return redirect()->route('setting.profile.password')->with(['error' => "Password can't be the same as before!"]);
         } else {
             $user = $user->Update([
                 'password'     => Hash::make($request->password),
             ]);
             if ($user) {
-                return redirect()->route('setting.password')->with(['success' => 'Success Update Password!']);
+                return redirect()->route('setting.profile.password')->with(['success' => 'Success Update Password!']);
             } else {
-                return redirect()->route('setting.password')->with(['error' => 'Failed Update Password!']);
+                return redirect()->route('setting.profile.password')->with(['error' => 'Failed Update Password!']);
             }
         }
     }

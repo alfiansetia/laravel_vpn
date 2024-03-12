@@ -29,13 +29,13 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="animated-underline-profile-tab"
-                                onclick="redirect('{{ route('setting.social') }}')">
+                                onclick="redirect('{{ route('setting.profile.social') }}')">
                                 <i data-feather="at-sign"></i> Social
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="animated-underline-contact-tab"
-                                onclick="redirect('{{ route('setting.password') }}')">
+                                onclick="redirect('{{ route('setting.profile.password') }}')">
                                 <i data-feather="lock"></i> Password
                             </button>
                         </li>

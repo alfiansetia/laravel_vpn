@@ -29,13 +29,13 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="animated-underline-profile-tab"
-                                onclick="redirect('{{ route('setting.social') }}')">
+                                onclick="redirect('{{ route('setting.profile.social') }}')">
                                 <i data-feather="at-sign"></i> Social
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="animated-underline-contact-tab"
-                                onclick="redirect('{{ route('setting.password') }}')">
+                                onclick="redirect('{{ route('setting.profile.password') }}')">
                                 <i data-feather="lock"></i> Password
                             </button>
                         </li>
@@ -98,8 +98,8 @@
                 </div>
 
                 <div class="col-xl-8 col-lg-8 col-md-12 layout-spacing">
-                    <form id="info" class="section general-info" action="{{ route('setting.password.update') }}"
-                        method="POST">
+                    <form id="info" class="section general-info"
+                        action="{{ route('setting.profile.password.update') }}" method="POST">
                         @csrf
                         <div class="info">
                             <h6 class="">Password Setting</h6>

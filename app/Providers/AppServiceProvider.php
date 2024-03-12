@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
                 'setting.profile.social',
                 'setting.profile.password',
                 'setting.company.general',
+                'setting.company.social',
                 'setting.company.image',
                 'setting.company.telegram',
                 'components.backend.footer'

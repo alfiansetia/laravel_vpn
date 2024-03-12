@@ -15,7 +15,7 @@ class SettingController extends Controller
 
     public function __construct()
     {
-        $this->middleware('roleAdmin');
+        $this->middleware('is.admin');
     }
 
 
