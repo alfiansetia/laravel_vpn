@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Vpn;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -29,7 +30,12 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        // return view('invoice.create');
+    }
+
+    public function createVpn(Vpn $vpn)
+    {
+        // return view('invoice.create');
     }
 
     /**

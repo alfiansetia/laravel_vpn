@@ -180,19 +180,21 @@
         // $(document).ready(function() {
 
         $('[data-mask]').inputmask();
-
+        var perpage = 20;
         $("#email").select2({
             dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
-                url: "{{ route('user.index') }}",
+                url: "{{ route('user.paginate') }}",
                 data: function(params) {
                     return {
-                        email: params.term,
-                        page: params.page
+                        email: params.term || '',
+                        page: params.page || 1,
+                        perpage: perpage,
                     };
                 },
-                processResults: function(data) {
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
                     return {
                         results: $.map(data.data, function(item) {
                             return {
@@ -200,7 +202,10 @@
                                 id: item.id,
                                 disabled: item.email_verified_at == null ? true : false,
                             }
-                        })
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
                     };
                 },
             }
@@ -210,14 +215,16 @@
             dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
-                url: "{{ route('server.index') }}",
+                url: "{{ route('server.paginate') }}",
                 data: function(params) {
                     return {
                         name: params.term,
-                        page: params.page
+                        page: params.page || 1,
+                        perpage: perpage,
                     };
                 },
-                processResults: function(data) {
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
                     return {
                         results: $.map(data.data, function(item) {
                             return {
@@ -225,7 +232,10 @@
                                 id: item.id,
                                 disabled: item.is_active == 'no' ? true : false,
                             }
-                        })
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
                     };
                 },
             }
@@ -239,14 +249,16 @@
             dropdownParent: $("#modalEdit"),
             ajax: {
                 delay: 1000,
-                url: "{{ route('user.index') }}",
+                url: "{{ route('user.paginate') }}",
                 data: function(params) {
                     return {
-                        email: params.term,
-                        page: params.page
+                        email: params.term || '',
+                        page: params.page,
+                        perpage: perpage,
                     };
                 },
-                processResults: function(data) {
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
                     return {
                         results: $.map(data.data, function(item) {
                             return {
@@ -254,7 +266,10 @@
                                 id: item.id,
                                 disabled: item.email_verified_at == null ? true : false,
                             }
-                        })
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
                     };
                 },
             }

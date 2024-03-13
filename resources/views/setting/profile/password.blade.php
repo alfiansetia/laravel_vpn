@@ -1,4 +1,4 @@
-@extends('layouts.backend.template', ['title' => 'Setting Password'])
+@extends('layouts.backend.template', ['title' => 'Setting Profile'])
 
 @push('css')
     <link href="{{ asset('backend/src/assets/css/light/components/tabs.css') }}" rel="stylesheet" type="text/css">

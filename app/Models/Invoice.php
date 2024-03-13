@@ -33,4 +33,13 @@ class Invoice extends Model
     {
         return $this->belongsTo(Vpn::class);
     }
+
+    public function getImageAttribute($value)
+    {
+        if ($value && file_exists(storage_path('app/images/invoice/' . $value))) {
+            return storage_path('app/images/invoice/' . $value);
+        } else {
+            return url('images/default/invoice.png');
+        }
+    }
 }

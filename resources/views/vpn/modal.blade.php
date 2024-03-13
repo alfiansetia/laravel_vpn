@@ -353,6 +353,9 @@
                                         <button type="button" id="download" class="btn btn-primary"><i
                                                 class="fas fa-download me-1 bs-tooltip"
                                                 title="Download Config"></i>Download</button>
+                                        <button type="button" id="invoice" class="btn btn-warning"><i
+                                                class="fas fa-money-bill me-1 bs-tooltip"
+                                                title="Download Config"></i>Create Invoice</button>
                                     </div>
                                 </div>
                             </div>

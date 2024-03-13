@@ -11,9 +11,16 @@
 @endpush
 
 @section('content')
+    @if ($user->complete())
+        <div class="alert alert-danger layout-top-spacing" role="alert">
+            Click <a class="alert-link" href="{{ route('setting.profile.edit') }}">this</a> to Complete Your Profile
+            Information!
+        </div>
+    @endif
     <div class="row layout-spacing ">
         <!-- Content -->
-        <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 layout-top-spacing">
+        <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12">
+
             <div class="user-profile">
                 <div class="widget-content widget-content-area">
                     <div class="d-flex justify-content-between">
@@ -29,7 +36,8 @@
                         <div class="pt-0">
                             <ul class="contacts-block list-unstyled">
                                 <li class="contacts-block__item">
-                                    <i data-feather="coffee" class="me-3 bs-tooltip" title="Role"></i> {{ $user->role }}
+                                    <i data-feather="coffee" class="me-3 bs-tooltip" title="Role"></i>
+                                    {{ $user->role }}
                                 </li>
                                 <li class="contacts-block__item">
                                     <a href="mailto:{{ $user->email }}">
@@ -86,10 +94,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-7 col-lg-12 col-md-12 col-sm-12 layout-top-spacing">
+        <div class="col-xl-7 col-lg-12 col-md-12 col-sm-12">
             <div class="payment-history layout-spacing ">
                 <div class="widget-content widget-content-area">
-                    <h3 class="">Orders History</h3>
+                    <h3 class="">Invoice History</h3>
                     <div class="list-group">
                         @forelse ($orders as $item)
                             <div class="list-group-item d-flex justify-content-between align-items-start">

@@ -56,8 +56,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::group(['middleware' => ['is.active']], function () {
 
-        Route::resource('invoice', InvoiceController::class)->only(['index', 'show', 'store', 'destroy',]);
+        Route::resource('invoice', InvoiceController::class)->only(['index', 'show', 'store', 'update', 'destroy',]);
 
+        Route::get('user/paginate', [UserController::class, 'paginate'])->name('user.paginate');
         Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
         Route::resource('user', UserController::class)->except(['edit', 'create']);
 
@@ -65,6 +66,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('vpn/autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
         Route::resource('vpn', VpnController::class)->except(['edit']);
 
+        Route::get('server/paginate', [ServerController::class, 'paginate'])->name('server.paginate');
         Route::delete('server/batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
         Route::get('server/{server}/ping', [ServerController::class, 'ping'])->name('server.ping');
         Route::resource('server', ServerController::class)->except(['edit', 'create']);

@@ -86,4 +86,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(NotificationUser::class)->where('is_read', 'no');
     }
+
+    public function complete()
+    {
+        if (
+            empty($this->address) || empty($this->phone) || empty($this->phone) || empty($this->instagram)
+            || empty($this->facebook) || empty($this->linkedin) || empty($this->github)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

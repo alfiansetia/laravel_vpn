@@ -20,6 +20,20 @@ class ServerController extends Controller
         $this->model = Server::class;
     }
 
+    public function paginate(Request $request)
+    {
+        $perpage = 10;
+        if ($request->filled('perpage') && $request->perpage > 10 && is_numeric($request->perpage)) {
+            $perpage = $request->perpage;
+        }
+        $data = Server::query();
+        if ($request->filled('name')) {
+            $data->where('name', 'like', "%{$request->name}%");
+        }
+        $result = $data->paginate($perpage);
+        return $result;
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {

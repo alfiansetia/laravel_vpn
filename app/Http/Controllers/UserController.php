@@ -21,6 +21,20 @@ class UserController extends Controller
         $this->model = User::class;
     }
 
+    public function paginate(Request $request)
+    {
+        $perpage = 10;
+        if ($request->filled('perpage') && $request->perpage > 10 && is_numeric($request->perpage)) {
+            $perpage = $request->perpage;
+        }
+        $data = User::query();
+        if ($request->filled('email')) {
+            $data->where('email', 'like', "%{$request->email}%");
+        }
+        $result = $data->paginate($perpage);
+        return $result;
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {

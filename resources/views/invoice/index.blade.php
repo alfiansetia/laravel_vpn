@@ -26,11 +26,15 @@
             </div>
         </div>
     </div>
+    @include('invoice.modal')
 @endsection
 @push('jslib')
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js') }}"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
+
+    <script src="{{ asset('backend/src/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 @endpush
 
 
@@ -110,6 +114,7 @@
         $("div.toolbar").html(btn_element);
 
         $('#btn_add').click(function() {
+            console.log('as');
             $('#modalAdd').modal('show')
         })
 
@@ -124,22 +129,22 @@
         multiCheck(table);
 
         var id;
-        var url_post = "{{ route('bank.store') }}";
-        var url_put = "{{ route('bank.update', '') }}/" + id;
-        var url_delete = "{{ route('bank.destroy', '') }}/" + id;
+        var url_post = "{{ route('invoice.store') }}";
+        var url_put = "{{ route('invoice.update', '') }}/" + id;
+        var url_delete = "{{ route('invoice.destroy', '') }}/" + id;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
             edit(true)
-            url_put = "{{ route('bank.update', '') }}/" + id;
-            url_delete = "{{ route('bank.destroy', '') }}/" + id;
+            url_put = "{{ route('invoice.update', '') }}/" + id;
+            url_delete = "{{ route('invoice.destroy', '') }}/" + id;
             id = table.row(this).id()
         });
 
         function edit(show = false) {
             clear_validate($('#formEdit'))
             $.ajax({
-                url: "{{ route('bank.show', '') }}/" + id,
+                url: "{{ route('invoice.show', '') }}/" + id,
                 method: 'GET',
                 success: function(result) {
                     unblock();

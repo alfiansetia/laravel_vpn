@@ -236,6 +236,8 @@
                                 placeholder="Please Enter Username" minlength="5" maxlength="100" required>
                             <span id="err_edit_username" class="error invalid-feedback"
                                 style="display: hide;"></span>
+                            <small id="sh-text1" class="form-text text-muted">Leave blank if not change
+                                Username!.</small>
                         </div>
                         <div class="form-group col-md-6 mb-2">
                             <label for="edit_password"><i class="fas fa-fingerprint me-1 bs-tooltip"
