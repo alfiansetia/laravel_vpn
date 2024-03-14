@@ -64,18 +64,22 @@
             placement: "top",
         });
 
+        var perpage = 20;
+
         $("#vpn").select2({
             dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
-                url: "{{ route('vpn.index') }}",
+                url: "{{ route('vpn.paginate') }}",
                 data: function(params) {
                     return {
-                        username: params.term,
-                        page: params.page
+                        username: params.term || '',
+                        page: params.page || 1,
+                        perpage: perpage,
                     };
                 },
-                processResults: function(data) {
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
                     return {
                         results: $.map(data.data, function(item) {
                             return {
@@ -83,7 +87,10 @@
                                 id: item.id,
                                 disabled: item.is_active === 'yes' ? false : true,
                             }
-                        })
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
                     };
                 },
             }
@@ -93,14 +100,16 @@
             dropdownParent: $("#modalEdit"),
             ajax: {
                 delay: 1000,
-                url: "{{ route('vpn.index') }}",
+                url: "{{ route('vpn.paginate') }}",
                 data: function(params) {
                     return {
-                        username: params.term,
-                        page: params.page
+                        username: params.term || '',
+                        page: params.page || 1,
+                        perpage: perpage,
                     };
                 },
-                processResults: function(data) {
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
                     return {
                         results: $.map(data.data, function(item) {
                             return {
@@ -108,7 +117,10 @@
                                 id: item.id,
                                 disabled: item.is_active === 'yes' ? false : true,
                             }
-                        })
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
                     };
                 },
             }

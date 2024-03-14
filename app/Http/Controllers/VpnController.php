@@ -21,6 +21,20 @@ class VpnController extends Controller
 {
     use CompanyTrait;
 
+    public function paginate(Request $request)
+    {
+        $perpage = 10;
+        if ($request->filled('perpage') && $request->perpage > 10 && is_numeric($request->perpage)) {
+            $perpage = $request->perpage;
+        }
+        $data = Vpn::query();
+        if ($request->filled('username')) {
+            $data->where('username', 'like', "%{$request->username}%");
+        }
+        $result = $data->paginate($perpage);
+        return $result;
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
