@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
                 'setting.company.social',
                 'setting.company.image',
                 'setting.company.telegram',
-                'components.backend.footer'
+                'components.backend.footer',
             ],
             function ($view) {
                 $view->with('company', Company::first());

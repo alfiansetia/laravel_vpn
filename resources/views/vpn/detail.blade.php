@@ -257,7 +257,10 @@
                                                 title="Download Config"></i>Download</button>
                                         <button type="button" id="invoice" class="btn btn-warning me-1"><i
                                                 class="fas fa-money-bill me-1 bs-tooltip"
-                                                title="Download Config"></i>Create Invoice</button>
+                                                title="Create Invoice"></i>Create Invoice</button>
+                                        <button type="button" id="send_email" class="btn btn-primary me-1"><i
+                                                class="fas fa-envelope me-1 bs-tooltip" title="Send Email"></i>Send
+                                            Email</button>
                                     </div>
                                 </div>
                             </div>

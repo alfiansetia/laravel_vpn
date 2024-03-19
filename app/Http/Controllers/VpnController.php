@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DetailVpnMail;
 use App\Models\Port;
 use App\Models\Server;
 use App\Models\Vpn;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
@@ -357,5 +359,19 @@ class VpnController extends Controller
             return response()->json(['message' => 'Server Nonactive!'], 403);
         }
         return new ServerApiServices($vpn->server);
+    }
+
+    public function sendEmail(Request $request, Vpn $vpn)
+    {
+        $this->validate($request, [
+            'email' => 'required|email:rfc,dns'
+        ]);
+        $to = $request->email;
+        try {
+            Mail::to($to)->queue(new DetailVpnMail($vpn));
+            return response()->json(['message' => 'Success Send Email to ' . $to]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Failed Send Email : ' . $th->getMessage()], 500);
+        }
     }
 }

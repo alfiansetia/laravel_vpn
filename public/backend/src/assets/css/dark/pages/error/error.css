@@ -53,7 +53,7 @@ body.dark.error .error-number {
   margin-bottom: 5px;
   margin-top: 15px;
   text-shadow: 0px 5px 4px rgba(31, 45, 61, 0.1019607843);
-  display: none;
+  /* display: none; */
 }
 body.dark.error .error-text {
   font-size: 18px;

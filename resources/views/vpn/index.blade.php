@@ -107,6 +107,8 @@
 
         @include('vpn.create')
 
+        @include('vpn.modal')
+
     </div>
 @endsection
 @push('jslib')
@@ -169,6 +171,58 @@
         $('.close-add').click(function() {
             hide_card_add()
         })
+
+        $('#send_email').click(function() {
+            $('#modalSendEmail').modal('show')
+        })
+
+        $('#form_send_email').submit(function(event) {
+            event.preventDefault();
+        }).validate({
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+            submitHandler: function(form) {
+                ajax_setup()
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ url('vpn') }}/" + id + '/send-email',
+                    data: $(form).serialize(),
+                    beforeSend: function() {
+                        block();
+                        clear_validate($(form))
+                    },
+                    success: function(res) {
+                        unblock();
+                        table.ajax.reload();
+                        reset();
+                        Swal.fire(
+                            'Success!',
+                            res.message,
+                            'success'
+                        )
+                    },
+                    error: function(xhr, status, error) {
+                        unblock();
+                        handleResponseForm(xhr, 'add')
+                        Swal.fire(
+                            'Failed!',
+                            xhr.responseJSON.message,
+                            'error'
+                        )
+                    }
+                });
+            }
+        });
 
         // $(document).ready(function() {
         var f1 = flatpickr(document.getElementById('expired'), {
@@ -493,6 +547,9 @@
                     $('#edit_username').val(result.data.username);
                     $('#edit_password').val(result.data.password);
                     $('#edit_ip').val(result.data.ip);
+                    $('#edit_ip').val(result.data.ip);
+                    $('#input_send_email').val(result.data.user.email)
+
                     f2.setDate(result.data.expired);
                     let option1 = new Option(result.data.user.email, result.data.user_id,
                         true, true);
