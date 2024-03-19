@@ -255,12 +255,12 @@
                                         <button type="button" id="download" class="btn btn-primary me-1"><i
                                                 class="fas fa-download me-1 bs-tooltip"
                                                 title="Download Config"></i>Download</button>
-                                        <button type="button" id="invoice" class="btn btn-warning me-1"><i
-                                                class="fas fa-money-bill me-1 bs-tooltip"
-                                                title="Create Invoice"></i>Create Invoice</button>
                                         <button type="button" id="send_email" class="btn btn-primary me-1"><i
                                                 class="fas fa-envelope me-1 bs-tooltip" title="Send Email"></i>Send
                                             Email</button>
+                                        <button type="button" id="analyze" class="btn btn-warning me-1"><i
+                                                class="fas fa-sync me-1 bs-tooltip"
+                                                title="Analyze"></i>Analyze</button>
                                     </div>
                                 </div>
                             </div>

@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
         Route::resource('user', UserController::class)->except(['edit', 'create']);
 
+        Route::get('vpn/{vpn}/analyze', [VpnController::class, 'analyze'])->name('vpn.analyze');
         Route::post('vpn/{vpn}/send-email', [VpnController::class, 'sendEmail'])->name('vpn.send.email');
         Route::get('vpn/paginate', [VpnController::class, 'paginate'])->name('vpn.paginate');
         Route::delete('vpn/batch', [VpnController::class, 'destroyBatch'])->name('vpn.destroy.batch');

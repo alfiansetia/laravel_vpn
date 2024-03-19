@@ -238,6 +238,11 @@ function handle_not_found()
     return  ['status' => false, 'message' => 'Data Not Found', 'data' => []];
 }
 
+function throw_not_found()
+{
+    throw new Exception('Data Not Found');
+}
+
 
 function handle_fail_login($api)
 {

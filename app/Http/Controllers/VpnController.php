@@ -374,4 +374,27 @@ class VpnController extends Controller
             return response()->json(['message' => 'Failed Send Email : ' . $th->getMessage()], 500);
         }
     }
+
+    public function analyze(Request $request, Vpn $vpn)
+    {
+        try {
+            $service = $this->setServer($vpn);
+            $data = $service->analyze($vpn);
+            return response()->json([
+                'message' => '',
+                'data' => [
+                    'on_server' => $data,
+                    'on_db'     => $vpn,
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Failed : ' . $th->getMessage(),
+                'data' => [
+                    'on_server' => null,
+                    'on_db'     => $vpn,
+                ]
+            ], 500);
+        }
+    }
 }

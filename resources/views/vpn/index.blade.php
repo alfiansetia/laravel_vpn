@@ -224,6 +224,25 @@
             }
         });
 
+        $('#analyze').click(function() {
+            $.ajax({
+                url: "{{ url('vpn') }}/" + id + '/analyze',
+                method: 'GET',
+                success: function(result) {
+                    unblock();
+                    // $('#share').val(result.data.id);
+                    console.log(result);
+                },
+                beforeSend: function() {
+                    block();
+                },
+                error: function(xhr, status, error) {
+                    unblock();
+                    handleResponse(xhr)
+                }
+            });
+        })
+
         // $(document).ready(function() {
         var f1 = flatpickr(document.getElementById('expired'), {
             defaultDate: "today",

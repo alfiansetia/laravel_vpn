@@ -176,4 +176,19 @@ class ServerApiServices
             throw new Exception('Selected Server Error!', 500);
         }
     }
+
+    public function analyze(Vpn $vpn)
+    {
+        if ($this->connect()) {
+            $user = $this->API->comm("/ppp/secret/print", array(
+                "?name"  => $vpn->username,
+            ));
+            if (empty($user)) {
+                throw_not_found();
+            }
+            return $user;
+        } else {
+            throw new Exception('Selected Server Error!', 500);
+        }
+    }
 }
