@@ -167,37 +167,32 @@ class PortController extends Controller
         return response()->json($data);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, string $id)
     {
-        $this->validate($request, [
-            'id' => 'required|array|min:1'
-        ]);
-        foreach ($request->id as $id) {
-            $port = Port::with('vpn.server')->findOrFail($id);
-            $ip = ($port->vpn->server->ip . ($port->vpn->server->port != 0 ? (':' . $port->vpn->server->port) : ''));
-            $u = $port->vpn->server->username;
-            $p = decrypt($port->vpn->server->password);
-            $param = [
-                'server'    => [
-                    'ip'    => $ip,
-                    'user'  => $u,
-                    'pass'  => $p,
-                ],
-                'username'  => $port->vpn->username,
-                'dst'       => $port->dst,
-                'to'        => $port->to,
-            ];
-            $api = Port::deleteApi($param);
-            if ($api['status']) {
-                $port->delete();
-                if ($port) {
-                    $data = ['status' => true, 'message' => 'Success Delete Data', 'data' => ''];
-                } else {
-                    $data = ['status' => false, 'message' => 'Failed Delete Data', 'data' => ''];
-                }
+        $port = Port::with('vpn.server')->findOrFail($id);
+        $ip = ($port->vpn->server->ip . ($port->vpn->server->port != 0 ? (':' . $port->vpn->server->port) : ''));
+        $u = $port->vpn->server->username;
+        $p = decrypt($port->vpn->server->password);
+        $param = [
+            'server'    => [
+                'ip'    => $ip,
+                'user'  => $u,
+                'pass'  => $p,
+            ],
+            'username'  => $port->vpn->username,
+            'dst'       => $port->dst,
+            'to'        => $port->to,
+        ];
+        $api = Port::deleteApi($param);
+        if ($api['status']) {
+            $port->delete();
+            if ($port) {
+                $data = ['status' => true, 'message' => 'Success Delete Data', 'data' => ''];
             } else {
-                $data = $api;
+                $data = ['status' => false, 'message' => 'Failed Delete Data', 'data' => ''];
             }
+        } else {
+            $data = $api;
         }
         return response()->json($data);
     }

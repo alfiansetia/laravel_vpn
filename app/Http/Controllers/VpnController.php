@@ -69,7 +69,7 @@ class VpnController extends Controller
     public function create(Request $request)
     {
         $servers = Server::where('is_active', 'yes')->where('is_available', 'yes')->get();
-        return view('vpn.create', compact('servers'));
+        return view('vpn.create_auto', compact('servers'));
     }
 
     public function autoCreate(Request $request)

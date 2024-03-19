@@ -64,7 +64,7 @@
 @section('content')
     <div class="row" id="cancel-row">
 
-        <div class="row layout-top-spacing layout-spacing pb-0">
+        <div class="row layout-top-spacing layout-spacing pb-0" id="card_filter">
             <div class="col-md-4">
                 <select class="form-control" name="status" id="select_status">
                     <option value="">All</option>
@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing">
+        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing" id="card_table">
             <div class="widget-content widget-content-area br-8">
                 <form action="" id="formSelected">
                     <table id="tableData" class="table dt-table-hover table-hover" style="width:100%; cursor: pointer;">
@@ -102,8 +102,12 @@
                 </form>
             </div>
         </div>
+
+        @include('vpn.detail')
+
+        @include('vpn.create')
+
     </div>
-    @include('vpn.modal')
 @endsection
 @push('jslib')
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
@@ -130,6 +134,42 @@
 @push('js')
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
+        function show_card_detail() {
+            $('#card_detail').show()
+            $('#card_table').hide()
+            $('#card_filter').hide()
+            $('#card_add').hide()
+        }
+
+        function hide_card_detail() {
+            $('#card_detail').hide()
+            $('#card_table').show()
+            $('#card_filter').show()
+            $('#card_add').hide()
+        }
+
+        function hide_card_add() {
+            $('#card_add').hide()
+            $('#card_table').show()
+            $('#card_filter').show()
+            $('#card_detail').hide()
+        }
+
+        function show_card_add() {
+            $('#card_add').show()
+            $('#card_table').hide()
+            $('#card_filter').hide()
+            $('#card_detail').hide()
+        }
+
+        $('.close-detail').click(function() {
+            hide_card_detail()
+        })
+
+        $('.close-add').click(function() {
+            hide_card_add()
+        })
+
         // $(document).ready(function() {
         var f1 = flatpickr(document.getElementById('expired'), {
             defaultDate: "today",
@@ -181,8 +221,8 @@
 
         $('[data-mask]').inputmask();
         var perpage = 20;
-        $("#email").select2({
-            dropdownParent: $("#modalAdd"),
+        $("#email, #edit_email").select2({
+            // dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
                 url: "{{ route('user.paginate') }}",
@@ -212,7 +252,7 @@
         });
 
         $("#server").select2({
-            dropdownParent: $("#modalAdd"),
+            // dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
                 url: "{{ route('server.paginate') }}",
@@ -239,44 +279,6 @@
                     };
                 },
             }
-        });
-
-        $("#masa").select2({
-            dropdownParent: $("#modalAdd"),
-        });
-
-        $("#edit_email").select2({
-            dropdownParent: $("#modalEdit"),
-            ajax: {
-                delay: 1000,
-                url: "{{ route('user.paginate') }}",
-                data: function(params) {
-                    return {
-                        email: params.term || '',
-                        page: params.page,
-                        perpage: perpage,
-                    };
-                },
-                processResults: function(data, params) {
-                    params.page = params.page || 1;
-                    return {
-                        results: $.map(data.data, function(item) {
-                            return {
-                                text: item.email,
-                                id: item.id,
-                                disabled: item.email_verified_at == null ? true : false,
-                            }
-                        }),
-                        pagination: {
-                            more: (params.page * perpage) < data.total
-                        }
-                    };
-                },
-            }
-        });
-
-        $("#edit_masa").select2({
-            dropdownParent: $("#modalEdit"),
         });
 
         $('#home-tab-icon').click(function() {
@@ -380,7 +382,7 @@
         $("div.toolbar").html(btn_element);
 
         $('#btn_add').click(function() {
-            $('#modalAdd').modal('show')
+            show_card_add()
         })
 
         $('#btn_delete').click(function() {
@@ -574,7 +576,8 @@
                     })
                     tooltip()
                     if (show) {
-                        $('#modalEdit').modal('show');
+                        show_card_detail()
+                        // $('#modalEdit').modal('show');
                     }
                 },
                 beforeSend: function() {

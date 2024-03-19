@@ -1,103 +1,7 @@
-<form id="form" action="" method="POST">
-    <div class="modal animated fade fadeInDown" id="modalAdd" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-plus me-1 bs-tooltip"
-                            title="Add Data"></i>Add Data</h5>
-                    <button type="button" class="btn-close bs-tooltip" data-bs-dismiss="modal" aria-label="Close"
-                        title="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-2">
-                        <div class="form-group col-md-6">
-                            <label for="email"><i class="far fa-envelope me-1 bs-tooltip"
-                                    title="Option Email User"></i>Email :</label>
-                            <select name="email" id="email" class="form-control" style="width: 100%;" required>
-                                <option value="">Please Select Email</option>
-                            </select>
-                            <span id="err_email" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="server"><i class="fas fa-server me-1 bs-tooltip"
-                                    title="Option Server"></i>Server :</label>
-                            <select name="server" id="server" class="form-control" style="width: 100%;" required>
-                                <option value="">Please Select Server</option>
-                            </select>
-                            <span id="err_server" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="form-group col-md-6">
-                            <label for="username"><i class="far fa-user me-1 bs-tooltip"
-                                    title="Username Vpn"></i>Username Vpn :</label>
-                            <input type="text" name="username" class="form-control maxlength" id="username"
-                                placeholder="Please Enter Username" minlength="4" maxlength="50" required>
-                            <span id="err_username" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="password"><i class="fas fa-fingerprint me-1 bs-tooltip"
-                                    title="Password Vpn"></i>Password Vpn :</label>
-                            <input type="text" name="password" class="form-control maxlength" id="password"
-                                placeholder="Please Enter Password" minlength="4" maxlength="50" required>
-                            <span id="err_password" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="form-group col-md-6">
-                            <label for="ip"><i class="fas fa-ethernet me-1 bs-tooltip" title="IP Vpn"></i>IP Vpn
-                                :</label>
-                            <input type="text" name="ip" class="form-control" id="ip"
-                                data-inputmask="'alias': 'ip'" placeholder="Please Enter IP Address" data-mask required>
-                            <span id="err_ip" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="expired"><i class="fas fa-calendar me-1 bs-tooltip" title="Expired"></i>Expired
-                                :</label>
-                            <input type="text" id="expired" name="expired"
-                                class="form-control form-control-solid flatpickr flatpickr-input active"
-                                placeholder="Select Date.." required>
-                            <span id="err_expired" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-lg-2 col-6 mb-2 mt-2">
-                            <div class="switch form-switch-custom switch-inline form-switch-success">
-                                <input class="switch-input" type="checkbox" role="switch" id="is_active"
-                                    name="is_active" checked>
-                                <label class="switch-label" for="is_active">Active</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-6 mb-2 mt-2">
-                            <div class="switch form-switch-custom switch-inline form-switch-success">
-                                <input class="switch-input" type="checkbox" role="switch" id="sync"
-                                    name="sync" checked>
-                                <label class="switch-label" for="sync">Sync</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fas fa-times me-1 bs-tooltip" title="Close"></i>Close</button>
-                    <button type="reset" id="reset" class="btn btn-warning"><i
-                            class="fas fa-undo me-1 bs-tooltip" title="Reset"></i>Reset</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1 bs-tooltip"
-                            title="Save"></i>Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
-<div class="modal animated fade fadeInDown" id="modalEdit" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+<div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing" id="card_detail" style="display: none;">
+    <div class="widget-content widget-content-area br-8">
+        <div class="card">
+            <div class="card-header">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab-icon" data-bs-toggle="tab"
@@ -115,8 +19,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="modal-body">
-
+            <div class="card-body">
                 <div class="simple-pill">
 
                     <div class="tab-content" id="myTabContent">
@@ -132,8 +35,8 @@
                                                         <section class="mb-0 mt-0">
                                                             <div role="menu" class="collapsed"
                                                                 data-bs-toggle="collapse"
-                                                                data-bs-target="#iconAccordionOne"
-                                                                aria-expanded="true" aria-controls="iconAccordionOne">
+                                                                data-bs-target="#iconAccordionOne" aria-expanded="true"
+                                                                aria-controls="iconAccordionOne">
                                                                 <div class="accordion-icon">
                                                                     <i data-feather="server"></i>
                                                                 </div>
@@ -144,8 +47,7 @@
                                                             </div>
                                                         </section>
                                                     </div>
-                                                    <div id="iconAccordionOne"
-                                                        class="accordion-collapse collapse show">
+                                                    <div id="iconAccordionOne" class="accordion-collapse collapse show">
                                                         <div class="card-body p-0">
                                                             <table class="table"
                                                                 style="width: 100%; table-layout: fixed;">
@@ -341,19 +243,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                    <div class="card-footer text-center">
+                                        <button type="button" class="btn btn-secondary close-detail me-1"><i
                                                 class="fas fa-times me-1 bs-tooltip" title="Close"></i>Close</button>
-                                        <button type="button" id="share" class="btn btn-info"><i
+                                        <button type="button" id="share" class="btn btn-info me-1"><i
                                                 class="fas fa-share-alt me-1 bs-tooltip"
                                                 title="Share"></i>Share</button>
-                                        <button type="button" id="wa" class="btn btn-success"><i
+                                        <button type="button" id="wa" class="btn btn-success me-1"><i
                                                 class="fab fa-whatsapp me-1 bs-tooltip"
                                                 title="Share Whatsapp"></i>WA</button>
-                                        <button type="button" id="download" class="btn btn-primary"><i
+                                        <button type="button" id="download" class="btn btn-primary me-1"><i
                                                 class="fas fa-download me-1 bs-tooltip"
                                                 title="Download Config"></i>Download</button>
-                                        <button type="button" id="invoice" class="btn btn-warning"><i
+                                        <button type="button" id="invoice" class="btn btn-warning me-1"><i
                                                 class="fas fa-money-bill me-1 bs-tooltip"
                                                 title="Download Config"></i>Create Invoice</button>
                                     </div>
@@ -452,17 +354,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <div class="card-footer text-center">
+                                            <button type="button" class="btn btn-secondary close-detail me-1">
                                                 <i class="fas fa-times me-1 bs-tooltip" title="Close"></i>Close
                                             </button>
-                                            <button type="button" id="edit_reset" class="btn btn-warning">
+                                            <button type="button" id="edit_reset" class="btn btn-warning me-1">
                                                 <i class="fas fa-undo me-1 bs-tooltip" title="Reset"></i>Reset
                                             </button>
-                                            <button type="button" id="edit_delete" class="btn btn-danger">
+                                            <button type="button" id="edit_delete" class="btn btn-danger me-1">
                                                 <i class="fas fa-trash me-1 bs-tooltip" title="Delete"></i>Delete
                                             </button>
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary me-1">
                                                 <i class="fas fa-paper-plane me-1 bs-tooltip" title="Save"></i>Save
                                             </button>
                                         </div>
@@ -474,5 +376,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
