@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('acc_name');
             $table->string('acc_number');
+            $table->enum('is_active', ['yes', 'no'])->default('yes');
             $table->timestamps();
         });
     }

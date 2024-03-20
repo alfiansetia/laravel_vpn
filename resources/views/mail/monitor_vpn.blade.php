@@ -48,7 +48,8 @@
                                                             style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:16px;line-height:1.5em;margin-top:0;text-align:left">
                                                         <ul>
                                                             @foreach ($vpns as $item)
-                                                                <li>{{ $item->username }} : {{ $item->expired }}</li>
+                                                                <li>{{ $item['username'] }} : {{ $item['expired'] }}
+                                                                </li>
                                                             @endforeach
                                                         </ul>
                                                         </p>

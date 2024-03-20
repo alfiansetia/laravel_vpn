@@ -10,6 +10,40 @@
     <link href="{{ asset('backend/src/assets/css/dark/apps/invoice-list.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/src/assets/css/light/components/modal.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}" rel="stylesheet" type="text/css" />
+
+
+    <link href="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/src/noUiSlider/nouislider.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/light/flatpickr/custom-flatpickr.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/dark/flatpickr/custom-flatpickr.css') }}" rel="stylesheet"
+        type="text/css">
+
+    <link href="{{ asset('backend/src/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css">
+
+    <style>
+        .flatpickr-calendar {
+            z-index: 1056 !important;
+        }
+
+        .tba {
+            width: 35%;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: left;
+        }
+
+        .tbb {
+            width: 65%;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: left;
+        }
+
+        .tbb::before {
+            content: ": ";
+        }
+    </style>
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
@@ -35,13 +69,93 @@
 
     <script src="{{ asset('backend/src/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+
+    <script src="{{ asset('backend/src/plugins/src/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/moment/moment-with-locales.min.js') }}"></script>
+
+    <script src="{{ asset('backend/src/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/select2/custom-select2.js') }}"></script>
 @endpush
 
 
 @push('js')
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
+        $('.maxlength').maxlength({
+            alwaysShow: true,
+            placement: "top",
+        });
+
+        var from = flatpickr(document.getElementById('from'), {
+            defaultDate: "today",
+            disableMobile: true,
+        });
+
+        var to = flatpickr(document.getElementById('to'), {
+            defaultDate: "today",
+            disableMobile: true,
+        });
+
         // $(document).ready(function() {
+        var perpage = 20;
+        $("#vpn").select2({
+            dropdownParent: $("#modalAdd"),
+            ajax: {
+                delay: 1000,
+                url: "{{ route('vpn.paginate') }}",
+                data: function(params) {
+                    return {
+                        username: params.term || '',
+                        page: params.page || 1,
+                        perpage: perpage,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.username,
+                                id: item.id,
+                            }
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
+                    };
+                },
+            }
+        });
+
+        $("#bank").select2({
+            dropdownParent: $("#modalAdd"),
+            ajax: {
+                delay: 1000,
+                url: "{{ route('bank.paginate') }}",
+                data: function(params) {
+                    return {
+                        name: params.term || '',
+                        page: params.page || 1,
+                        perpage: perpage,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: `${item.name} (${item.acc_name})`,
+                                id: item.id,
+                            }
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
+                    };
+                },
+            }
+        });
 
         var table = $('#tableData').DataTable({
             processing: true,
@@ -82,15 +196,30 @@
                 title: "Number",
                 data: 'number',
             }, {
-                title: "Amount",
-                data: 'amount',
+                title: 'VPN',
+                data: 'vpn_id',
+                className: "text-center",
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        if (data != null) {
+                            return row.vpn.username
+                        } else {
+                            return ''
+                        }
+                    } else {
+                        return data
+                    }
+                }
+            }, {
+                title: "Total",
+                data: 'total',
             }, {
                 title: 'Status',
                 data: 'status',
                 className: "text-center",
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        return `<span class="badge badge-${data === 'success' ? 'success' : (ata === 'pending'? 'warning':'danger')}">${data}</span>`
+                        return `<span class="badge badge-${data === 'success' ? 'success' : (data === 'pending'? 'warning':'danger')}">${data}</span>`
                     } else {
                         return data
                     }
@@ -114,7 +243,6 @@
         $("div.toolbar").html(btn_element);
 
         $('#btn_add').click(function() {
-            console.log('as');
             $('#modalAdd').modal('show')
         })
 
@@ -123,7 +251,7 @@
         })
 
         $('#modalAdd, #modalEdit').on('shown.bs.modal', function() {
-            $('input[name="name"]').focus();
+            $('input[name="total"]').focus();
         });
 
         multiCheck(table);

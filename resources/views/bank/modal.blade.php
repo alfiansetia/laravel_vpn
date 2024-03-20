@@ -34,6 +34,15 @@
                             placeholder="Please Enter Acc Name" minlength="1" maxlength="100" required>
                         <span id="err_acc_number" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
+                    <div class="form-group mb-2">
+                        <div class="col-lg-2 col-6 mb-2 mt-2">
+                            <div class="switch form-switch-custom switch-inline form-switch-success">
+                                <input class="switch-input" type="checkbox" role="switch" id="is_active"
+                                    name="is_active" checked>
+                                <label class="switch-label" for="is_active">Active</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
@@ -84,6 +93,15 @@
                         <input type="text" name="acc_number" class="form-control maxlength" id="edit_acc_number"
                             placeholder="Please Enter Acc Name" minlength="1" maxlength="100" required>
                         <span id="err_edit_acc_number" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="col-lg-2 col-6 mb-2 mt-2">
+                            <div class="switch form-switch-custom switch-inline form-switch-success">
+                                <input class="switch-input" type="checkbox" role="switch" id="edit_is_active"
+                                    name="is_active" checked>
+                                <label class="switch-label" for="edit_is_active">Active</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

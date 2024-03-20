@@ -18,9 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('vpn_id')->nullable();
             $table->dateTime('date')->useCurrent();
             $table->string('number');
-            $table->integer('price')->default(0);
             $table->integer('total')->default(0);
-            $table->integer('amount')->default(0);
+            $table->date('from');
+            $table->date('to');
             $table->enum('status', ['paid', 'unpaid', 'cancel'])->default('unpaid');
             $table->string('image')->nullable();
             $table->timestamps();

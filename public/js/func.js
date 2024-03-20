@@ -331,6 +331,7 @@ $('#edit_delete').click(function () {
                         'success'
                     )
                     $('#modalEdit').modal('hide')
+                    hide_card_detail()
                 },
                 error: function (xhr, status, error) {
                     unblock();

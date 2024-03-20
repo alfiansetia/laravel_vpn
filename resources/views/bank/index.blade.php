@@ -10,6 +10,13 @@
     <link href="{{ asset('backend/src/assets/css/dark/apps/invoice-list.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/src/assets/css/light/components/modal.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}" rel="stylesheet" type="text/css" />
+
+
+    <link href="{{ asset('backend/src/assets/css/light/scrollspyNav.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/assets/css/light/forms/switches.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('backend/src/assets/css/dark/scrollspyNav.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/assets/css/dark/forms/switches.css') }}" rel="stylesheet" type="text/css">
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
@@ -97,6 +104,17 @@
             }, {
                 title: "Acc Number",
                 data: 'acc_number',
+            }, {
+                title: "Active",
+                data: 'is_active',
+                className: 'text-center',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return `<span class="badge badge-${data == 'yes' ? 'success' : 'danger'}">${data == 'yes' ? 'active' : 'nonactive'}</span>`
+                    } else {
+                        return data
+                    }
+                }
             }],
             headerCallback: function(e, a, t, n, s) {
                 e.getElementsByTagName("th")[0].innerHTML = `
@@ -152,6 +170,11 @@
                     $('#edit_name').val(result.data.name);
                     $('#edit_acc_name').val(result.data.acc_name);
                     $('#edit_acc_number').val(result.data.acc_number);
+                    if (result.data.is_active == 'yes') {
+                        $('#edit_is_active').prop('checked', true).change();
+                    } else {
+                        $('#edit_is_active').prop('checked', false).change();
+                    }
                     if (show) {
                         $('#modalEdit').modal('show');
                     }

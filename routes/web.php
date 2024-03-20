@@ -79,6 +79,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::delete('port/batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
         Route::resource('port', PortController::class)->except(['edit', 'create']);
 
+        Route::get('bank/paginate', [BankController::class, 'paginate'])->name('bank.paginate');
         Route::delete('bank/batch', [BankController::class, 'destroyBatch'])->name('bank.destroy.batch');
         Route::resource('bank', BankController::class)->except(['edit', 'create']);
 
