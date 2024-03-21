@@ -162,20 +162,16 @@
                 }
             }, {
                 title: "VPN",
-                data: 'port',
+                data: 'port_id',
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
                         if (data !== null) {
-                            return data.vpn.username + ":" + data.dst;
+                            return row.port.vpn.username + ":" + row.port.dst;
                         } else {
                             return null;
                         }
                     } else {
-                        if (data !== null) {
-                            return data.dst
-                        } else {
-                            return null;
-                        }
+                        return data
                     }
                 }
             }, {
@@ -239,7 +235,7 @@
                     $('#edit_hsname').val(result.data.hsname);
                     $('#edit_dnsname').val(result.data.dnsname);
                     $('#edit_username').val(result.data.username);
-                    if (result.data.port !== null) {
+                    if (result.data.port_id !== null) {
                         let option2 = new Option((result.data.port.vpn.username + ":" +
                                 result.data.port.dst + ' => ' + result.data.port.vpn.server.name
                             ),

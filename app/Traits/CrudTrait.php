@@ -8,6 +8,8 @@ trait CrudTrait
 {
     protected $model;
 
+    public $with = [];
+
     public function paginate()
     {
         $data = $this->model->paginate(10);
@@ -53,7 +55,7 @@ trait CrudTrait
     public function show(Request $request, string $id,)
     {
         if ($request->ajax()) {
-            $data = $this->model::find($id);
+            $data = $this->model::with($this->with)->find($id);
             if (!$data) {
                 return response()->json(['message' => 'Data Not Found!'], 404);
             }

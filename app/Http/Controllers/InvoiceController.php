@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Vpn;
+use App\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class InvoiceController extends Controller
 {
+    use CrudTrait;
+
+    public function __construct()
+    {
+        $this->model = Invoice::class;
+        $this->with = ['user:id,name,email', 'vpn:id,username,server_id', 'vpn.server:id,name', 'bank:id,name,acc_name'];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -45,13 +54,13 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'user'  => 'required|exists:users,id',
             'bank'  => 'required|exists:banks,id',
             'vpn'   => 'required|exists:vpns,id',
             'from'  => 'required|date_format:Y-m-d',
             'to'    => 'required|date_format:Y-m-d',
             'total' => 'required|integer|gt:0',
         ]);
-        $user = auth()->user();
         $date = date('Y-m-d');
         $date_parse = Carbon::parse($date);
         $count = Invoice::whereDate('date', $date_parse)->count() ?? 0;
@@ -59,7 +68,7 @@ class InvoiceController extends Controller
         Invoice::create([
             'number'    => $number,
             'date'      => date('Y-m-d H:i:s'),
-            'user_id'   => $user->id,
+            'user_id'   => $request->user,
             'bank_id'   => $request->bank,
             'vpn_id'    => $request->vpn,
             'from'      => $request->from,
@@ -70,34 +79,51 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Invoice $invoice)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        $this->validate($request, [
+            'user'  => 'required|exists:users,id',
+            'bank'  => 'required|exists:banks,id',
+            'vpn'   => 'required|exists:vpns,id',
+            'from'  => 'required|date_format:Y-m-d',
+            'to'    => 'required|date_format:Y-m-d',
+            'total' => 'required|integer|gt:0',
+        ]);
+        $invoice->update([
+            'user_id'   => $request->user,
+            'bank_id'   => $request->bank,
+            'vpn_id'    => $request->vpn,
+            'from'      => $request->from,
+            'to'        => $request->to,
+            'total'     => $request->total,
+        ]);
+        return response()->json(['message' => 'Success Update Data', 'data' => []]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Invoice $invoice)
+    public function status(Request $request, Invoice $invoice)
     {
-        //
+        $this->validate($request, [
+            'status' => 'required|in:paid,cancel'
+        ]);
+        $reqstatus = $request->status;
+        $invstatus = $invoice->status;
+        if (
+            $reqstatus == $invstatus ||
+            ($reqstatus == 'paid' && $invstatus != 'unpaid') ||
+            ($reqstatus == 'cancel' && $invstatus != 'paid' && $invstatus == 'cancel')
+        ) {
+            return response()->json([
+                'message' => 'Status Already : ' . $invoice->status
+            ], 403);
+        }
+        $invoice->update([
+            'status' => $reqstatus,
+        ]);
+
+        return response()->json([
+            'message' => 'Success Update Status : ' . $invoice->number . ' to : ' . $reqstatus
+        ]);
     }
 }

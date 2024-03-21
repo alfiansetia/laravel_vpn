@@ -54,17 +54,7 @@
                 <div class="card-footer text-center">
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-secondary show-index"><i
-                                    class="fas fa-times me-1 bs-tooltip" title="Close"></i>Close</button>
-                            <button type="button" id="edit_reset" class="btn btn-warning">
-                                <i class="fas fa-undo me-1 bs-tooltip" title="Reset"></i>Reset
-                            </button>
-                            <button type="button" id="edit_delete" class="btn btn-danger">
-                                <i class="fas fa-trash me-1 bs-tooltip" title="Delete"></i>Delete
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane me-1 bs-tooltip" title="Save"></i>Save
-                            </button>
+                            @include('components.form.button_edit')
                         </div>
                     </div>
                 </div>

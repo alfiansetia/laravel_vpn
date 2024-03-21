@@ -9,6 +9,14 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group mb-2">
+                        <label for="user"><i class="far fa-envelope me-1 bs-tooltip" title="Option User"></i>User
+                            :</label>
+                        <select name="user" id="user" class="form-control" style="width: 100%;" required>
+                            <option value="">Please Select User</option>
+                        </select>
+                        <span id="err_user" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
+                    <div class="form-group mb-2">
                         <label for="vpn"><i class="far fa-envelope me-1 bs-tooltip" title="Option VPN"></i>VPN
                             :</label>
                         <select name="vpn" id="vpn" class="form-control" style="width: 100%;" required>
@@ -51,12 +59,7 @@
                 <div class="card-footer text-center">
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-secondary show-index"><i
-                                    class="fas fa-times me-1 bs-tooltip" title="Close"></i>Close</button>
-                            <button type="reset" id="reset" class="btn btn-warning"><i
-                                    class="fas fa-undo me-1 bs-tooltip" title="Reset"></i>Reset</button>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1 bs-tooltip"
-                                    title="Save"></i>Save</button>
+                            @include('components.form.button_add')
                         </div>
                     </div>
                 </div>

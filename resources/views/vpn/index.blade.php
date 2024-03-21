@@ -66,14 +66,14 @@
 
         <div class="row layout-top-spacing layout-spacing pb-0" id="card_filter">
             <div class="col-md-4">
-                <select class="form-control" name="status" id="select_status">
+                <select class="form-control select2" name="status" id="select_status">
                     <option value="">All</option>
                     <option value="yes">Active</option>
                     <option value="no">Nonactive</option>
                 </select>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="trial" id="select_trial">
+                <select class="form-control select2" name="trial" id="select_trial">
                     <option value="">All</option>
                     <option value="yes">Trial</option>
                     <option value="no">Paid</option>
@@ -148,6 +148,10 @@
         $('#send_email').click(function() {
             $('#modalSendEmail').modal('show')
         })
+
+        $('#modalSendEmail').on('shown.bs.modal', function() {
+            $('input[name="email"]').focus();
+        });
 
         $('#form_send_email').submit(function(event) {
             event.preventDefault();
@@ -265,10 +269,11 @@
 
         // $(document).ready(function() {
 
+        $('.select2').select2()
+
         $('[data-mask]').inputmask();
         var perpage = 20;
         $("#email, #edit_email").select2({
-            // dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
                 url: "{{ route('user.paginate') }}",
@@ -298,7 +303,6 @@
         });
 
         $("#server").select2({
-            // dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
                 url: "{{ route('server.paginate') }}",
@@ -537,15 +541,24 @@
                     $('#edit_password').val(result.data.password);
                     $('#edit_ip').val(result.data.ip);
                     $('#edit_ip').val(result.data.ip);
-                    $('#input_send_email').val(result.data.user.email)
 
                     f2.setDate(result.data.expired);
-                    let option1 = new Option(result.data.user.email, result.data.user_id,
-                        true, true);
-                    let option2 = new Option(result.data.server.name, result.data.server_id,
-                        true, true);
-                    $('#edit_email').append(option1).trigger('change');
-                    $('#edit_server').append(option2).trigger('change');
+                    if (result.data.user_id == null) {
+                        $('#edit_email').val('').trigger('change');
+                        $('#input_send_email').val('')
+                    } else {
+                        $('#input_send_email').val(result.data.user.email)
+                        let option1 = new Option(result.data.user.email, result.data.user_id,
+                            true, true);
+                        $('#edit_email').append(option1).trigger('change');
+                    }
+                    if (result.data.server_id == null) {
+                        $('#edit_server').val('').trigger('change');
+                    } else {
+                        let option2 = new Option(result.data.server.name, result.data.server_id,
+                            true, true);
+                        $('#edit_server').append(option2).trigger('change');
+                    }
 
                     if (result.data.is_active == 'yes') {
                         $('#edit_is_active').prop('checked', true).change();

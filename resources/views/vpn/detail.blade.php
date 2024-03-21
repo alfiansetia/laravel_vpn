@@ -359,18 +359,7 @@
                                             </div>
                                         </div>
                                         <div class="card-footer text-center">
-                                            <button type="button" class="btn btn-secondary close-detail me-1">
-                                                <i class="fas fa-times me-1 bs-tooltip" title="Close"></i>Close
-                                            </button>
-                                            <button type="button" id="edit_reset" class="btn btn-warning me-1">
-                                                <i class="fas fa-undo me-1 bs-tooltip" title="Reset"></i>Reset
-                                            </button>
-                                            <button type="button" id="edit_delete" class="btn btn-danger me-1">
-                                                <i class="fas fa-trash me-1 bs-tooltip" title="Delete"></i>Delete
-                                            </button>
-                                            <button type="submit" class="btn btn-primary me-1">
-                                                <i class="fas fa-paper-plane me-1 bs-tooltip" title="Save"></i>Save
-                                            </button>
+                                            @include('components.form.button_edit')
                                         </div>
                                     </form>
                                 </div>

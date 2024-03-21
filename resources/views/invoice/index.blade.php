@@ -8,8 +8,6 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('backend/src/plugins/css/dark/table/datatable/dt-global_style.css') }}">
     <link href="{{ asset('backend/src/assets/css/dark/apps/invoice-list.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('backend/src/assets/css/light/components/modal.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}" rel="stylesheet" type="text/css" />
 
 
     <link href="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css">
@@ -99,9 +97,19 @@
             disableMobile: true,
         });
 
+        var edit_from = flatpickr(document.getElementById('edit_from'), {
+            defaultDate: "today",
+            disableMobile: true,
+        });
+
+        var edit_to = flatpickr(document.getElementById('edit_to'), {
+            defaultDate: "today",
+            disableMobile: true,
+        });
+
         // $(document).ready(function() {
         var perpage = 20;
-        $("#vpn").select2({
+        $("#vpn, #edit_vpn").select2({
             ajax: {
                 delay: 1000,
                 url: "{{ route('vpn.paginate') }}",
@@ -117,7 +125,7 @@
                     return {
                         results: $.map(data.data, function(item) {
                             return {
-                                text: item.username,
+                                text: `${item.username} (${item.server.name})`,
                                 id: item.id,
                             }
                         }),
@@ -129,7 +137,35 @@
             }
         });
 
-        $("#bank").select2({
+        $("#user, #edit_user").select2({
+            ajax: {
+                delay: 1000,
+                url: "{{ route('user.paginate') }}",
+                data: function(params) {
+                    return {
+                        name: params.term || '',
+                        page: params.page || 1,
+                        perpage: perpage,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: `${item.name} (${item.email})`,
+                                id: item.id,
+                            }
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
+                    };
+                },
+            }
+        });
+
+        $("#bank, #edit_bank").select2({
             ajax: {
                 delay: 1000,
                 url: "{{ route('bank.paginate') }}",
@@ -219,7 +255,7 @@
                 className: "text-center",
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        return `<span class="badge badge-${data === 'success' ? 'success' : (data === 'pending'? 'warning':'danger')}">${data}</span>`
+                        return `<span class="badge badge-${data === 'paid' ? 'success' : (data === 'unpaid'? 'warning':'danger')}">${data}</span>`
                     } else {
                         return data
                     }
@@ -247,9 +283,8 @@
             input_focus('total')
         })
 
-        $('#btn_delete').click(function() {
-            delete_batch("{{ route('bank.destroy.batch') }}")
-        })
+        $('#btn_delete').remove()
+        $('#edit_delete').remove()
 
         multiCheck(table);
 
@@ -273,9 +308,52 @@
                 method: 'GET',
                 success: function(result) {
                     unblock();
-                    $('#edit_name').val(result.data.name);
-                    $('#edit_acc_name').val(result.data.acc_name);
-                    $('#edit_acc_number').val(result.data.acc_number);
+                    $('#edit_total').val(result.data.total);
+                    $('#titleEdit2').html(`<b>${result.data.number}</b> (${result.data.status})`);
+                    edit_from.setDate(result.data.from);
+                    edit_to.setDate(result.data.to);
+
+                    if (result.data.bank_id == null) {
+                        $('#edit_bank').val('').trigger('change')
+                    } else {
+                        let option_bank = new Option(`${result.data.bank.name} (${result.data.bank.acc_name})`,
+                            result.data.bank_id,
+                            true, true);
+                        $('#edit_bank').append(option_bank).trigger('change')
+                    }
+                    if (result.data.vpn_id == null) {
+                        $('#edit_vpn').val('').trigger('change')
+                    } else {
+                        let option_vpn = new Option(
+                            `${result.data.vpn.username} (${result.data.vpn.server.name})`,
+                            result.data.vpn_id,
+                            true, true);
+                        $('#edit_vpn').append(option_vpn).trigger('change')
+                    }
+                    if (result.data.user_id == null) {
+                        $('#edit_user').val('').trigger('change')
+                    } else {
+                        let option_user = new Option(
+                            `${result.data.user.name} (${result.data.user.email})`,
+                            result.data.user_id,
+                            true, true);
+                        $('#edit_user').append(option_user).trigger('change')
+                    }
+                    let element = ['edit_total', 'edit_bank', 'edit_vpn', 'edit_from', 'edit_to', 'edit_delete',
+                        'edit_save', 'edit_user', 'btn_paid', 'btn_cancel'
+                    ];
+                    if (result.data.status == 'unpaid') {
+                        element.forEach(item => {
+                            $(`#${item}`).prop('disabled', false);
+                        });
+                    } else {
+                        element.forEach(item => {
+                            $(`#${item}`).prop('disabled', true);
+                        });
+                    }
+                    if (result.data.status == 'paid') {
+                        $('#btn_cancel').prop('disabled', false);
+                    }
                     if (show) {
                         show_card_edit()
                         input_focus('total')
@@ -289,6 +367,59 @@
                     handleResponse(xhr)
                 }
             });
+        }
+
+        function update_status(status) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Status will be update!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
+                confirmButtonAriaLabel: 'Thumbs up, Yes!',
+                cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
+                cancelButtonAriaLabel: 'Thumbs down',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                padding: '2em',
+                customClass: 'animated tada',
+                showClass: {
+                    popup: `animated tada`
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    ajax_setup();
+                    $.ajax({
+                        type: 'POST',
+                        url: url_put + '/set_status',
+                        data: {
+                            status: status
+                        },
+                        beforeSend: function() {
+                            block();
+                        },
+                        success: function(res) {
+                            unblock();
+                            table.ajax.reload();
+                            Swal.fire(
+                                'Success!',
+                                res.message,
+                                'success'
+                            )
+                            show_index()
+                        },
+                        error: function(xhr, status, error) {
+                            unblock();
+                            handleResponse(xhr)
+                            Swal.fire(
+                                'Failed!',
+                                xhr.responseJSON.message,
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
         }
 
         // });
