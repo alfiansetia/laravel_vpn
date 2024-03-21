@@ -44,7 +44,7 @@ class PortController extends Controller
             $data = Port::with('vpn:id,ip,is_active,username,server_id', 'vpn.server:id,domain,ip,location,name,netwatch,price,is_active')
                 ->whereRelation('vpn', 'is_active', '=', 'yes')
                 // ->whereRelation('vpn.server', 'is_active', '=', 'yes')
-                ->whereRelation('vpn', 'user_id', '=', auth()->user()->id);
+                ->whereRelation('vpn', 'user_id', '=', auth()->id());
             return DataTables::of($data)->toJson();
         } else {
             abort(404);

@@ -124,15 +124,7 @@
                 </div>
             </li>
 
-            <li class="menu {{ $title == 'Data Order' ? 'active' : '' }}">
-                <a href="{{ route('order.index') }}" aria-expanded="{{ $title == 'Data Order' ? 'true' : 'false' }}"
-                    class="dropdown-toggle">
-                    <div class="">
-                        <i data-feather="shopping-cart"></i>
-                        <span> List Order </span>
-                    </div>
-                </a>
-            </li>
+
 
             @if (isAdmin())
                 <li class="menu menu-heading">
@@ -185,10 +177,10 @@
                     <ul class="collapse submenu list-unstyled {{ $title == 'Setting Company' || $title == 'Setting Telegram' ? 'show' : '' }}"
                         id="setting_nav" data-parent="#accordionExample">
                         <li class="{{ $title == 'Setting Company' ? 'active' : '' }}">
-                            <a href="{{ route('setting.company') }}"> Company </a>
+                            <a href="{{ route('setting.company.general') }}"> Company </a>
                         </li>
                         <li class="{{ $title == 'Setting Telegram' ? 'active' : '' }}">
-                            <a href="{{ route('setting.telegram') }}"> Telegram </a>
+                            <a href="{{ route('setting.company.telegram') }}"> Telegram </a>
                         </li>
                     </ul>
                 </li>
@@ -213,7 +205,7 @@
                     <ul class="collapse submenu list-unstyled {{ $title == 'Backup Data' ? 'show' : '' }}"
                         id="backup_nav" data-parent="#accordionExample">
                         <li class="{{ $title == 'Backup Data' ? 'active' : '' }}">
-                            <a href="{{ route('setting.backup') }}"> Backup Data </a>
+                            <a href="{{ route('setting.company.backup') }}"> Backup Data </a>
                         </li>
                     </ul>
                 </li>

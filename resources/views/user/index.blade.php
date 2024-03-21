@@ -21,7 +21,7 @@
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
-        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing">
+        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing" id="card_table">
             <div class="widget-content widget-content-area br-8">
                 <form action="" id="formSelected">
                     <table id="tableData" class="table dt-table-hover table-hover" style="width:100%; cursor: pointer;">
@@ -33,8 +33,10 @@
                 </form>
             </div>
         </div>
+
+        @include('user.add')
+        @include('user.edit')
     </div>
-    @include('user.modal')
 @endsection
 @push('jslib')
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
@@ -55,6 +57,7 @@
 
 
 @push('js')
+    <script src="{{ asset('js/navigation.js') }}"></script>
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
         // $(document).ready(function() {
@@ -64,13 +67,7 @@
             placement: "top",
         });
 
-        $("#gender").select2({
-            dropdownParent: $("#modalAdd"),
-        });
-
-        $("#edit_gender").select2({
-            dropdownParent: $("#modalEdit"),
-        });
+        $(".select2").select2();
 
         var table = $('#tableData').DataTable({
             processing: true,
@@ -171,16 +168,13 @@
         $("div.toolbar").html(btn_element);
 
         $('#btn_add').click(function() {
-            $('#modalAdd').modal('show')
+            show_card_add()
+            input_focus('name')
         })
 
         $('#btn_delete').click(function() {
             delete_batch("{{ route('user.destroy.batch') }}")
         })
-
-        $('#modalAdd, #modalEdit').on('shown.bs.modal', function() {
-            $('input[name="name"]').focus();
-        });
 
         multiCheck(table);
 
@@ -227,7 +221,8 @@
                         $('#edit_role').prop('checked', false).change();
                     }
                     if (show) {
-                        $('#modalEdit').modal('show');
+                        show_card_edit()
+                        input_focus('name')
                     }
                 },
                 beforeSend: function() {

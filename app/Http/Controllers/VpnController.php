@@ -33,7 +33,7 @@ class VpnController extends Controller
         if ($request->filled('username')) {
             $data->where('username', 'like', "%{$request->username}%");
         }
-        $result = $data->paginate($perpage);
+        $result = $data->with('server:id,name')->paginate($perpage);
         return $result;
     }
 

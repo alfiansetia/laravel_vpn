@@ -21,7 +21,7 @@
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
-        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing">
+        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing" id="card_table">
             <div class="widget-content widget-content-area br-8">
                 <form action="" id="formSelected">
                     <table id="tableData" class="table dt-table-hover table-hover" style="width:100%; cursor: pointer;">
@@ -33,8 +33,9 @@
                 </form>
             </div>
         </div>
+        @include('router.add')
+        @include('router.edit')
     </div>
-    @include('router.modal')
 @endsection
 @push('jslib')
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
@@ -55,6 +56,7 @@
 
 
 @push('js')
+    <script src="{{ asset('js/navigation.js') }}"></script>
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
         // $(document).ready(function() {
@@ -101,8 +103,7 @@
             window.open(url, '_blank');
         });
 
-        $("#vpn").select2({
-            dropdownParent: $("#modalAdd"),
+        $("#vpn, #edit_vpn").select2({
             ajax: {
                 delay: 1000,
                 url: "{{ route('port.getbyuser') }}",
@@ -126,33 +127,6 @@
                 },
             }
         });
-
-        $("#edit_vpn").select2({
-            dropdownParent: $("#modalEdit"),
-            ajax: {
-                delay: 1000,
-                url: "{{ route('port.getbyuser') }}",
-                data: function(params) {
-                    return {
-                        dst: params.term,
-                        page: params.page
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: $.map(data.data, function(item) {
-                            return {
-                                text: item.vpn.username + ":" + item.dst + ' => ' + item.vpn
-                                    .server.name,
-                                id: item.id,
-                                disabled: item.vpn.is_active == 'yes' ? false : true,
-                            }
-                        })
-                    };
-                },
-            }
-        });
-
 
         var table = $('#tableData').DataTable({
             processing: true,
@@ -229,16 +203,13 @@
         $("div.toolbar").html(btn_element);
 
         $('#btn_add').click(function() {
-            $('#modalAdd').modal('show')
+            show_card_add()
+            input_focus('name')
         })
 
         $('#btn_delete').click(function() {
             delete_batch("{{ route('router.destroy.batch') }}")
         })
-
-        $('#modalAdd, #modalEdit').on('shown.bs.modal', function() {
-            $('input[name="name"]').focus();
-        });
 
         multiCheck(table);
 
@@ -278,7 +249,8 @@
                         $('#edit_vpn').val('').change();
                     }
                     if (show) {
-                        $('#modalEdit').modal('show');
+                        show_card_edit()
+                        input_focus('name')
                     }
                 },
                 beforeSend: function() {

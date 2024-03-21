@@ -13,7 +13,8 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab-icon" data-bs-toggle="tab"
                             data-bs-target="#profile-tab-icon-pane" type="button" role="tab"
-                            aria-controls="profile-tab-icon-pane" aria-selected="false">
+                            aria-controls="profile-tab-icon-pane" aria-selected="false"
+                            onclick="input_focus('username')">
                             <i data-feather="edit" class="bs-tooltip" title="Edit"></i> Edit
                         </button>
                     </li>

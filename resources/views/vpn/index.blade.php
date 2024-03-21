@@ -327,7 +327,7 @@
             }
         });
 
-        $('#home-tab-icon').click(function() {
+        $('#home-tab-icon, #profile-tab-icon').click(function() {
             $('#edit_reset').click()
         })
 
@@ -429,15 +429,12 @@
 
         $('#btn_add').click(function() {
             show_card_add()
+            input_focus('username')
         })
 
         $('#btn_delete').click(function() {
             delete_batch("{{ route('vpn.destroy.batch') }}")
         })
-
-        $('#modalAdd, #modalEdit').on('shown.bs.modal', function() {
-            $('input[name="name"]').focus();
-        });
 
         multiCheck(table);
 
@@ -626,7 +623,7 @@
                     tooltip()
                     if (show) {
                         show_card_detail()
-                        // $('#modalEdit').modal('show');
+                        input_focus('username')
                     }
                 },
                 beforeSend: function() {

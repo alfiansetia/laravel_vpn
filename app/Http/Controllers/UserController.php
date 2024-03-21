@@ -57,7 +57,7 @@ class UserController extends Controller
             'phone'     => 'required|max:15|min:3',
             'address'   => 'required|max:100|min:3',
             'password'  => 'required',
-            'role'      => 'required|in:admin,user',
+            'role'      => 'nullable|in:on',
             'status'    => 'nullable|in:on',
             'verified'  => 'nullable|in:on',
         ]);
@@ -68,7 +68,7 @@ class UserController extends Controller
             'phone'     => $request->phone,
             'address'   => $request->address,
             'password'  => Hash::make($request->password),
-            'role'      => $request->role,
+            'role'      => $request->role == 'on' ? 'admin' : 'user',
             'status'    => $request->status == 'on' ? 'active' : 'nonactive',
             'email_verified_at' => $request->verified == 'on' ? now() : null,
         ]);
@@ -83,7 +83,7 @@ class UserController extends Controller
             'gender'    => 'required|in:male,female',
             'phone'     => 'required|max:15|min:3',
             'address'   => 'required|max:100|min:3',
-            'role'      => 'required|in:admin,user',
+            'role'      => 'nullable|in:on',
             'status'    => 'nullable|in:on',
             'password'  => 'nullable|min:5',
             'verified'  => 'nullable|in:on',
@@ -94,11 +94,11 @@ class UserController extends Controller
             'gender'    => $request->gender,
             'phone'     => $request->phone,
             'address'   => $request->address,
-            'role'      => $request->role,
+            'role'      => $request->role == 'on' ? 'admin' : 'user',
             'status'    => $request->status == 'on' ? 'active' : 'nonactive',
             'email_verified_at' => null,
         ];
-        if ($user->email_verified_at != null && $request->verified == 'on') {
+        if ($request->verified == 'on') {
             $data['email_verified_at'] = now();
         }
         if ($request->filled('password')) {

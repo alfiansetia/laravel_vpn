@@ -47,7 +47,7 @@
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
-        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing">
+        <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing" id="card_table">
             <div class="widget-content widget-content-area br-8">
                 <form action="" id="formSelected">
                     <table id="tableData" class="table dt-table-hover table-hover" style="width:100%; cursor: pointer;">
@@ -59,8 +59,9 @@
                 </form>
             </div>
         </div>
+        @include('invoice.add')
+        @include('invoice.edit')
     </div>
-    @include('invoice.modal')
 @endsection
 @push('jslib')
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
@@ -80,6 +81,7 @@
 
 
 @push('js')
+    <script src="{{ asset('js/navigation.js') }}"></script>
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
         $('.maxlength').maxlength({
@@ -100,7 +102,6 @@
         // $(document).ready(function() {
         var perpage = 20;
         $("#vpn").select2({
-            dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
                 url: "{{ route('vpn.paginate') }}",
@@ -129,7 +130,6 @@
         });
 
         $("#bank").select2({
-            dropdownParent: $("#modalAdd"),
             ajax: {
                 delay: 1000,
                 url: "{{ route('bank.paginate') }}",
@@ -243,16 +243,13 @@
         $("div.toolbar").html(btn_element);
 
         $('#btn_add').click(function() {
-            $('#modalAdd').modal('show')
+            show_card_add()
+            input_focus('total')
         })
 
         $('#btn_delete').click(function() {
             delete_batch("{{ route('bank.destroy.batch') }}")
         })
-
-        $('#modalAdd, #modalEdit').on('shown.bs.modal', function() {
-            $('input[name="total"]').focus();
-        });
 
         multiCheck(table);
 
@@ -280,7 +277,8 @@
                     $('#edit_acc_name').val(result.data.acc_name);
                     $('#edit_acc_number').val(result.data.acc_number);
                     if (show) {
-                        $('#modalEdit').modal('show');
+                        show_card_edit()
+                        input_focus('total')
                     }
                 },
                 beforeSend: function() {

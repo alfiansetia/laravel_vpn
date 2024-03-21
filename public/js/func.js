@@ -31,6 +31,11 @@ function formatBytes(size) {
     return parseFloat(size).toFixed(2) + ' ' + unit[i];
 }
 
+
+$('.show-index').click(function() {
+    show_index()
+})
+
 function selected() {
     let id = $('input[name="id[]"]:checked').length;
 
@@ -118,6 +123,10 @@ function handleResponseForm(jqXHR, form = 'add') {
         }
     }
 
+}
+
+function input_focus(input_name){
+    $(`input[name="${input_name}"]`).focus();
 }
 
 function delete_batch(url) {
@@ -331,7 +340,7 @@ $('#edit_delete').click(function () {
                         'success'
                     )
                     $('#modalEdit').modal('hide')
-                    hide_card_detail()
+                    show_index()
                 },
                 error: function (xhr, status, error) {
                     unblock();
