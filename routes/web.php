@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::delete('router/batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
         Route::get('router/open', [RouterController::class, 'open'])->name('router.open');
-        Route::get('router/ping', [RouterController::class, 'ping'])->name('router.ping');
+        Route::get('router/{router}/ping', [RouterController::class, 'ping'])->name('router.ping');
         Route::resource('router', RouterController::class)->except(['edit', 'create']);
 
         // Profile
@@ -118,6 +118,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::get('setting/company/backup', [SettingController::class, 'backup'])->name('setting.company.backup');
 
+        Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'getData'])->name('mikapi.dashboard.get.data');
         Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
 
 

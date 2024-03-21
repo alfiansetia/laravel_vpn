@@ -96,13 +96,6 @@
             // var id = $('#router').select2('data')[0].id
         })
 
-        $('#btnOpen').on('click', function() {
-            // block();
-            id = $(this).val();
-            let url = "{{ route('mikapi.dashboard') }}?router=" + id;
-            window.open(url, '_blank');
-        });
-
         $("#vpn, #edit_vpn").select2({
             ajax: {
                 delay: 1000,
@@ -230,11 +223,11 @@
                 success: function(result) {
                     unblock();
                     $('#edit_reset').val(result.data.id);
-                    $('#btnOpen').val(result.data.id);
                     $('#edit_name').val(result.data.name);
                     $('#edit_hsname').val(result.data.hsname);
                     $('#edit_dnsname').val(result.data.dnsname);
                     $('#edit_username').val(result.data.username);
+                    $('#edit_password').val('');
                     if (result.data.port_id !== null) {
                         let option2 = new Option((result.data.port.vpn.username + ":" +
                                 result.data.port.dst + ' => ' + result.data.port.vpn.server.name
@@ -258,6 +251,24 @@
                 }
             });
         }
+
+
+        $('#btn_open').on('click', function() {
+            let url = "{{ route('mikapi.dashboard') }}?router=" + id;
+            window.open(url, '_blank');
+        });
+
+        $('#btn_ping').click(function() {
+            ajax_setup()
+            block()
+            $.get(url_put + '/ping').done(function(result) {
+                unblock()
+                show_alert(result.message, 'success')
+            }).fail(function(xhr) {
+                unblock()
+                show_alert(xhr.responseJSON.message)
+            })
+        })
 
         // });
     </script>

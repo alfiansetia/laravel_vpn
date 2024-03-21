@@ -49,7 +49,7 @@
                     <div class="form-group mb-2">
                         <label class="control-label" for="edit_password"><i class="fas fa-lock me-1 bs-tooltip"
                                 title="Password"></i>Password :</label>
-                        <input type="text" name="password" class="form-control maxlength" id="edit_password"
+                        <input type="password" name="password" class="form-control maxlength" id="edit_password"
                             placeholder="Please Enter Password" minlength="0" maxlength="100">
                         <div class="mt-1">
                             <span class="badge badge-primary w-100">
@@ -66,7 +66,11 @@
 
                             @include('components.form.button_edit')
 
-                            <button type="button" class="btn btn-info" id="btnOpen">
+                            <button type="button" class="btn btn-secondary" id="btn_ping">
+                                <i class="fas fa-plug me-1 bs-tooltip" title="Ping"></i>Ping
+                            </button>
+
+                            <button type="button" class="btn btn-info" id="btn_open">
                                 <i class="fas fa-rocket me-1 bs-tooltip" title="Open"></i>Open
                             </button>
                         </div>

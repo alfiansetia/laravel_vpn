@@ -39,7 +39,7 @@ class RouterApiServices
     public function ping()
     {
         if ($this->connect()) {
-            return handle_data([], 'Connected');
+            return true;
         } else {
             return handle_fail_login($this->API);
         }

@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             [
                 'layouts.backend.template',
+                'layouts.backend.template_mikapi',
                 'layouts.template',
                 'layouts.auth',
                 'auth.verify',

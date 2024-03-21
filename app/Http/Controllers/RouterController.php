@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Port;
 use App\Models\Router;
+use App\Services\RouterApiServices;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -21,56 +22,23 @@ class RouterController extends Controller
         return view('router.index');
     }
 
-    public function ping(Request $request, $id)
+    public function ping(Request $request, Router $router)
     {
-        if ($request->ajax()) {
-            $obj = Router::with('port.vpn.server')->whereRelation('port.vpn', 'user_id', '=', $this->getUser()->id)->find($id);
-            if ($obj && $obj->port !== null) {
-                if ($obj->port->vpn->server->is_active == 'yes') {
-                    $ip = $obj->port->vpn->server->ip . ':' . $obj->port->dst;
-                    $u = $obj->username;
-                    $p = decrypt($obj->password);
-                    $data = Router::cek_login($ip, $u, $p);
-                } else {
-                    $data = ['message' => 'Server Nonactive', 'data' => ''];
-                }
-            } else {
-                $data = ['message' => 'Data Not Found / Lengkapi Data!', 'data' => ''];
-            }
-            return response()->json($data);
-        } else {
-            abort(404);
+        $router = $router->load('port.vpn.server');
+        if (empty($router->port_id)) {
+            return response()->json(['message' => 'VPN Not Ready On Router!']);
+        }
+        if ($router->port->vpn->user_id != auth()->id()) {
+            return response()->json(['message' => 'Unauthorize!'], 403);
+        }
+        try {
+            $service = new RouterApiServices($router);
+            $service->ping();
+            return response()->json(['message' => 'Connected!']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
     }
-
-    // public function open(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         if ($request->has('router_id')) {
-    //             Session::put('router_id', $request->router_id);
-    //             $session = MikApi::cekSession();
-    //             if ($session) {
-    //                 if (MikApi::isActiveService($session)) {
-    //                     $cek = MikApi::cek();
-    //                     if ($cek['status']) {
-    //                         $data = ['message' => 'Success Create Session Router', 'data' => route('mikapi.dashboard')];
-    //                     } else {
-    //                         $data = ['message' => $cek['message'], 'data' => ''];
-    //                     }
-    //                 } else {
-    //                     $data = ['message' => 'Service VPN/Server NOT Active, Select Other VPN !', 'data' => ''];
-    //                 }
-    //             } else {
-    //                 $data = ['message' => 'Data Router Not Found', 'data' => ''];
-    //             }
-    //         } else {
-    //             $data = ['message' => 'Data Router Not Found', 'data' => ''];
-    //         }
-    //         return response()->json($data);
-    //     } else {
-    //         abort(404);
-    //     }
-    // }
 
     public function store(Request $request)
     {

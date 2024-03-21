@@ -45,7 +45,7 @@ class DashboardServices extends RouterApiServices
                     $ppp_secret = 0;
                 }
             }
-            $data = ['status' => true, 'message' => '', 'data' => [
+            $data = ['message' => '', 'data' => [
                 'resource'      => $resource,
                 'package'       => $packages,
                 'routerboard'   => $routerboard,

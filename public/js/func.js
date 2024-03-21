@@ -50,6 +50,14 @@ function selected() {
     return true
 }
 
+function show_alert(message, type){
+    Swal.fire({
+        title: type == 'success' ? 'Success!' : 'Failed!',
+        text: message,
+        icon: type,
+    })
+}
+
 function handleResponseCode(code) {
     if (code === 404) {
         Swal.fire({

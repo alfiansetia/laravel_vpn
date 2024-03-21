@@ -249,9 +249,8 @@ function handle_fail_login($api)
     if ($api->error_str == "") {
         $api->error_str = "User/Password Wrong!";
     }
-    $data = ['status' => false, 'message' => 'Router Not Connect!  ' . $api->error_str, 'data' => []];
-    // return ['status' => false, 'message' => 'Router Not Connect!', 'data' => []];
-    return $data;
+    $message = 'Router Not Connect : ' . $api->error_str;
+    throw new Exception($message);
 }
 
 
