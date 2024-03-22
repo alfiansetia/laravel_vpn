@@ -17,7 +17,7 @@ class RoleAdmin
     {
         if (!isAdmin()) {
             if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['message' => 'Unauthorize!'], 403);
+                return response()->json(['message' => 'Unauthorize!', 'data' => []], 403);
             }
             return redirect(route('home'))->withErrors(['errors' => 'Unauthorize!'])->withInput();
         }

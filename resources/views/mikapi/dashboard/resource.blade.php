@@ -4,7 +4,7 @@
             <div class="vistorsBrowser">
                 <div class="browser-list">
                     <div class="w-icon">
-                        <i data-feather="server"></i>
+                        <i data-feather="cpu"></i>
                     </div>
                     <div class="w-browser-details">
                         <div class="w-browser-info">
@@ -23,7 +23,7 @@
 
                 <div class="browser-list">
                     <div class="w-icon">
-                        <i data-feather="server"></i>
+                        <i data-feather="package"></i>
                     </div>
                     <div class="w-browser-details">
                         <div class="w-browser-info">
@@ -42,7 +42,7 @@
 
                 <div class="browser-list">
                     <div class="w-icon">
-                        <i data-feather="server"></i>
+                        <i data-feather="hard-drive"></i>
                     </div>
                     <div class="w-browser-details">
                         <div class="w-browser-info">

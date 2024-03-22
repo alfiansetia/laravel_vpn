@@ -7,7 +7,7 @@
 
                 <div class="summary-list">
                     <div class="w-icon">
-                        <i data-feather="database"></i>
+                        <i data-feather="clock"></i>
                     </div>
                     <div class="w-summary-details">
                         <div class="w-summary-info">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="summary-list">
                     <div class="w-icon">
-                        <i data-feather="database"></i>
+                        <i data-feather="command"></i>
                     </div>
                     <div class="w-summary-details">
                         <div class="w-summary-info">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="summary-list">
                     <div class="w-icon">
-                        <i data-feather="database"></i>
+                        <i data-feather="monitor"></i>
                     </div>
                     <div class="w-summary-details">
                         <div class="w-summary-info">

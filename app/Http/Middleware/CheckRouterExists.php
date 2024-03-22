@@ -23,15 +23,15 @@ class CheckRouterExists
                 'router' => [
                     'required',
                     'integer',
-                    'exists:routers,id,user_id,' . auth()->user()->id,
+                    'exists:routers,id,user_id,' . auth()->id(),
                     function ($attribute, $value, $fail) use ($request) {
-                        $router = Router::where('user_id', auth()->user()->id)->with('port.vpn.server')->find($request->input('router'));
+                        $router = Router::where('user_id', auth()->id())->with('port.vpn.server')->find($request->input('router'));
                         if ($router) {
                             if (!$router->port) {
                                 return $fail('Select VPN on Router');
                             }
                             if ($router->port->vpn->user_id != auth()->id()) {
-                                return response()->json(['mesage' => 'Warning! This Port is not Your VPN Account!'], 422);
+                                return $fail('Warning! This Port is not Your VPN Account!');
                             }
                             if ($router->port->vpn->is_active == 'no') {
                                 return $fail('Your VPN Nonactive!');
@@ -46,7 +46,7 @@ class CheckRouterExists
         );
         if ($validator->fails()) {
             if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['errors' => $validator->errors()], 422);
+                return response()->json(['message' => $validator->messages(), 'errors' => $validator->errors()], 422);
             }
             return redirect(route('router.index'))->withErrors($validator)->withInput();
         }
