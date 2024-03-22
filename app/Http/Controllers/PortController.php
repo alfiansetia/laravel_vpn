@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Port;
 use App\Models\Vpn;
+use App\Services\PortApiServices;
 use App\Traits\CompanyTrait;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class PortController extends Controller
@@ -69,42 +71,32 @@ class PortController extends Controller
             'to'     => 'required|integer|gt:1|lt:10000',
             'sync'   => 'nullable|in:on',
         ]);
-        $createApi['status'] = true;
-        if ($request->sync == 'yes') {
-            $vpn = Vpn::with('server')->find($request->vpn);
-            $ip = ($vpn->server->ip . ($vpn->server->port != 0 ? (':' . $vpn->server->port) : ''));
-            $u = $vpn->server->username;
-            $p = decrypt($vpn->server->password);
-            $param = [
-                'server'    => [
-                    'ip'    => $ip,
-                    'user'  => $u,
-                    'pass'  => $p,
-                ],
-                'data'      => [
+
+        DB::beginTransaction();
+        try {
+            $data = [];
+            if ($request->sync == 'on') {
+                $vpn = Vpn::with('server')->find($request->vpn);
+                $param = [
                     'username'  => $vpn->username,
                     'ip'        => $vpn->ip,
                     'dst'       => $request->dst,
-                    'to'        => $request->to
-                ],
-            ];
-            $createApi = Port::createApi($param);
-        }
-        if ($createApi['status']) {
-            $port = Port::create([
+                    'to'        => $request->to,
+                ];
+                $service  = new PortApiServices($vpn->server);
+                $data = $service->store($param);
+            }
+            Port::create([
                 'vpn_id'    => $request->vpn,
                 'dst'       => $request->dst,
                 'to'        => $request->to,
             ]);
-            if ($port) {
-                $data = ['status' => true, 'message' => 'Success Insert Data', 'data' => ''];
-            } else {
-                $data = ['status' => false, 'message' => 'Failed Insert Data', 'data' => ''];
-            }
-        } else {
-            $data = $createApi;
+            DB::commit();
+            return response()->json(['message' => 'Success Update Data', 'data' => $data]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => $th->getMessage(), 'data' => []], 500);
         }
-        return response()->json($data);
     }
 
     public function show(Request $request, Port $port)
@@ -126,74 +118,40 @@ class PortController extends Controller
             'to'     => 'required|integer|gt:1|lt:10000',
             'sync'   => 'nullable|in:on',
         ]);
-        $port = Port::with('vpn.server')->findOrFail($port->id);
-        $updateApi['status'] = true;
-        if ($request->sync == 'yes') {
-            $ip = ($port->vpn->server->ip . ($port->vpn->server->port != 0 ? (':' . $port->vpn->server->port) : ''));
-            $u = $port->vpn->server->username;
-            $p = decrypt($port->vpn->server->password);
+
+        DB::beginTransaction();
+        try {
             $param = [
-                'server'    => [
-                    'ip'    => $ip,
-                    'user'  => $u,
-                    'pass'  => $p,
-                ],
-                'old' => [
-                    'dst' => $port->dst,
-                    'to'  => $port->to,
-                ],
-                'data'      => [
-                    'username'  => $port->vpn->username,
-                    'ip'        => $port->vpn->ip,
-                    'dst'       => $request->dst,
-                    'to'        => $request->to
-                ],
+                'dst'   => $request->dst,
+                'to'    => $request->to,
             ];
-            $updateApi = Port::updateApi($param);
-        }
-        if ($updateApi['status']) {
-            $port->update([
-                'dst'       => $request->dst,
-                'to'        => $request->to,
-            ]);
-            if ($port) {
-                $data = ['status' => true, 'message' => 'Success Update Data', 'data' => ''];
-            } else {
-                $data = ['status' => false, 'message' => 'Failed Update Data', 'data' => ''];
+            $data = [];
+            if ($request->sync == 'on') {
+                $service  = new PortApiServices($port->vpn->server);
+                $data = $service->update($port, $param);
             }
-        } else {
-            $data = $updateApi;
+            $port->update($param);
+            DB::commit();
+            return response()->json(['message' => 'Success Update Data', 'data' => $data]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => $th->getMessage(), 'data' => []], 500);
         }
-        return response()->json($data);
     }
 
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request, Port $port)
     {
-        $port = Port::with('vpn.server')->findOrFail($id);
-        $ip = ($port->vpn->server->ip . ($port->vpn->server->port != 0 ? (':' . $port->vpn->server->port) : ''));
-        $u = $port->vpn->server->username;
-        $p = decrypt($port->vpn->server->password);
-        $param = [
-            'server'    => [
-                'ip'    => $ip,
-                'user'  => $u,
-                'pass'  => $p,
-            ],
-            'username'  => $port->vpn->username,
-            'dst'       => $port->dst,
-            'to'        => $port->to,
-        ];
-        $api = Port::deleteApi($param);
-        if ($api['status']) {
+        DB::beginTransaction();
+        try {
+            $data = [];
+            $service  = new PortApiServices($port->vpn->server);
+            $data = $service->destroy($port);
             $port->delete();
-            if ($port) {
-                $data = ['status' => true, 'message' => 'Success Delete Data', 'data' => ''];
-            } else {
-                $data = ['status' => false, 'message' => 'Failed Delete Data', 'data' => ''];
-            }
-        } else {
-            $data = $api;
+            DB::commit();
+            return response()->json(['message' => 'Success Update Data', 'data' => $data]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => $th->getMessage(), 'data' => []], 500);
         }
-        return response()->json($data);
     }
 }

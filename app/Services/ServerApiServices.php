@@ -23,7 +23,6 @@ class ServerApiServices
 
     protected function connect()
     {
-        // $ip = $this->server->ip . ':' . $this->server->port;
         $ip = ($this->server->ip . ($this->server->port != 0 ? (':' . $this->server->port) : ''));
         $user = $this->server->username;
         try {

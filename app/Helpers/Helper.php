@@ -266,6 +266,20 @@ function is_error($response)
     }
 }
 
+function cek_error($response)
+{
+    if (isset($response['!trap'])) {
+        throw new Exception($response['!trap'][0]['message']);
+    }
+}
+
+function cek_exists($response)
+{
+    if (count($response) > 0) {
+        throw new Exception('Data Already Exist!');
+    }
+}
+
 function handle_data($response, $message = '')
 {
     try {
