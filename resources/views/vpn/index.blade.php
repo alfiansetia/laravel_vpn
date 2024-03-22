@@ -541,6 +541,7 @@
                     $('#edit_password').val(result.data.password);
                     $('#edit_ip').val(result.data.ip);
                     $('#edit_ip').val(result.data.ip);
+                    $('#edit_desc').val(result.data.desc);
 
                     f2.setDate(result.data.expired);
                     if (result.data.user_id == null) {

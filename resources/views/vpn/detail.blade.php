@@ -339,6 +339,15 @@
                                                 <span id="err_edit_expired" class="error invalid-feedback"
                                                     style="display: hide;"></span>
                                             </div>
+                                            <div class="form-group mb-2">
+                                                <label class="control-label" for="edit_desc"><i
+                                                        class="fas fa-map-marker me-1 bs-tooltip"
+                                                        title="desc User"></i>Description :</label>
+                                                <textarea name="desc" class="form-control maxlength" id="edit_desc" placeholder="Please Enter Description"
+                                                    minlength="0" maxlength="100"></textarea>
+                                                <span id="err_edit_desc" class="error invalid-feedback"
+                                                    style="display: hide;"></span>
+                                            </div>
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-lg-2 col-6 mb-2 mt-2">
