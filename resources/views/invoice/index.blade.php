@@ -144,6 +144,7 @@
                 data: function(params) {
                     return {
                         name: params.term || '',
+                        email: params.term || '',
                         page: params.page || 1,
                         perpage: perpage,
                     };
@@ -309,6 +310,7 @@
                 success: function(result) {
                     unblock();
                     $('#edit_total').val(result.data.total);
+                    $('#edit_desc').val(result.data.desc);
                     $('#titleEdit2').html(`<b>${result.data.number}</b> (${result.data.status})`);
                     edit_from.setDate(result.data.from);
                     edit_to.setDate(result.data.to);
@@ -339,8 +341,8 @@
                             true, true);
                         $('#edit_user').append(option_user).trigger('change')
                     }
-                    let element = ['edit_total', 'edit_bank', 'edit_vpn', 'edit_from', 'edit_to', 'edit_delete',
-                        'edit_save', 'edit_user', 'btn_paid', 'btn_cancel'
+                    let element = ['edit_total', 'edit_bank', 'edit_vpn', 'edit_from', 'edit_to',
+                        'edit_delete', 'edit_user', 'btn_paid', 'btn_cancel'
                     ];
                     if (result.data.status == 'unpaid') {
                         element.forEach(item => {
@@ -390,8 +392,8 @@
                 if (result.isConfirmed) {
                     ajax_setup();
                     $.ajax({
-                        type: 'POST',
-                        url: url_put + '/set_status',
+                        type: 'DELETE',
+                        url: url_put,
                         data: {
                             status: status
                         },

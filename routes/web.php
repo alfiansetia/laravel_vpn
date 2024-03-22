@@ -56,7 +56,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::group(['middleware' => ['is.active']], function () {
 
-        Route::post('invoice/{invoice}/set_status', [InvoiceController::class, 'status'])->name('invoice.set.status');
         Route::resource('invoice', InvoiceController::class)->only(['index', 'show', 'store', 'update', 'destroy',]);
 
         Route::get('user/paginate', [UserController::class, 'paginate'])->name('user.paginate');

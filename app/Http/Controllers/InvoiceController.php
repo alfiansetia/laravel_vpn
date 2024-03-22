@@ -60,6 +60,7 @@ class InvoiceController extends Controller
             'from'  => 'required|date_format:Y-m-d',
             'to'    => 'required|date_format:Y-m-d',
             'total' => 'required|integer|gt:0',
+            'desc'  => 'nullable|max:200',
         ]);
         $date = date('Y-m-d');
         $date_parse = Carbon::parse($date);
@@ -74,6 +75,7 @@ class InvoiceController extends Controller
             'from'      => $request->from,
             'to'        => $request->to,
             'total'     => $request->total,
+            'desc'      => $request->desc,
         ]);
         return response()->json(['message' => 'Success Insert Data', 'data' => []]);
     }
@@ -83,26 +85,40 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        $this->validate($request, [
+        $validate = [
             'user'  => 'required|exists:users,id',
             'bank'  => 'required|exists:banks,id',
             'vpn'   => 'required|exists:vpns,id',
             'from'  => 'required|date_format:Y-m-d',
             'to'    => 'required|date_format:Y-m-d',
             'total' => 'required|integer|gt:0',
-        ]);
-        $invoice->update([
+            'desc'  => 'nullable|max:200',
+        ];
+        if ($invoice->status != 'unpaid') {
+            $validate = [
+                'desc'  => 'nullable|max:200',
+            ];
+        }
+        $this->validate($request, $validate);
+        $param  = [
             'user_id'   => $request->user,
             'bank_id'   => $request->bank,
             'vpn_id'    => $request->vpn,
             'from'      => $request->from,
             'to'        => $request->to,
             'total'     => $request->total,
-        ]);
+            'desc'      => $request->desc,
+        ];
+        if ($invoice->status != 'unpaid') {
+            $param = [
+                'desc'  => $request->desc,
+            ];
+        }
+        $invoice->update($param);
         return response()->json(['message' => 'Success Update Data', 'data' => []]);
     }
 
-    public function status(Request $request, Invoice $invoice)
+    public function destroy(Request $request, Invoice $invoice)
     {
         $this->validate($request, [
             'status' => 'required|in:paid,cancel'

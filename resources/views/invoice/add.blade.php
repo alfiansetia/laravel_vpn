@@ -55,6 +55,13 @@
                             placeholder="Input Total" value="0" min="1" required>
                         <span id="err_total" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
+                    <div class="form-group mb-2">
+                        <label class="control-label" for="desc"><i class="fas fa-map-marker me-1 bs-tooltip"
+                                title="desc User"></i>Description :</label>
+                        <textarea name="desc" class="form-control maxlength" id="desc" placeholder="Please Enter Description"
+                            minlength="0" maxlength="100"></textarea>
+                        <span id="err_desc" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
                 </div>
                 <div class="card-footer text-center">
                     <div class="row">

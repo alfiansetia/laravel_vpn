@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('to');
             $table->enum('status', ['paid', 'unpaid', 'cancel'])->default('unpaid');
             $table->string('image')->nullable();
+            $table->string('desc')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->foreign('bank_id')->references('id')->on('banks')->cascadeOnUpdate()->nullOnDelete();

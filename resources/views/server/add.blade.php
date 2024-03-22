@@ -67,7 +67,7 @@
                         <div class="form-group col-md-6 mb-2">
                             <label for="password"><i class="fas fa-fingerprint me-1 bs-tooltip"
                                     title="Password Server"></i>Password :</label>
-                            <input type="text" name="password" class="form-control maxlength" id="password"
+                            <input type="password" name="password" class="form-control maxlength" id="password"
                                 placeholder="Please Enter Password" minlength="5" maxlength="100" required>
                             <span id="err_password" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
