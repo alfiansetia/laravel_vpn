@@ -55,6 +55,12 @@ class ServerApiServices
     public function store(array $data, array $dst)
     {
         if ($this->connect()) {
+            $exists =  $this->API->comm("/ppp/secret/print", array(
+                '?name'              => $data['username'],
+                '?local-address'     => $this->server->netwatch,
+                '?remote-address'    => $data['ip'],
+            ));
+            cek_exists($exists);
             $this->API->comm("/ppp/secret/add", array(
                 'service'           => 'any',
                 'name'              => $data['username'],
@@ -135,7 +141,7 @@ class ServerApiServices
                 ));
             }
             $this->disconnect();
-            return true;
+            return [];
         } else {
             throw new Exception('Selected Server Error!', 500);
         }
