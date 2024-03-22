@@ -1,4 +1,4 @@
-@extends('layouts.backend.template', ['title' => 'Data User'])
+@extends('layouts.backend.template', ['title' => 'Data Invoice'])
 @push('csslib')
     <link href="{{ asset('backend/src/plugins/src/table/datatable/datatables.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/plugins/css/light/table/datatable/dt-global_style.css') }}" rel="stylesheet"
@@ -9,13 +9,39 @@
         href="{{ asset('backend/src/plugins/css/dark/table/datatable/dt-global_style.css') }}">
     <link href="{{ asset('backend/src/assets/css/dark/apps/invoice-list.css') }}" rel="stylesheet" type="text/css" />
 
+
+    <link href="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/src/noUiSlider/nouislider.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/light/flatpickr/custom-flatpickr.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/dark/flatpickr/custom-flatpickr.css') }}" rel="stylesheet"
+        type="text/css">
+
     <link href="{{ asset('backend/src/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css">
 
-    <link href="{{ asset('backend/src/assets/css/light/scrollspyNav.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('backend/src/assets/css/light/forms/switches.css') }}" rel="stylesheet" type="text/css">
+    <style>
+        .flatpickr-calendar {
+            z-index: 1056 !important;
+        }
 
-    <link href="{{ asset('backend/src/assets/css/dark/scrollspyNav.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('backend/src/assets/css/dark/forms/switches.css') }}" rel="stylesheet" type="text/css">
+        .tba {
+            width: 35%;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: left;
+        }
+
+        .tbb {
+            width: 65%;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: left;
+        }
+
+        .tbb::before {
+            content: ": ";
+        }
+    </style>
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
@@ -31,9 +57,7 @@
                 </form>
             </div>
         </div>
-
-        @include('user.add')
-        @include('user.edit')
+        @include('invoice.edit_user')
     </div>
 @endsection
 @push('jslib')
@@ -44,13 +68,12 @@
     <script src="{{ asset('backend/src/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
+    <script src="{{ asset('backend/src/plugins/src/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/moment/moment-with-locales.min.js') }}"></script>
+
     <script src="{{ asset('backend/src/plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/select2/custom-select2.js') }}"></script>
-
-    <!-- InputMask -->
-    {{-- <script src="{{ asset('backend/src/plugins/src/input-mask/jquery.inputmask.bundle.min.js') }}"></script> --}}
-
-    <script src="{{ asset('backend/src/plugins/src/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
 @endpush
 
 
@@ -58,23 +81,30 @@
     <script src="{{ asset('js/navigation.js') }}"></script>
     <script src="{{ asset('js/func.js') }}"></script>
     <script>
-        // $(document).ready(function() {
-
         $('.maxlength').maxlength({
             alwaysShow: true,
             placement: "top",
         });
 
-        $(".select2").select2();
+        var edit_from = flatpickr(document.getElementById('edit_from'), {
+            defaultDate: "today",
+            disableMobile: true,
+        });
 
+        var edit_to = flatpickr(document.getElementById('edit_to'), {
+            defaultDate: "today",
+            disableMobile: true,
+        });
+
+        // $(document).ready(function() {
         var table = $('#tableData').DataTable({
             processing: true,
             serverSide: true,
             rowId: 'id',
             ajax: {
-                url: "{{ route('user.index') }}",
+                url: "{{ route('invoice.index') }}",
                 error: function(jqXHR, textStatus, errorThrown) {
-                    handleResponseCode(jqXHR.status)
+                    handleResponseCode(jqXHR, textStatus, errorThrown)
                 },
             },
             columnDefs: [{
@@ -100,54 +130,41 @@
                     </div>`
                 }
             }, {
-                title: "Name",
-                data: 'name',
-                render: function(data, type, row, meta) {
-                    if (row.email_verified_at != null) {
-                        text =
-                            `<i class="fas fa-circle text-success bs-tooltip" title="Verified"></i> ${data}`;
-                    } else {
-                        text =
-                            `<i class="fas fa-circle text-danger bs-tooltip" title="Unverified"></i> ${data}`;
-                    }
-                    if (type == 'display') {
-                        return text
-                    } else {
-                        return data
-                    }
-                }
+                title: "Date",
+                data: 'date',
             }, {
-                title: "Email",
-                data: 'email',
+                title: "Number",
+                data: 'number',
             }, {
-                title: "Gender",
-                data: 'gender',
-            }, {
-                title: "Phone",
-                data: 'phone',
-            }, {
-                title: 'Role',
-                data: 'role',
+                title: 'VPN',
+                data: 'vpn_id',
                 className: "text-center",
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        return `<span class="badge badge-${data === 'admin' ? 'success' : 'warning'}">${data}</span>`
+                        if (data != null) {
+                            return row.vpn.username
+                        } else {
+                            return ''
+                        }
                     } else {
                         return data
                     }
                 }
+            }, {
+                title: "Total",
+                data: 'total',
             }, {
                 title: 'Status',
                 data: 'status',
                 className: "text-center",
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        return `<span class="badge badge-${data === 'active' ? 'success' : 'danger'}">${data}</span>`
+                        return `<span class="badge badge-${data === 'paid' ? 'success' : (data === 'unpaid'? 'warning':'danger')}">${data}</span>`
                     } else {
                         return data
                     }
                 }
-            }],
+            }, ],
             headerCallback: function(e, a, t, n, s) {
                 e.getElementsByTagName("th")[0].innerHTML = `
                 <div class="form-check form-check-primary d-block new-control">
@@ -163,63 +180,72 @@
             }
         });
 
-        $("div.toolbar").html(btn_element);
-
-        $('#btn_add').click(function() {
-            show_card_add()
-            input_focus('name')
-        })
-
-        $('#btn_delete').click(function() {
-            delete_batch("{{ route('user.destroy.batch') }}")
-        })
+        $('#edit_save').remove()
+        $('#btn_delete').remove()
+        $('#edit_delete').remove()
 
         multiCheck(table);
 
         var id;
-        var url_post = "{{ route('user.store') }}";
-        var url_put = "{{ route('user.update', '') }}/" + id;
-        var url_delete = "{{ route('user.destroy', '') }}/" + id;
+        var url_post = "{{ route('invoice.store') }}";
+        var url_put = "{{ route('invoice.update', '') }}/" + id;
+        var url_delete = "{{ route('invoice.destroy', '') }}/" + id;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
-            edit(true)
-            url_put = "{{ route('user.update', '') }}/" + id;
-            url_delete = "{{ route('user.destroy', '') }}/" + id;
+            url_put = "{{ route('invoice.update', '') }}/" + id;
+            url_delete = "{{ route('invoice.destroy', '') }}/" + id;
             id = table.row(this).id()
+            edit(true)
         });
 
         function edit(show = false) {
             clear_validate($('#formEdit'))
             $.ajax({
-                url: "{{ route('user.show', '') }}/" + id,
+                url: "{{ route('invoice.show', '') }}/" + id,
                 method: 'GET',
                 success: function(result) {
                     unblock();
-                    $('#edit_name').val(result.data.name);
-                    $('#edit_email').val(result.data.email);
-                    $('#edit_gender').val(result.data.gender).change();
-                    $('#edit_phone').val(result.data.phone);
-                    $('#edit_address').val(result.data.address);
-                    $('#edit_password').val('');
-                    if (result.data.email_verified_at === null) {
-                        $('#edit_verified').prop('checked', false).change();
+                    $('#edit_total').val(result.data.total);
+                    $('#edit_desc').val(result.data.desc);
+                    $('#titleEdit2').html(`<b>${result.data.number}</b> (${result.data.status})`);
+                    edit_from.setDate(result.data.from);
+                    edit_to.setDate(result.data.to);
+
+                    if (result.data.bank_id == null) {
+                        $('#edit_bank').val('').trigger('change')
                     } else {
-                        $('#edit_verified').prop('checked', true).change();
+                        let option_bank = new Option(`${result.data.bank.name} (${result.data.bank.acc_name})`,
+                            result.data.bank_id,
+                            true, true);
+                        $('#edit_bank').append(option_bank).trigger('change')
                     }
-                    if (result.data.status == 'active') {
-                        $('#edit_status').prop('checked', true).change();
+                    if (result.data.vpn_id == null) {
+                        $('#edit_vpn').val('').trigger('change')
                     } else {
-                        $('#edit_status').prop('checked', false).change();
+                        let option_vpn = new Option(
+                            `${result.data.vpn.username} (${result.data.vpn.server.name})`,
+                            result.data.vpn_id,
+                            true, true);
+                        $('#edit_vpn').append(option_vpn).trigger('change')
                     }
-                    if (result.data.role == 'admin') {
-                        $('#edit_role').prop('checked', true).change();
+                    if (result.data.user_id == null) {
+                        $('#edit_user').val('').trigger('change')
                     } else {
-                        $('#edit_role').prop('checked', false).change();
+                        let option_user = new Option(
+                            `${result.data.user.name} (${result.data.user.email})`,
+                            result.data.user_id,
+                            true, true);
+                        $('#edit_user').append(option_user).trigger('change')
                     }
+                    let element = ['edit_total', 'edit_bank', 'edit_vpn', 'edit_from', 'edit_to',
+                        'edit_delete', 'edit_user', 'btn_paid', 'btn_cancel', 'edit_desc'
+                    ];
+                    element.forEach(item => {
+                        $(`#${item}`).prop('disabled', true);
+                    })
                     if (show) {
                         show_card_edit()
-                        input_focus('name')
                     }
                 },
                 beforeSend: function() {
@@ -231,6 +257,7 @@
                 }
             });
         }
+
 
         // });
     </script>

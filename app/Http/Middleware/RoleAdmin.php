@@ -15,7 +15,7 @@ class RoleAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!isAdmin()) {
+        if (!auth()->user()->is_admin()) {
             if ($request->ajax() || $request->expectsJson()) {
                 return response()->json(['message' => 'Unauthorize!', 'data' => []], 403);
             }

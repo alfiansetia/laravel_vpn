@@ -112,24 +112,26 @@
                 </a>
             </li>
 
-            <li class="menu {{ $title == 'Data Server' ? 'active' : '' }}">
-                <a href="#server_nav" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'Data Server' ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <i data-feather="server"></i>
-                        <span>Server</span>
-                    </div>
-                    <div>
-                        <i data-feather="chevron-right"></i>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'Data Server' ? 'show' : '' }}" id="server_nav"
-                    data-bs-parent="#accordionExample">
-                    <li class="{{ $title == 'Data Server' ? 'active' : '' }}">
-                        <a href="{{ url('server') }}"> List Server </a>
-                    </li>
-                </ul>
-            </li>
+            @if ($user->is_admin())
+                <li class="menu {{ $title == 'Data Server' ? 'active' : '' }}">
+                    <a href="#server_nav" data-bs-toggle="collapse"
+                        aria-expanded="{{ $title == 'Data Server' ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <div class="">
+                            <i data-feather="server"></i>
+                            <span>Server</span>
+                        </div>
+                        <div>
+                            <i data-feather="chevron-right"></i>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ $title == 'Data Server' ? 'show' : '' }}"
+                        id="server_nav" data-bs-parent="#accordionExample">
+                        <li class="{{ $title == 'Data Server' ? 'active' : '' }}">
+                            <a href="{{ url('server') }}"> List Server </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
             <li class="menu {{ $title == 'Data Invoice' ? 'active' : '' }}">
                 <a href="{{ route('invoice.index') }}"
@@ -141,34 +143,31 @@
                 </a>
             </li>
 
-            <li class="menu {{ $title == 'Data User' || $title == 'Data Bank' ? 'active' : '' }}">
-                <a href="#invoice" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'Data User' || $title == 'Data Bank' ? 'true' : 'false' }}"
-                    class="dropdown-toggle">
-                    <div class="">
-                        <i data-feather="database"></i>
-                        <span>Master Data</span>
-                    </div>
-                    <div>
-                        <i data-feather="chevron-right"></i>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'Data User' || $title == 'Data Bank' ? 'show' : '' }}"
-                    id="invoice" data-bs-parent="#accordionExample">
-                    <li class="{{ $title == 'Data Bank' ? 'active' : '' }}">
-                        <a href="{{ route('bank.index') }}"> Bank </a>
-                    </li>
-                    <li class="{{ $title == 'Data User' ? 'active' : '' }}">
-                        <a href="{{ route('user.index') }}"> User </a>
-                    </li>
-                    <li>
-                        <a href="tes"> Tes </a>
-                    </li>
-                    <li>
-                        <a href="./app-invoice-edit.html"> Edit </a>
-                    </li>
-                </ul>
-            </li>
+            @if ($user->is_admin())
+                <li class="menu {{ $title == 'Data User' || $title == 'Data Bank' ? 'active' : '' }}">
+                    <a href="#invoice" data-bs-toggle="collapse"
+                        aria-expanded="{{ $title == 'Data User' || $title == 'Data Bank' ? 'true' : 'false' }}"
+                        class="dropdown-toggle">
+                        <div class="">
+                            <i data-feather="database"></i>
+                            <span>Master Data</span>
+                        </div>
+                        <div>
+                            <i data-feather="chevron-right"></i>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ $title == 'Data User' || $title == 'Data Bank' ? 'show' : '' }}"
+                        id="invoice" data-bs-parent="#accordionExample">
+                        <li class="{{ $title == 'Data Bank' ? 'active' : '' }}">
+                            <a href="{{ route('bank.index') }}"> Bank </a>
+                        </li>
+                        <li class="{{ $title == 'Data User' ? 'active' : '' }}">
+                            <a href="{{ route('user.index') }}"> User </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             <li class="menu menu-heading">
                 <div class="heading">
                     <i data-feather="minus"></i>
@@ -192,9 +191,11 @@
                     <li class="{{ $title == 'Setting Profile' ? 'active' : '' }}">
                         <a href="{{ route('setting.profile.edit') }}"> Account </a>
                     </li>
-                    <li class="{{ $title == 'Setting Company' ? 'active' : '' }}">
-                        <a href="{{ route('setting.company.general') }}"> Company </a>
-                    </li>
+                    @if ($user->is_admin())
+                        <li class="{{ $title == 'Setting Company' ? 'active' : '' }}">
+                            <a href="{{ route('setting.company.general') }}"> Company </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
 

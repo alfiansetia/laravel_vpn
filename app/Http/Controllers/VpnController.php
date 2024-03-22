@@ -56,7 +56,7 @@ class VpnController extends Controller
             if (isAdmin()) {
                 $data->with('user', 'server');
             } else {
-                $data->where('user_id', '=', auth()->id())->with('server:id,name,ip,domain,netwatch,location,price,is_active,is_trial');
+                $data->where('user_id', '=', auth()->id())->with('server:id,name,ip,domain,netwatch,location,price,is_active');
             }
             $result = $data->latest('id');
             return DataTables::of($result)->toJson();
@@ -64,7 +64,7 @@ class VpnController extends Controller
         if (isAdmin()) {
             return view('vpn.index');
         } else {
-            return view('vpn.user');
+            return view('vpn.index_user');
         }
     }
 
@@ -221,10 +221,10 @@ class VpnController extends Controller
     {
         $user = Auth::user();
         if ($request->ajax()) {
-            if (isAdmin()) {
+            if ($user->is_admin()) {
                 $vpn = Vpn::with('user', 'server', 'port')->find($vpn->id);
             } else {
-                $vpn = Vpn::where('user_id', '=', $user->id)->with('server:id,name,ip,domain,netwatch,location,price,is_active,paid', 'port')->find($vpn->id);
+                $vpn = Vpn::where('user_id', '=', $user->id)->with('server:id,name,ip,domain,netwatch,location,price,is_active', 'port')->find($vpn->id);
             }
             return response()->json([
                 'status'    => true,

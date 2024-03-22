@@ -68,41 +68,42 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'getData'])->name('mikapi.dashboard.get.data');
         Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
 
-        Route::post('vpn/autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
-        Route::get('port/getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
+        Route::post('vpn-autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
+        Route::get('port-getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
+        Route::resource('vpn', VpnController::class)->only(['create', 'index', 'show']);
 
-        Route::delete('router/batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
-        Route::get('router/open', [RouterController::class, 'open'])->name('router.open');
+        Route::delete('router-batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
+        Route::get('router-open', [RouterController::class, 'open'])->name('router.open');
         Route::get('router/{router}/ping', [RouterController::class, 'ping'])->name('router.ping');
         Route::resource('router', RouterController::class)->except(['edit', 'create']);
 
+        Route::resource('invoice', InvoiceController::class)->only(['index', 'show']);
 
         Route::group(['middleware' => ['is.admin']], function () {
 
-            Route::resource('invoice', InvoiceController::class)->only(['index', 'show', 'store', 'update', 'destroy',]);
+            Route::resource('invoice', InvoiceController::class)->only(['store', 'update', 'destroy',]);
 
-            Route::get('user/paginate', [UserController::class, 'paginate'])->name('user.paginate');
-            Route::delete('user/batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
+            Route::get('user-paginate', [UserController::class, 'paginate'])->name('user.paginate');
+            Route::delete('user-batch', [UserController::class, 'destroyBatch'])->name('user.destroy.batch');
             Route::resource('user', UserController::class)->except(['edit', 'create']);
 
-
+            Route::get('vpn-paginate', [VpnController::class, 'paginate'])->name('vpn.paginate');
             Route::get('vpn/{vpn}/analyze', [VpnController::class, 'analyze'])->name('vpn.analyze');
             Route::post('vpn/{vpn}/send-email', [VpnController::class, 'sendEmail'])->name('vpn.send.email');
-            Route::get('vpn/paginate', [VpnController::class, 'paginate'])->name('vpn.paginate');
-            Route::delete('vpn/batch', [VpnController::class, 'destroyBatch'])->name('vpn.destroy.batch');
-            Route::resource('vpn', VpnController::class)->except(['edit']);
+            Route::delete('vpn-batch', [VpnController::class, 'destroyBatch'])->name('vpn.destroy.batch');
+            Route::resource('vpn', VpnController::class)->only(['store', 'update', 'destroy']);
 
-            Route::get('server/paginate', [ServerController::class, 'paginate'])->name('server.paginate');
-            Route::delete('server/batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
+            Route::get('server-paginate', [ServerController::class, 'paginate'])->name('server.paginate');
+            Route::delete('server-batch', [ServerController::class, 'destroyBatch'])->name('server.destroy.batch');
             Route::get('server/{server}/ping', [ServerController::class, 'ping'])->name('server.ping');
             Route::resource('server', ServerController::class)->except(['edit', 'create']);
 
-            Route::get('port/paginate', [PortController::class, 'paginate'])->name('port.paginate');
-            Route::delete('port/batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
+            Route::get('port-paginate', [PortController::class, 'paginate'])->name('port.paginate');
+            Route::delete('port-batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
             Route::resource('port', PortController::class)->except(['edit', 'create']);
 
-            Route::get('bank/paginate', [BankController::class, 'paginate'])->name('bank.paginate');
-            Route::delete('bank/batch', [BankController::class, 'destroyBatch'])->name('bank.destroy.batch');
+            Route::get('bank-paginate', [BankController::class, 'paginate'])->name('bank.paginate');
+            Route::delete('bank-batch', [BankController::class, 'destroyBatch'])->name('bank.destroy.batch');
             Route::resource('bank', BankController::class)->except(['edit', 'create']);
 
 
@@ -122,8 +123,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
             Route::get('setting/company/backup', [SettingController::class, 'backup'])->name('setting.company.backup');
 
-            Route::delete('database/batch', [DatabaseBackupController::class, 'destroyBatch'])->name('database.destroy.batch');
-            Route::get('database/detail/{file}', [DatabaseBackupController::class, 'download'])->name('database.download');
+            Route::delete('database-batch', [DatabaseBackupController::class, 'destroyBatch'])->name('database.destroy.batch');
+            Route::get('database-detail/{file}', [DatabaseBackupController::class, 'download'])->name('database.download');
             Route::get('database', [DatabaseBackupController::class, 'index'])->name('database.index');
             Route::post('database', [DatabaseBackupController::class, 'store'])->name('database.store');
             Route::delete('database/{file}', [DatabaseBackupController::class, 'destroy'])->name('database.destroy');

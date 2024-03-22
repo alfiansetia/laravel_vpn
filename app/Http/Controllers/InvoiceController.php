@@ -24,15 +24,25 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
         if ($request->ajax()) {
             $data = Invoice::query();
             if ($request->filled('number')) {
                 $data->where('number', 'like', "%{$request->number}%");
             }
-            $result = $data->with('user', 'bank', 'vpn');
+            if ($user->is_admin()) {
+                $result = $data->with('user', 'bank', 'vpn');
+            } else {
+                $data->where('user_id', $user->id);
+                $result = $data->with('user:id,name,email', 'bank:id,name,acc_name', 'vpn:id,username,server_id', 'vpn.server:id,name');
+            }
             return DataTables::of($result)->toJson();
         }
-        return view('invoice.index');
+        if ($user->is_admin()) {
+            return view('invoice.index');
+        } else {
+            return view('invoice.index_user');
+        }
     }
 
     /**
