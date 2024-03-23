@@ -393,3 +393,17 @@ var btn_element = `<div class="btn-group" role="group">
                         <li><button id="btn_delete" type="button" class="dropdown-item bs-tooltip" title="Delete Selected Data">Delete</button></li>
                     </ul>
                 </div>`
+
+var btn_element_refresh = `<div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Action
+        <i data-feather="chevron-down"></i> 
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+        <li><button id="btn_add" type="button" class="dropdown-item bs-tooltip" title="Add Data">Add</button></li>
+        <li><button id="btn_delete" type="button" class="dropdown-item bs-tooltip" title="Delete Selected Data">Delete</button></li>
+    </ul>
+</div>
+<button type="button" id="btn_refresh" class="btn btn-info ms-2">
+<i class="fas fa-sync me-1 bs-tooltip" title="Refresh Data"></i>
+</button>`

@@ -12,6 +12,7 @@
     <script>
         var light_logo = "{{ $company->logo_light }}";
         var dark_logo = "{{ $company->logo_dark }}";
+        var param_router = "?router={{ request()->query('router') }}"
     </script>
 
     <link href="{{ asset('backend/layouts/modern-light-menu/css/light/loader.css') }}" rel="stylesheet"
@@ -60,7 +61,7 @@
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    @include('components.backend.navbar')
+    @include('components.mikapi.navbar')
     <!--  END NAVBAR  -->
 
     <!--  BEGIN MAIN CONTAINER  -->
@@ -71,7 +72,7 @@
         <div class="search-overlay"></div>
 
         <!--  BEGIN SIDEBAR  -->
-        @include('components.backend.sidebar')
+        @include('components.mikapi.sidebar')
         <!--  END SIDEBAR  -->
 
         <!--  BEGIN CONTENT AREA  -->
@@ -85,7 +86,7 @@
             </div>
 
             <!--  BEGIN FOOTER  -->
-            @include('components.backend.footer')
+            @include('components.mikapi.footer')
             <!--  END FOOTER  -->
         </div>
         <!--  END CONTENT AREA  -->

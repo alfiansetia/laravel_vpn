@@ -15,6 +15,7 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'DT_RowId'      => $this['.id'],
             '.id'           => $this['.id'],
             'name'          => $this['name'],
             'server'        => $this['server'] ?? 'all',

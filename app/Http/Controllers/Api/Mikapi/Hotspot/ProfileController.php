@@ -19,71 +19,85 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, ProfileServices::class);
-        $query = [];
-        if ($request->filled('name')) {
-            $query['?name'] = $request->name;
+        try {
+            $this->setRouter($request->router, ProfileServices::class);
+            $query = [];
+            if ($request->filled('name')) {
+                $query['?name'] = $request->name;
+            }
+            $data = $this->conn->get($query);
+            return ProfileResource::collection($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        $data = $this->conn->get($query);
-        if (!$data['status']) {
-            return response()->json($data, 422);
-        }
-        return ProfileResource::collection($data['data']);
     }
 
     public function show(Request $request, string $id)
     {
-        $this->setRouter($request->router, ProfileServices::class);
-        $data = $this->conn->show($id);
-        if (!$data['status']) {
-            return response()->json($data, 422);
+        try {
+            $this->setRouter($request->router, ProfileServices::class);
+            $data = $this->conn->show($id);
+            return new ProfileResource($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        return new ProfileResource($data['data']);
     }
 
     public function store(Request $request)
     {
-        $this->setRouter($request->router, ProfileServices::class);
         $this->validate($request, [
-            'name'              => 'required|min:2|max:25',
-            'shared-users'      => 'integer',
-            'rate-limit'        => 'nullable',
-            'session-timeout'   => 'nullable',
+            'name'              => 'required|min:1|max:50',
+            'shared_users'      => 'integer|gte:0',
+            'rate_limit'        => 'nullable',
+            'session_timeout'   => 'nullable',
         ]);
         $param = [
             'name'              => $request->input('name'),
-            'shared-users'      => $request->input('shared-users'),
-            'rate-limit'        => $request->input('rate-limit'),
-            'session-timeout'   => $request->input('session-timeout') ?? '00:00:00',
+            'shared-users'      => $request->input('shared_users'),
+            'rate-limit'        => $request->input('rate_limit'),
+            'session-timeout'   => $request->input('session_timeout') ?? '00:00:00',
         ];
-        $data = $this->conn->store($param);
-        return response()->json($data, $data['status'] ? 200 : 422);
+        try {
+            $this->setRouter($request->router, ProfileServices::class);
+            $data = $this->conn->store($param);
+            return response()->json(['message' => 'Success Insert Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, string $id)
     {
-        $this->setRouter($request->router, ProfileServices::class);
         $this->validate($request, [
-            'name'              => 'required|min:2|max:25',
-            'shared-users'      => 'integer',
-            'rate-limit'        => 'nullable',
-            'session-timeout'   => 'nullable',
+            'name'              => 'required|min:1|max:50',
+            'shared_users'      => 'integer|gte:0',
+            'rate_limit'        => 'nullable',
+            'session_timeout'   => 'nullable',
         ]);
         $param = [
             '.id'               => $id,
             'name'              => $request->input('name'),
-            'shared-users'      => $request->input('shared-users'),
-            'rate-limit'        => $request->input('rate-limit'),
-            'session-timeout'   => $request->input('session-timeout') ?? '00:00:00',
+            'shared-users'      => $request->input('shared_users'),
+            'rate-limit'        => $request->input('rate_limit'),
+            'session-timeout'   => $request->input('session_timeout') ?? '00:00:00',
         ];
-        $data = $this->conn->update($param);
-        return response()->json($data, $data['status'] ? 200 : 422);
+        try {
+            $this->setRouter($request->router, ProfileServices::class);
+            $data = $this->conn->update($param);
+            return response()->json(['message' => 'Success Update Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 
     public function destroy(Request $request, string $id)
     {
-        $this->setRouter($request->router, ProfileServices::class);
-        $data = $this->conn->destroy($id);
-        return response()->json($data, $data['status'] ? 200 : 422);
+        try {
+            $this->setRouter($request->router, ProfileServices::class);
+            $data = $this->conn->destroy($id);
+            return response()->json(['message' => 'Success Delete Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 }

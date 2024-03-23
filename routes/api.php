@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Mikapi\Hotspot\ServerProfileController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\UserController as HotspotUserController;
 use App\Http\Controllers\Api\Mikapi\InterfaceController;
 use App\Http\Controllers\Api\Mikapi\LogController;
+use App\Http\Controllers\Api\Mikapi\QueueController;
 use App\Http\Controllers\Api\Mikapi\System\PackageController;
 use App\Http\Controllers\Api\Mikapi\System\ResourceController;
 use App\Http\Controllers\Api\Mikapi\System\RouterboardController;
@@ -53,19 +54,37 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::apiResource('ports', PortController::class)->only(['show']);
 
-        Route::apiResource('mikapi/hotspot/profiles', ProfileController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+        Route::apiResource('mikapi/hotspot/profiles', ProfileController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.hotspot.profiles');
 
-        Route::apiResource('mikapi/hotspot/users', HotspotUserController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+        Route::apiResource('mikapi/hotspot/users', HotspotUserController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.hotspot.users');
 
-        Route::apiResource('mikapi/hotspot/actives', ActiveController::class)->only(['index', 'show', 'destroy']);
+        Route::apiResource('mikapi/hotspot/actives', ActiveController::class)
+            ->only(['index', 'show', 'destroy'])
+            ->names('api.mikapi.hotspot.actives');
 
-        Route::apiResource('mikapi/hotspot/hosts', HostController::class)->only(['index', 'show', 'destroy']);
+        Route::apiResource('mikapi/hotspot/hosts', HostController::class)
+            ->only(['index', 'show', 'destroy'])
+            ->names('api.mikapi.hotspot.hosts');
 
-        Route::apiResource('mikapi/hotspot/bindings', BindingController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+        Route::apiResource('mikapi/hotspot/bindings', BindingController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.hotspot.bindings');
 
-        Route::apiResource('mikapi/hotspot/servers', ServerController::class)->only(['index', 'show', 'update']);
+        Route::apiResource('mikapi/hotspot/servers', ServerController::class)
+            ->only(['index', 'show', 'update'])
+            ->names('api.mikapi.hotspot.servers');
 
-        Route::apiResource('mikapi/hotspot/serverprofiles', ServerProfileController::class)->only(['index', 'show', 'update']);
+        Route::apiResource('mikapi/hotspot/serverprofiles', ServerProfileController::class)
+            ->only(['index', 'show', 'update'])
+            ->names('api.mikapi.hotspot.serverprofiles');
+
+        Route::apiResource('api/mikapi/queues', QueueController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.queues');
 
         Route::apiResource('mikapi/interfaces', InterfaceController::class)->only(['index', 'show', 'update']);
 
@@ -74,6 +93,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('mikapi/system/routerboards', RouterboardController::class)->only(['index']);
         Route::apiResource('mikapi/system/users', SystemUserController::class)->only(['index']);
 
-        Route::apiResource('mikapi/logs', LogController::class)->only(['index', 'show']);
+        Route::delete('mikapi/logs', [LogController::class, 'destroy'])->name('api.mikapi.logs.destroy');
+        Route::apiResource('mikapi/logs', LogController::class)->only(['index', 'show'])->names('api.mikapi.logs');
     });
 });

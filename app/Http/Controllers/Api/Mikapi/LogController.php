@@ -19,25 +19,39 @@ class LogController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, LogServices::class);
-        $query = [];
-        if ($request->filled('topics')) {
-            $query['?topics'] = $request->input('topics');
+        try {
+            $this->setRouter($request->router, LogServices::class);
+            $query = [];
+            if ($request->filled('topics')) {
+                $query['?topics'] = $request->input('topics');
+            }
+            $data = $this->conn->get($query);
+            return LogResource::collection($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        $data = $this->conn->get($query);
-        if (!$data['status']) {
-            return response()->json($data, 422);
-        }
-        return LogResource::collection($data['data']);
     }
+
 
     public function show(Request $request, string $id)
     {
-        $this->setRouter($request->router, LogServices::class);
-        $data = $this->conn->show($id);
-        if (!$data['status']) {
-            return response()->json($data, 422);
+        try {
+            $this->setRouter($request->router, LogServices::class);
+            $data = $this->conn->show($id);
+            return new LogResource($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        return new LogResource($data['data']);
+    }
+
+    public function destroy(Request $request)
+    {
+        try {
+            $this->setRouter($request->router, LogServices::class);
+            $data = $this->conn->destroy();
+            return response()->json(['message' => 'Success deleted data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 }

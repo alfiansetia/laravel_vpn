@@ -19,40 +19,41 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, UserServices::class);
-        $query = [];
-        if ($request->filled('name')) {
-            $query['?name'] = $request->name;
+        try {
+            $this->setRouter($request->router, UserServices::class);
+            $query = [];
+            if ($request->filled('name')) {
+                $query['?name'] = $request->name;
+            }
+            if ($request->filled('server')) {
+                $query['?server'] = $request->input('server');
+            }
+            if ($request->filled('profile')) {
+                $query['?profile'] = $request->input('profile');
+            }
+            if ($request->filled('comment')) {
+                $query['?comment'] = $request->input('comment');
+            }
+            $data = $this->conn->get($query);
+            return UserResource::collection($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        if ($request->filled('server')) {
-            $query['?server'] = $request->input('server');
-        }
-        if ($request->filled('profile')) {
-            $query['?profile'] = $request->input('profile');
-        }
-        if ($request->filled('comment')) {
-            $query['?comment'] = $request->input('comment');
-        }
-        $data = $this->conn->get($query);
-        if (!$data['status']) {
-            return response()->json($data, 422);
-        }
-        return UserResource::collection($data['data']);
     }
 
     public function show(Request $request, string $id)
     {
-        $this->setRouter($request->router, UserServices::class);
-        $data = $this->conn->show($id);
-        if (!$data['status']) {
-            return response()->json($data, 422);
+        try {
+            $this->setRouter($request->router, UserServices::class);
+            $data = $this->conn->show($id);
+            return new UserResource($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        return new UserResource($data['data']);
     }
 
     public function store(Request $request)
     {
-        $this->setRouter($request->router, UserServices::class);
         $this->validate($request, [
             'server'        => 'required',
             'name'          => 'required|min:2|max:30',
@@ -76,13 +77,17 @@ class UserController extends Controller
             'comment'            => $request->input('comment'),
             'disabled'           => $request->input('disabled') ? 'yes' : 'no',
         ];
-        $data = $this->conn->store($param);
-        return response()->json($data, $data['status'] ? 200 : 422);
+        try {
+            $this->setRouter($request->router, UserServices::class);
+            $data = $this->conn->store($param);
+            return response()->json(['message' => 'Success Insert Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, string $id)
     {
-        $this->setRouter($request->router, UserServices::class);
         $this->validate($request, [
             'server'        => 'required',
             'name'          => 'required|min:2|max:30',
@@ -107,14 +112,23 @@ class UserController extends Controller
             'comment'            => $request->input('comment'),
             'disabled'           => $request->input('disabled') ? 'yes' : 'no',
         ];
-        $data = $this->conn->update($param);
-        return response()->json($data, $data['status'] ? 200 : 422);
+        try {
+            $this->setRouter($request->router, UserServices::class);
+            $data = $this->conn->update($param);
+            return response()->json(['message' => 'Success Update Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 
     public function destroy(Request $request, string $id)
     {
-        $this->setRouter($request->router, UserServices::class);
-        $data = $this->conn->destroy($id);
-        return response()->json($data, $data['status'] ? 200 : 422);
+        try {
+            $this->setRouter($request->router, UserServices::class);
+            $data = $this->conn->destroy($id);
+            return response()->json(['message' => 'Success Delete Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 }

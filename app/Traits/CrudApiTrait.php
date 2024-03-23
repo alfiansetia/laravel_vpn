@@ -10,13 +10,10 @@ trait CrudApiTrait
     public function get(array $query = [])
     {
         if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm($this->command . "print", $query);
-                return handle_data($data);
-            }
+            $data = $this->API->comm($this->command . "print", $query);
+            cek_error($data);
             $this->disconnect();
-            return handle_no_package($this->name);
+            return $data;
         } else {
             return handle_fail_login($this->API);
         }
@@ -25,15 +22,12 @@ trait CrudApiTrait
     public function show(string $id)
     {
         if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm($this->command . "print", [
-                    '?.id' => $id
-                ]);
-                return handle_data_edit($data);
-            }
+            $data = $this->API->comm($this->command . "print", [
+                '?.id' => $id
+            ]);
+            cek_error($data);
             $this->disconnect();
-            return handle_no_package($this->name);
+            return handle_data_edit($data);
         } else {
             return handle_fail_login($this->API);
         }
@@ -72,15 +66,12 @@ trait CrudApiTrait
     public function destroy(string $id)
     {
         if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm($this->command . "remove", [
-                    '.id' => $id
-                ]);
-                return handle_data($data, 'Success deleted data!');
-            }
+            $data = $this->API->comm($this->command . "remove", [
+                '.id' => $id
+            ]);
+            cek_error($data);
             $this->disconnect();
-            return handle_no_package($this->name);
+            return $data;
         } else {
             return handle_fail_login($this->API);
         }

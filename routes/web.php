@@ -7,6 +7,8 @@ use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Mikapi\DashboardController;
+use App\Http\Controllers\Mikapi\HotspotController;
+use App\Http\Controllers\Mikapi\LogController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProfileController;
@@ -53,6 +55,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::group(['middleware' => ['is.active']], function () {
 
+        Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'getData'])->name('mikapi.dashboard.get.data');
+        Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
+
+        Route::get('mikapi/log', [LogController::class, 'index'])->name('mikapi.log.index');
+        Route::get('mikapi/hotspot/server', [HotspotController::class, 'server'])->name('mikapi.hotspot.server');
+        Route::get('mikapi/hotspot/profile', [HotspotController::class, 'profile'])->name('mikapi.hotspot.profile');
+        Route::get('mikapi/hotspot/user', [HotspotController::class, 'user'])->name('mikapi.hotspot.user');
 
         // Profile
         Route::get('setting/profile', [ProfileController::class, 'profile'])->name('setting.profile');
@@ -65,8 +74,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('setting/profile/password', [ProfileController::class, 'password'])->name('setting.profile.password');
         Route::post('setting/profile/password', [ProfileController::class, 'passwordUpdate'])->name('setting.profile.password.update');
 
-        Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'getData'])->name('mikapi.dashboard.get.data');
-        Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
 
         Route::post('vpn-autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
         Route::get('port-getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');

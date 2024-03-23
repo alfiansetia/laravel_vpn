@@ -85,7 +85,7 @@
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-block btn-primary" id="btn_filter">
-                    <i class="fas fa-filter mr-1"></i>Filter
+                    <i class="fas fa-filter me-1"></i>Filter
                 </button>
             </div>
         </div>

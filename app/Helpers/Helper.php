@@ -230,7 +230,7 @@ function cek_package($packages, $package)
 
 function handle_no_package($name)
 {
-    return ['status' => false, 'message' => "No Package! $name found on Router", 'data' => []];
+    throw new Exception("No Package! $name found on Router");
 }
 
 function handle_not_found()
@@ -269,7 +269,7 @@ function is_error($response)
 function cek_error($response)
 {
     if (isset($response['!trap'])) {
-        throw new Exception($response['!trap'][0]['message']);
+        throw new Exception('Error : ' . $response['!trap'][0]['message']);
     }
 }
 
@@ -294,17 +294,10 @@ function handle_data($response, $message = '')
 
 function handle_data_edit($response)
 {
-    try {
-        if (isset($response['!trap'])) {
-            return  ['status' => false, 'message' => $response['!trap'][0]['message'], 'data' => []];
-        }
-        if (count($response) < 1) {
-            return  ['status' => false, 'message' => 'Data Not Found', 'data' => []];
-        }
-        return ['status' => true, 'message' => '', 'data' => $response[0]];
-    } catch (Exception $e) {
-        return  ['status' => false, 'message' => 'Server Error', 'data' => $response];
+    if (count($response) < 1) {
+        throw_not_found();
     }
+    return $response[0];
 }
 
 function generateUsername(string $string)

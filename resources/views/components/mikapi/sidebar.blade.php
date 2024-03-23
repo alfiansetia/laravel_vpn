@@ -1,3 +1,7 @@
+@php
+    $param_router = '?router=' . request()->query('router');
+@endphp
+
 <div class="sidebar-wrapper sidebar-theme">
 
     <nav id="sidebar">
@@ -74,31 +78,26 @@
                 </div>
             </li>
             <li
-                class="menu {{ $title == 'Data Vpn' || $title == 'Order Vpn' || $title == 'Data Port' ? 'active' : '' }}">
-                <a href="#vpn_nav" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'Data VPN' || $title == 'Order Vpn' || $title == 'Data Port' ? 'true' : 'false' }}"
+                class="menu {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Data Port' ? 'active' : '' }}">
+                <a href="#hotspot_nav" data-bs-toggle="collapse"
+                    aria-expanded="{{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Data Port' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="share-2"></i>
-                        <span> Vpn </span>
+                        <span> Hotspot </span>
                     </div>
                     <div>
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'Data Vpn' || $title == 'Order Vpn' || $title == 'Data Port' ? 'show' : '' }}"
-                    id="vpn_nav" data-bs-parent="#accordionExample">
-                    <li class="{{ $title == 'Order Vpn' ? 'active' : '' }}">
-                        <a href="{{ route('vpn.create') }}"> Order Vpn </a>
+                <ul class="collapse submenu list-unstyled {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Data Port' ? 'show' : '' }}"
+                    id="hotspot_nav" data-bs-parent="#accordionExample">
+                    <li class="{{ $title == 'Hotspot Profile' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.profile') }}{{ $param_router }}"> Profile </a>
                     </li>
-                    <li class="{{ $title == 'Data Vpn' ? 'active' : '' }}">
-                        <a href="{{ route('vpn.index') }}"> List Vpn </a>
+                    <li class="{{ $title == 'Hotspot User' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.user') }}{{ $param_router }}"> User </a>
                     </li>
-                    @if (isAdmin())
-                        <li class="{{ $title == 'Data Port' ? 'active' : '' }}">
-                            <a href="{{ route('port.index') }}"> List Port </a>
-                        </li>
-                    @endif
                 </ul>
             </li>
 
@@ -108,6 +107,16 @@
                     <div class="">
                         <i data-feather="cloud"></i>
                         <span>List Router</span>
+                    </div>
+                </a>
+            </li>
+
+            <li class="menu {{ $title == 'Log' ? 'active' : '' }}">
+                <a href="{{ route('mikapi.log.index') }}?router={{ request()->query('router') }}"
+                    aria-expanded="{{ $title == 'Log' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="cloud"></i>
+                        <span>Log</span>
                     </div>
                 </a>
             </li>
