@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email')->default('admin@gmail.com');
             $table->string('phone');
             $table->string('slogan');
             $table->string('author');

@@ -23,6 +23,7 @@ class CompanySeeder extends Seeder
             'address'       => 'JL. Kampung Pasar Kembang, Yogyakarta',
             'link_blog'     => 'https://blog.kacangan.net',
             'link_status'   => 'https://stats.uptimerobot.com/Xkn03tnOPl',
+            'email'         => 'adm.kacangan@gmail.com',
         ]);
     }
 }

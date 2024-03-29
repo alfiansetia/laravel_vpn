@@ -60,7 +60,7 @@
     <script src="{{ asset('js/mikapi.js') }}"></script>
     <script>
         // $(document).ready(function() {
-
+        var refresh = false
         $('.maxlength').maxlength({
             alwaysShow: true,
             placement: "top",
@@ -71,10 +71,14 @@
 
         var table = $('#tableData').DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             ajax: {
                 url: "{{ route('api.mikapi.hotspot.users.index') }}",
                 data: function(dt) {
+                    if (refresh) {
+                        dt.refresh = 'on'
+                    }
+                    dt.dt = 'on'
                     dt.router = "{{ request()->query('router') }}";
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -192,9 +196,11 @@
             drawCallback: function(settings) {
                 feather.replace();
                 // tooltip()
+                refresh = false
             },
             initComplete: function() {
                 feather.replace();
+                refresh = false
             }
         });
 
@@ -206,6 +212,7 @@
         })
 
         $('#btn_refresh').click(function() {
+            refresh = true
             table.ajax.reload()
         })
 

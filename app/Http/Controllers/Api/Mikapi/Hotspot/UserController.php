@@ -5,37 +5,55 @@ namespace App\Http\Controllers\Api\Mikapi\Hotspot;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Mikapi\Hotspot\UserResource;
 use App\Services\Mikapi\Hotspot\UserServices;
+use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
-    use RouterTrait;
+    use RouterTrait, DataTableTrait;
+
+    private $path;
+    private $full_path;
 
     public function __construct(Request $request)
     {
         $this->middleware('checkRouterExists');
+        $this->path = storage_path('app/mikapi/hotspot/user');
+        $this->full_path = $this->path . '/' . $request->router . '.json';
     }
 
     public function index(Request $request)
     {
         try {
-            $this->setRouter($request->router, UserServices::class);
-            $query = [];
-            if ($request->filled('name')) {
-                $query['?name'] = $request->name;
+            $dt = $request->dt == 'on';
+            if ($request->refresh == 'on' || !file_exists($this->full_path)) {
+                $this->setRouter($request->router, UserServices::class);
+                $query = [];
+                if ($request->filled('name')) {
+                    $query['?name'] = $request->name;
+                }
+                if ($request->filled('server')) {
+                    $query['?server'] = $request->input('server');
+                }
+                if ($request->filled('profile')) {
+                    $query['?profile'] = $request->input('profile');
+                }
+                if ($request->filled('comment')) {
+                    $query['?comment'] = $request->input('comment');
+                }
+                $data = $this->conn->get($query);
+                if (!File::exists($this->path)) {
+                    File::makeDirectory($this->path, 755, true);
+                }
+                $json = UserResource::collection($data);
+                File::put($this->full_path, $json->toJson(JSON_PRETTY_PRINT));
+                return $this->callback($json->toArray($request), $dt);
             }
-            if ($request->filled('server')) {
-                $query['?server'] = $request->input('server');
-            }
-            if ($request->filled('profile')) {
-                $query['?profile'] = $request->input('profile');
-            }
-            if ($request->filled('comment')) {
-                $query['?comment'] = $request->input('comment');
-            }
-            $data = $this->conn->get($query);
-            return UserResource::collection($data);
+            $file = file_get_contents($this->full_path);
+            $d = json_decode($file, true);
+            return $this->callback($d, $dt);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);
         }

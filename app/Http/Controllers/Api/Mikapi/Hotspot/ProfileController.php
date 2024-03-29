@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\Mikapi\Hotspot;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Mikapi\Hotspot\ProfileResource;
 use App\Services\Mikapi\Hotspot\ProfileServices;
+use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    use RouterTrait;
+    use RouterTrait, DataTableTrait;
 
     public function __construct(Request $request)
     {
@@ -26,7 +27,8 @@ class ProfileController extends Controller
                 $query['?name'] = $request->name;
             }
             $data = $this->conn->get($query);
-            return ProfileResource::collection($data);
+            $resource = ProfileResource::collection($data);
+            return $this->callback($resource->toArray($request), $request->dt == 'on');
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);
         }

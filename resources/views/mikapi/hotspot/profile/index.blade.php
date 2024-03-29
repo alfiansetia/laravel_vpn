@@ -97,6 +97,7 @@
             ajax: {
                 url: "{{ route('api.mikapi.hotspot.profiles.index') }}",
                 data: function(dt) {
+                    dt.dt = 'on'
                     dt.router = "{{ request()->query('router') }}";
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
