@@ -78,9 +78,9 @@
                 </div>
             </li>
             <li
-                class="menu {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' ? 'active' : '' }}">
+                class="menu {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' || $title == 'Hotspot Cookie' ? 'active' : '' }}">
                 <a href="#hotspot_nav" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' || $title == 'Hotspot Cookie' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="share-2"></i>
@@ -90,7 +90,7 @@
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' || $title == 'Hotspot Cookie' ? 'show' : '' }}"
                     id="hotspot_nav" data-bs-parent="#accordionExample">
                     <li class="{{ $title == 'Hotspot Profile' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.hotspot.profile') }}{{ $param_router }}"> Profile </a>
@@ -106,6 +106,9 @@
                     </li>
                     <li class="{{ $title == 'Hotspot Binding' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.hotspot.binding') }}{{ $param_router }}"> Binding </a>
+                    </li>
+                    <li class="{{ $title == 'Hotspot Cookie' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.cookie') }}{{ $param_router }}"> Cookie </a>
                     </li>
                 </ul>
             </li>

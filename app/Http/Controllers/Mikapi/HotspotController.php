@@ -42,4 +42,9 @@ class HotspotController extends Controller
     {
         return view('mikapi.hotspot.binding.index');
     }
+
+    public function cookie()
+    {
+        return view('mikapi.hotspot.cookie.index');
+    }
 }

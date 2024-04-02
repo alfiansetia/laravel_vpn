@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ActiveController as HotspotActiveController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\BindingController as HotspotBindingController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\CookieController as HotspotCookieController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\HostController as HotspotHostController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ProfileController as HotspotProfileController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ServerController as HotspotServerController;
@@ -83,6 +84,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             ->names('api.mikapi.hotspot.bindings');
         Route::delete('mikapi/hotspot/bindings', [HotspotBindingController::class, 'destroy_batch'])
             ->name('api.mikapi.hotspot.bindings.destroy.batch');
+
+        Route::apiResource('mikapi/hotspot/cookies', HotspotCookieController::class)
+            ->only(['index', 'show', 'destroy'])
+            ->names('api.mikapi.hotspot.cookies');
+        Route::delete('mikapi/hotspot/cookies', [HotspotCookieController::class, 'destroy_batch'])
+            ->name('api.mikapi.hotspot.cookies.destroy.batch');
 
         Route::apiResource('mikapi/hotspot/servers', HotspotServerController::class)
             ->only(['index', 'show', 'update'])
