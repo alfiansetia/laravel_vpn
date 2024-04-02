@@ -1,4 +1,4 @@
-@extends('layouts.backend.template_mikapi', ['title' => 'Hotspot Profile'])
+@extends('layouts.backend.template_mikapi', ['title' => 'PPP Profile'])
 @push('csslib')
     <link href="{{ asset('backend/src/plugins/src/table/datatable/datatables.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/plugins/css/light/table/datatable/dt-global_style.css') }}" rel="stylesheet"
@@ -39,9 +39,9 @@
             </div>
         </div>
 
-        @include('mikapi.hotspot.profile.add')
-        @include('mikapi.hotspot.profile.edit')
-        @include('mikapi.hotspot.profile.detail')
+        @include('mikapi.ppp.profile.add')
+        @include('mikapi.ppp.profile.edit')
+        @include('mikapi.ppp.profile.detail')
     </div>
 @endsection
 @push('jslib')
@@ -60,7 +60,7 @@
     <script src="{{ asset('backend/src/plugins/moment/moment-with-locales.min.js') }}"></script>
 
     <!-- InputMask -->
-    {{-- <script src="{{ asset('backend/src/plugins/src/input-mask/jquery.inputmask.bundle.min.js') }}"></script> --}}
+    <script src="{{ asset('backend/src/plugins/src/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
 
     <script src="{{ asset('backend/src/plugins/src/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
 @endpush
@@ -92,6 +92,8 @@
             time_24hr: true,
             enableSeconds: true
         })
+
+        Inputmask("ip").mask($(".mask_ip"));
 
         $('.maxlength').maxlength({
             alwaysShow: true,
@@ -129,7 +131,7 @@
             processing: true,
             serverSide: false,
             ajax: {
-                url: "{{ route('api.mikapi.hotspot.profiles.index') }}",
+                url: "{{ route('api.mikapi.ppp.profiles.index') }}",
                 data: function(dt) {
                     dt.dt = 'on'
                     dt.router = "{{ request()->query('router') }}";
@@ -158,10 +160,6 @@
                     if (type == 'display') {
                         let text = `<div class="form-check form-check-primary d-block new-control">
                         <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >`
-                        if (row.disabled) {
-                            text +=
-                                '<span class="badge me-1 badge-danger" title="Disabled">X</span>'
-                        }
                         if (row.default) {
                             text +=
                                 '<span class="badge me-1 badge-info" title="Default">*</span>'
@@ -176,8 +174,11 @@
                 title: "Name",
                 data: 'name',
             }, {
-                title: "Shared User",
-                data: 'shared-users',
+                title: "Local Address",
+                data: 'local-address',
+            }, {
+                title: "Remote Address",
+                data: 'remote-address',
             }, {
                 title: "Rate Limit",
                 data: 'rate-limit',
@@ -195,6 +196,9 @@
                         }
                     }
                 }
+            }, {
+                title: "Only One",
+                data: 'only-one',
             }, {
                 title: "Comment",
                 data: 'comment',
@@ -226,7 +230,7 @@
         })
 
         $('#btn_delete').click(function() {
-            delete_batch("{{ route('api.mikapi.hotspot.profiles.destroy.batch') }}" + param_router)
+            delete_batch("{{ route('api.mikapi.ppp.profiles.destroy.batch') }}" + param_router)
         })
 
         $('#edit_delete').after(btn_detail)
@@ -234,14 +238,14 @@
         multiCheck(table);
 
         var id;
-        var url_post = "{{ route('api.mikapi.hotspot.profiles.store') }}" + param_router;
-        var url_put = "{{ route('api.mikapi.hotspot.profiles.update', '') }}/" + id + param_router;
-        var url_delete = "{{ route('api.mikapi.hotspot.profiles.destroy', '') }}/" + id + param_router;
+        var url_post = "{{ route('api.mikapi.ppp.profiles.store') }}" + param_router;
+        var url_put = "{{ route('api.mikapi.ppp.profiles.update', '') }}/" + id + param_router;
+        var url_delete = "{{ route('api.mikapi.ppp.profiles.destroy', '') }}/" + id + param_router;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
-            url_put = "{{ route('api.mikapi.hotspot.profiles.update', '') }}/" + id + param_router;
-            url_delete = "{{ route('api.mikapi.hotspot.profiles.destroy', '') }}/" + id + param_router;
+            url_put = "{{ route('api.mikapi.ppp.profiles.update', '') }}/" + id + param_router;
+            url_delete = "{{ route('api.mikapi.ppp.profiles.destroy', '') }}/" + id + param_router;
             edit(true)
         });
 
@@ -252,10 +256,11 @@
                 method: 'GET',
                 success: function(result) {
                     unblock();
+                    $('#default').val((result.data.default ? 'yes' : 'no'));
                     $('#edit_name').val(result.data.name);
                     $('#edit_comment').val(result.data.comment);
-                    $('#edit_shared_users').val(result.data['shared-users']);
                     $('#edit_rate_limit').val(result.data['rate-limit']);
+                    $('#edit_only_one').val(result.data['only-one']).trigger('change');
                     let time = result.data['session-timeout'];
                     let timeparse = parsedtm(time);
                     $('#edit_data_day').val(timeparse.day).change();
@@ -266,6 +271,11 @@
                         let option = new Option(result.data['parent-queue'], result.data['parent-queue'], true,
                             true);
                         $('#edit_parent').append(option).trigger('change');
+                    }
+                    if (result.data.default) {
+                        $('#edit_name').prop('disabled', true);
+                    } else {
+                        $('#edit_name').prop('disabled', false);
                     }
                     $('#tbl_detail').empty()
                     Object.keys(result.data).forEach(function(key) {

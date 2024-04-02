@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Mikapi\Hotspot;
+namespace App\Http\Controllers\Api\Mikapi\PPP;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Mikapi\Hotspot\ProfileResource;
-use App\Services\Mikapi\Hotspot\ProfileServices;
+use App\Http\Resources\Mikapi\PPP\ProfileResource;
+use App\Services\Mikapi\PPP\ProfileServices;
 use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
@@ -27,6 +27,7 @@ class ProfileController extends Controller
                 $query['?name'] = $request->name;
             }
             $data = $this->conn->get($query);
+            // return response()->json(['message' => 'asd', 'data' => $data], 500);
             $resource = ProfileResource::collection($data);
             return $this->callback($resource->toArray($request), $request->dt == 'on');
         } catch (\Throwable $th) {
@@ -49,19 +50,22 @@ class ProfileController extends Controller
     {
         $this->validate($request, [
             'name'              => 'required|min:1|max:50',
-            'shared_users'      => 'integer|gte:0',
-            'rate_limit'        => 'nullable|min:5|max:25',
+            'only_one'          => 'nullable|in:default,yes,no',
+            'local_address'     => 'nullable|ip',
+            'remote_address'    => 'nullable|ip',
             'data_day'          => 'nullable|integer|between:0,365',
             'time_limit'        => 'required|date_format:H:i:s',
+            'rate_limit'        => 'nullable|min:5|max:25',
             'parent'            => 'nullable',
             'comment'           => 'nullable|max:100',
-
         ]);
         $param = [
             'name'              => $request->input('name'),
-            'shared-users'      => $request->input('shared_users') == 0 ? 'unlimited' : $request->input('shared_users'),
-            'rate-limit'        => $request->input('rate_limit'),
+            'only-one'          => $request->input('only_one') ?? 'default',
+            'local-address'     => $request->input('local_address') ?? '0.0.0.0',
+            'remote-address'    => $request->input('remote_address') ?? '0.0.0.0',
             'session-timeout'   => ($request->data_day ?? 0) . 'd ' . $request->time_limit,
+            'rate-limit'        => $request->input('rate_limit'),
             'parent-queue'      => $request->input('parent') ?? 'none',
             'comment'           => $request->input('comment'),
         ];
@@ -76,24 +80,33 @@ class ProfileController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $this->validate($request, [
-            'name'              => 'required|min:1|max:50',
-            'shared_users'      => 'integer|gte:0',
-            'rate_limit'        => 'nullable|min:5|max:25',
-            'data_day'          => 'required|integer|between:0,365',
+        $validate = [
+            'only_one'          => 'nullable|in:default,yes,no',
+            'local_address'     => 'nullable|ip',
+            'remote_address'    => 'nullable|ip',
+            'data_day'          => 'nullable|integer|between:0,365',
             'time_limit'        => 'required|date_format:H:i:s',
+            'rate_limit'        => 'nullable|min:5|max:25',
             'parent'            => 'nullable',
             'comment'           => 'nullable|max:100',
-        ]);
+        ];
+        if ($request->default == 'no') {
+            $validate['name'] = 'required|min:1|max:50';
+        }
+        $this->validate($request, $validate);
         $param = [
             '.id'               => $id,
-            'name'              => $request->input('name'),
-            'shared-users'      => $request->input('shared_users') == 0 ? 'unlimited' : $request->input('shared_users'),
-            'rate-limit'        => $request->input('rate_limit'),
+            'only-one'          => $request->input('only_one') ?? 'default',
+            'local-address'     => $request->input('local_address') ?? '0.0.0.0',
+            'remote-address'    => $request->input('remote_address') ?? '0.0.0.0',
             'session-timeout'   => ($request->data_day ?? 0) . 'd ' . $request->time_limit,
+            'rate-limit'        => $request->input('rate_limit'),
             'parent-queue'      => $request->input('parent') ?? 'none',
             'comment'           => $request->input('comment'),
         ];
+        if ($request->default == 'no') {
+            $param['name'] = $request->input('name');
+        }
         try {
             $this->setRouter($request->router, ProfileServices::class);
             $data = $this->conn->update($param);

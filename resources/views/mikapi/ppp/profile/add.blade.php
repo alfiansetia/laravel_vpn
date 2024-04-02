@@ -15,11 +15,30 @@
                                 placeholder="Please Enter Profile Name" minlength="1" maxlength="50" required>
                             <span id="err_name" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
+                        <div class="form-group col-6 mb-2">
+                            <label class="control-label" for="only_one">Only One :</label>
+                            <select name="only_one" id="only_one" class="form-control select2">
+                                <option value="">Default</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <span id="err_only_one" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-6 mb-2">
-                            <label class="control-label" for="shared_users">Shared User :</label>
-                            <input type="number" name="shared_users" class="form-control" id="shared_users"
-                                placeholder="Please Enter Shared User" min="0" value="1" required>
-                            <span id="err_shared_users" class="error invalid-feedback" style="display: hide;"></span>
+                            <label class="control-label" for="local_address">Local Address :</label>
+                            <input type="text" name="local_address" class="form-control maxlength mask_ip"
+                                id="local_address" placeholder="Please Enter Local Address" minlength="0"
+                                maxlength="18">
+                            <span id="local_address" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group col-md-6 mb-2">
+                            <label class="control-label" for="remote_address">Remote Address :</label>
+                            <input type="text" name="remote_address" class="form-control maxlength mask_ip"
+                                id="remote_address" placeholder="Please Enter Remote Address" minlength="0"
+                                maxlength="18">
+                            <span id="err_remote_address" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                     </div>
                     <div class="row">

@@ -113,6 +113,33 @@
                 </ul>
             </li>
 
+            <li
+                class="menu {{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' ? 'active' : '' }}">
+                <a href="#ppp_nav" data-bs-toggle="collapse"
+                    aria-expanded="{{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' ? 'true' : 'false' }}"
+                    class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="share-2"></i>
+                        <span> PPP </span>
+                    </div>
+                    <div>
+                        <i data-feather="chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled {{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' ? 'show' : '' }}"
+                    id="ppp_nav" data-bs-parent="#accordionExample">
+                    <li class="{{ $title == 'PPP Profile' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.ppp.profile') }}{{ $param_router }}"> Profile </a>
+                    </li>
+                    <li class="{{ $title == 'PPP Secret' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.user') }}{{ $param_router }}"> Secret </a>
+                    </li>
+                    <li class="{{ $title == 'PPP Active' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.active') }}{{ $param_router }}"> Active </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="menu {{ $title == 'Data Router' ? 'active' : '' }}">
                 <a href="{{ route('router.index') }}" aria-expanded="{{ $title == 'Data Router' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
@@ -144,8 +171,8 @@
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'Data Server' ? 'show' : '' }}" id="server_nav"
-                    data-bs-parent="#accordionExample">
+                <ul class="collapse submenu list-unstyled {{ $title == 'Data Server' ? 'show' : '' }}"
+                    id="server_nav" data-bs-parent="#accordionExample">
                     <li class="{{ $title == 'Data Server' ? 'active' : '' }}">
                         <a href="{{ url('server') }}"> List Server </a>
                     </li>

@@ -9,6 +9,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Mikapi\DashboardController;
 use App\Http\Controllers\Mikapi\HotspotController;
 use App\Http\Controllers\Mikapi\LogController;
+use App\Http\Controllers\Mikapi\PPPController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProfileController;
@@ -66,6 +67,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('mikapi/hotspot/host', [HotspotController::class, 'host'])->name('mikapi.hotspot.host');
         Route::get('mikapi/hotspot/binding', [HotspotController::class, 'binding'])->name('mikapi.hotspot.binding');
         Route::get('mikapi/hotspot/cookie', [HotspotController::class, 'cookie'])->name('mikapi.hotspot.cookie');
+
+        Route::get('mikapi/ppp/profile', [PPPController::class, 'profile'])->name('mikapi.ppp.profile');
 
         // Profile
         Route::get('setting/profile', [ProfileController::class, 'profile'])->name('setting.profile');
