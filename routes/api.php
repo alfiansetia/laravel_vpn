@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Mikapi\Hotspot\ActiveController;
-use App\Http\Controllers\Api\Mikapi\Hotspot\BindingController;
-use App\Http\Controllers\Api\Mikapi\Hotspot\HostController;
-use App\Http\Controllers\Api\Mikapi\Hotspot\ProfileController;
-use App\Http\Controllers\Api\Mikapi\Hotspot\ServerController;
-use App\Http\Controllers\Api\Mikapi\Hotspot\ServerProfileController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ActiveController as HotspotActiveController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\BindingController as HotspotBindingController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\HostController as HotspotHostController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ProfileController as HotspotProfileController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ServerController as HotspotServerController;
+use App\Http\Controllers\Api\Mikapi\Hotspot\ServerProfileController as HotspotServerProfileController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\UserController as HotspotUserController;
 use App\Http\Controllers\Api\Mikapi\InterfaceController;
 use App\Http\Controllers\Api\Mikapi\LogController;
@@ -54,31 +54,41 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::apiResource('ports', PortController::class)->only(['show']);
 
-        Route::apiResource('mikapi/hotspot/profiles', ProfileController::class)
+        Route::apiResource('mikapi/hotspot/profiles', HotspotProfileController::class)
             ->only(['index', 'show', 'store', 'update', 'destroy'])
             ->names('api.mikapi.hotspot.profiles');
+        Route::delete('mikapi/hotspot/profiles', [HotspotProfileController::class, 'destroy_batch'])
+            ->name('api.mikapi.hotspot.profiles.destroy.batch');
 
         Route::apiResource('mikapi/hotspot/users', HotspotUserController::class)
             ->only(['index', 'show', 'store', 'update', 'destroy'])
             ->names('api.mikapi.hotspot.users');
+        Route::delete('mikapi/hotspot/users', [HotspotUserController::class, 'destroy_batch'])
+            ->name('api.mikapi.hotspot.users.destroy.batch');
 
-        Route::apiResource('mikapi/hotspot/actives', ActiveController::class)
+        Route::apiResource('mikapi/hotspot/actives', HotspotActiveController::class)
             ->only(['index', 'show', 'destroy'])
             ->names('api.mikapi.hotspot.actives');
+        Route::delete('mikapi/hotspot/actives', [HotspotActiveController::class, 'destroy_batch'])
+            ->name('api.mikapi.hotspot.actives.destroy.batch');
 
-        Route::apiResource('mikapi/hotspot/hosts', HostController::class)
+        Route::apiResource('mikapi/hotspot/hosts', HotspotHostController::class)
             ->only(['index', 'show', 'destroy'])
             ->names('api.mikapi.hotspot.hosts');
+        Route::delete('mikapi/hotspot/hosts', [HotspotHostController::class, 'destroy_batch'])
+            ->name('api.mikapi.hotspot.hosts.destroy.batch');
 
-        Route::apiResource('mikapi/hotspot/bindings', BindingController::class)
+        Route::apiResource('mikapi/hotspot/bindings', HotspotBindingController::class)
             ->only(['index', 'show', 'store', 'update', 'destroy'])
             ->names('api.mikapi.hotspot.bindings');
+        Route::delete('mikapi/hotspot/bindings', [HotspotBindingController::class, 'destroy_batch'])
+            ->name('api.mikapi.hotspot.bindings.destroy.batch');
 
-        Route::apiResource('mikapi/hotspot/servers', ServerController::class)
+        Route::apiResource('mikapi/hotspot/servers', HotspotServerController::class)
             ->only(['index', 'show', 'update'])
             ->names('api.mikapi.hotspot.servers');
 
-        Route::apiResource('mikapi/hotspot/serverprofiles', ServerProfileController::class)
+        Route::apiResource('mikapi/hotspot/serverprofiles', HotspotServerProfileController::class)
             ->only(['index', 'show', 'update'])
             ->names('api.mikapi.hotspot.serverprofiles');
 

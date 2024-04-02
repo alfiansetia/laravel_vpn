@@ -78,9 +78,9 @@
                 </div>
             </li>
             <li
-                class="menu {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Data Port' ? 'active' : '' }}">
+                class="menu {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' ? 'active' : '' }}">
                 <a href="#hotspot_nav" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Data Port' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="share-2"></i>
@@ -90,13 +90,22 @@
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Data Port' ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ $title == 'Hotspot Profile' || $title == 'Hotspot User' || $title == 'Hotspot Active' || $title == 'Hotspot Host' || $title == 'Hotspot Binding' ? 'show' : '' }}"
                     id="hotspot_nav" data-bs-parent="#accordionExample">
                     <li class="{{ $title == 'Hotspot Profile' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.hotspot.profile') }}{{ $param_router }}"> Profile </a>
                     </li>
                     <li class="{{ $title == 'Hotspot User' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.hotspot.user') }}{{ $param_router }}"> User </a>
+                    </li>
+                    <li class="{{ $title == 'Hotspot Active' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.active') }}{{ $param_router }}"> Active </a>
+                    </li>
+                    <li class="{{ $title == 'Hotspot Host' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.host') }}{{ $param_router }}"> Host </a>
+                    </li>
+                    <li class="{{ $title == 'Hotspot Binding' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.hotspot.binding') }}{{ $param_router }}"> Binding </a>
                     </li>
                 </ul>
             </li>

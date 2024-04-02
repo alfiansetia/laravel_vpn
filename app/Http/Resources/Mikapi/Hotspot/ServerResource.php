@@ -17,15 +17,19 @@ class ServerResource extends JsonResource
         // return parent::toArray($request);
         return [
             '.id'               => $this['.id'],
-            'name'              => $this['name'],
-            'interface'         => $this['interface'] ?? null,
-            'address-pool'      => $this['address-pool'] ?? null,
-            'profile'           => $this['profile'] ?? null,
-            'idle-timeout'      => $this['idle-timeout'] ?? null,
-            'addresses-per-mac' => (int) $this['addresses-per-mac'] ?? '0',
-            'invalid'           => ($this['invalid'] ?? false) == "true" ? true : false,
             'HTTPS'             => ($this['HTTPS'] ?? false) == "true" ? true : false,
+            'address-pool'      => $this['address-pool'] ?? null,
+            'addresses-per-mac' => (int) $this['addresses-per-mac'] ?? '0',
             'disabled'          => ($this['disabled'] ?? false) == "true" ? true : false,
+            'idle-timeout'      => $this['idle-timeout'] ?? null,
+            'interface'         => $this['interface'] ?? null,
+            'invalid'           => ($this['invalid'] ?? false) == "true" ? true : false,
+            'ip-of-dns-name'    => $this['ip-of-dns-name'] ?? null,
+            'keepalive-timeout' => $this['keepalive-timeout'] ?? null,
+            'login-timeout'     => $this['login-timeout'] ?? null,
+            'name'              => $this['name'],
+            'profile'           => $this['profile'] ?? null,
+            'proxy-status'      => $this['proxy-status'] ?? null,
         ];
     }
 }

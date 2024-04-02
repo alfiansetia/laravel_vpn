@@ -36,6 +36,15 @@ $('.show-index').click(function() {
     show_index()
 })
 
+$('.close-detail').click(function() {
+    hide_card_detail()
+})
+
+$('.show-edit').click(function() {
+    show_card_edit()
+})
+
+
 function selected() {
     let id = $('input[name="id[]"]:checked').length;
 
@@ -167,6 +176,7 @@ function delete_batch(url) {
                         block();
                     },
                     success: function (res) {
+                        refresh = true
                         unblock();
                         table.ajax.reload();
                         Swal.fire(
@@ -244,6 +254,7 @@ if($('#form').length > 0){
                     clear_validate($(form))
                 },
                 success: function (res) {
+                    refresh = true
                     unblock();
                     table.ajax.reload();
                     reset();
@@ -279,6 +290,7 @@ if($('#formEdit').length > 0){
             $(element).addClass('is-valid');
         },
         submitHandler: function (form) {
+            refresh = true
             ajax_setup()
             $.ajax({
                 type: 'POST',
@@ -340,6 +352,7 @@ $('#edit_delete').click(function () {
                     block();
                 },
                 success: function (res) {
+                    refresh = true
                     unblock();
                     table.ajax.reload();
                     Swal.fire(
@@ -360,6 +373,10 @@ $('#edit_delete').click(function () {
 })
 
 $('#edit_reset').click(function () {
+    edit(false)
+})
+
+$('.btn_edit_refresh').click(function () {
     edit(false)
 })
 
@@ -407,3 +424,6 @@ var btn_element_refresh = `<div class="btn-group" role="group">
 <button type="button" id="btn_refresh" class="btn btn-info ms-2">
 <i class="fas fa-sync me-1 bs-tooltip" title="Refresh Data"></i>
 </button>`
+
+var btn_detail = `<button type="button" class="btn btn-secondary show-detail ms-1"><i
+class="fas fa-info me-1 bs-tooltip" title="Detail"></i>Detail</button>`

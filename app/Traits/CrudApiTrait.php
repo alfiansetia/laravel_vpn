@@ -36,13 +36,10 @@ trait CrudApiTrait
     public function store(array $param)
     {
         if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm($this->command . "add", $param);
-                return handle_data($data, 'Success Insert Data!');
-            }
+            $data = $this->API->comm($this->command . "add", $param);
+            cek_error($data);
             $this->disconnect();
-            return handle_no_package($this->name);
+            return $data;
         } else {
             return handle_fail_login($this->API);
         }
@@ -51,13 +48,10 @@ trait CrudApiTrait
     public function update(array $param)
     {
         if ($this->connect()) {
-            $packages = $this->API->comm("/system/package/print");
-            if (cek_package($packages, $this->name)) {
-                $data = $this->API->comm($this->command . "set", $param);
-                return handle_data($data, 'Success Update Data!');
-            }
+            $data = $this->API->comm($this->command . "set", $param);
+            cek_error($data);
             $this->disconnect();
-            return handle_no_package($this->name);
+            return $data;
         } else {
             return handle_fail_login($this->API);
         }
@@ -68,6 +62,20 @@ trait CrudApiTrait
         if ($this->connect()) {
             $data = $this->API->comm($this->command . "remove", [
                 '.id' => $id
+            ]);
+            cek_error($data);
+            $this->disconnect();
+            return $data;
+        } else {
+            return handle_fail_login($this->API);
+        }
+    }
+
+    public function destroy_batch(array $id)
+    {
+        if ($this->connect()) {
+            $data = $this->API->comm($this->command . "remove", [
+                '.id' => implode(',', $id)
             ]);
             cek_error($data);
             $this->disconnect();

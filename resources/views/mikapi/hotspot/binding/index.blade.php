@@ -1,4 +1,4 @@
-@extends('layouts.backend.template_mikapi', ['title' => 'Hotspot User'])
+@extends('layouts.backend.template_mikapi', ['title' => 'Hotspot Binding'])
 @push('csslib')
     <link href="{{ asset('backend/src/plugins/src/table/datatable/datatables.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/plugins/css/light/table/datatable/dt-global_style.css') }}" rel="stylesheet"
@@ -44,9 +44,9 @@
             </div>
         </div>
 
-        @include('mikapi.hotspot.user.add')
-        @include('mikapi.hotspot.user.edit')
-        @include('mikapi.hotspot.user.detail')
+        @include('mikapi.hotspot.binding.add')
+        @include('mikapi.hotspot.binding.edit')
+        @include('mikapi.hotspot.binding.detail')
     </div>
 @endsection
 @push('jslib')
@@ -97,51 +97,7 @@
         Inputmask("ip").mask($(".mask_ip"));
         Inputmask("mac").mask($(".mask_mac"));
 
-        var f1 = $('#time_limit').flatpickr({
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i:S",
-            defaultDate: "today",
-            disableMobile: true,
-            time_24hr: true,
-            enableSeconds: true
-        })
-
-        var f2 = $('#edit_time_limit').flatpickr({
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i:S",
-            defaultDate: "today",
-            disableMobile: true,
-            time_24hr: true,
-            enableSeconds: true
-        })
-
         $(".select2").select2();
-
-        $("#profile, #edit_profile").select2({
-            placeholder: 'Select Profile',
-            ajax: {
-                delay: 1000,
-                url: "{{ route('api.mikapi.hotspot.profiles.index') }}" + param_router,
-                data: function(params) {
-                    return {
-                        name: params.term || '',
-                        page: params.page || 1,
-                    };
-                },
-                processResults: function(data, params) {
-                    return {
-                        results: $.map(data.data, function(item) {
-                            return {
-                                text: item.name,
-                                id: item.name,
-                            }
-                        })
-                    };
-                },
-            }
-        });
 
         $("#server, #edit_server").select2({
             placeholder: 'all',
@@ -170,9 +126,9 @@
 
         var table = $('#tableData').DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
-                url: "{{ route('api.mikapi.hotspot.users.index') }}",
+                url: "{{ route('api.mikapi.hotspot.bindings.index') }}",
                 data: function(dt) {
                     if (refresh) {
                         dt.refresh = 'on'
@@ -213,9 +169,12 @@
                             text +=
                                 '<span class="badge me-1 badge-danger" title="Disabled">X</span>'
                         }
-                        if (row.default) {
+                        if (row.bypassed) {
                             text +=
-                                '<span class="badge me-1 badge-info" title="Default">*</span>'
+                                '<span class="badge me-1 badge-success" title="Bypassed">P</span>'
+                        }
+                        if (row.blocked) {
+                            text += '<span class="badge me-1 badge-danger" title="Bloked">B</span>'
                         }
                         text += `</div>`
                         return text
@@ -238,55 +197,17 @@
                     }
                 }
             }, {
-                title: "Name",
-                data: 'name',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        if (row.disabled == 'true') {
-                            return `<span data-toggle="tooltip" title="Disabled"><font color="red">${data}</font></span>`;
-                        } else {
-                            return data
-                        }
-                    } else {
-                        return data
-                    }
-                }
-            }, {
-                title: "Profile",
-                data: 'profile',
-            }, {
                 title: "MAC",
                 data: 'mac-address',
             }, {
-                title: "Uptime",
-                data: 'uptime',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return dtm(data);
-                    } else {
-                        return data;
-                    }
-                }
+                title: "Address",
+                data: 'address',
             }, {
-                title: "IN",
-                data: 'bytes-in',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return formatBytes(data);
-                    } else {
-                        return data;
-                    }
-                }
+                title: "To Address",
+                data: 'to-address',
             }, {
-                title: "OUT",
-                data: 'bytes-out',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return formatBytes(data);
-                    } else {
-                        return data;
-                    }
-                }
+                title: "Type",
+                data: 'type',
             }, {
                 title: "Comment",
                 data: 'comment',
@@ -321,7 +242,7 @@
         })
 
         $('#btn_delete').click(function() {
-            delete_batch("{{ route('api.mikapi.hotspot.users.destroy.batch') }}" + param_router)
+            delete_batch("{{ route('api.mikapi.hotspot.bindings.destroy.batch') }}" + param_router)
         })
 
         $('#edit_delete').after(btn_detail)
@@ -329,14 +250,14 @@
         multiCheck(table);
 
         var id;
-        var url_post = "{{ route('api.mikapi.hotspot.users.store') }}" + param_router;
-        var url_put = "{{ route('api.mikapi.hotspot.users.update', '') }}/" + id + param_router;
-        var url_delete = "{{ route('api.mikapi.hotspot.users.destroy', '') }}/" + id + param_router;
+        var url_post = "{{ route('api.mikapi.hotspot.bindings.store') }}" + param_router;
+        var url_put = "{{ route('api.mikapi.hotspot.bindings.update', '') }}/" + id + param_router;
+        var url_delete = "{{ route('api.mikapi.hotspot.bindings.destroy', '') }}/" + id + param_router;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
-            url_put = "{{ route('api.mikapi.hotspot.users.update', '') }}/" + id + param_router;
-            url_delete = "{{ route('api.mikapi.hotspot.users.destroy', '') }}/" + id + param_router;
+            url_put = "{{ route('api.mikapi.hotspot.bindings.update', '') }}/" + id + param_router;
+            url_delete = "{{ route('api.mikapi.hotspot.bindings.destroy', '') }}/" + id + param_router;
             edit(true)
         });
 
@@ -347,30 +268,11 @@
                 method: 'GET',
                 success: function(result) {
                     unblock();
-                    $('#edit_name').val(result.data.name);
-                    $('#edit_password').val(result.data['password']);
-                    $('#edit_rate_limit').val(result.data['rate-limit']);
                     $('#edit_comment').val(result.data.comment);
-                    let time = result.data['limit-uptime'];
-                    let timeparse = parsedtm(time);
-                    $('#edit_data_day').val(timeparse.day).change();
-                    f2.setDate(timeparse.time);
-                    let limit = result.data['limit-bytes-total'];
-                    if (limit > 0 && limit < 1000000) {
-                        $('#edit_data_limit').val(limit / 1000);
-                        $('#edit_data_type').val('K').change();
-                    } else if (limit >= 1000000 && limit < 1000000000) {
-                        let mb = limit / 1000000;
-                        $('#edit_data_limit').val(mb);
-                        $('#edit_data_type').val('M').change();
-                    } else if (limit >= 1000000000) {
-                        let gb = limit / 1000000000;
-                        $('#edit_data_limit').val(gb);
-                        $('#edit_data_type').val('G').change();
-                    } else {
-                        $('#edit_data_limit').val(0);
-                        $('#edit_data_type').val('K').change();
-                    }
+                    $('#edit_mac').val(result.data['mac-address']);
+                    $('#edit_address').val(result.data['address']);
+                    $('#edit_to_address').val(result.data['to-address']);
+                    $('#edit_type').val(result.data.type).trigger('change');
                     if (result.data.server == null || result.data.server == 'all') {
                         $('#edit_server').val('').trigger('change');
                     } else {
@@ -378,38 +280,11 @@
                             true, true);
                         $('#edit_server').append(option).trigger('change');
                     }
-                    if (result.data['mac-address'] == null) {
-                        $('#edit_mac').val('');
-                    } else {
-                        $('#edit_mac').val(result.data['mac-address']);
-                    }
-                    if (result.data.profile == null) {
-                        $('#edit_profile').val('').change();
-                    } else {
-                        let option = new Option(result.data.profile, result.data
-                            .profile, true, true);
-                        $('#edit_profile').append(option).trigger('change');
-                    }
-                    if (result.data['address'] == null) {
-                        $('#edit_ip_address').val('');
-                    } else {
-                        $('#edit_ip_address').val(result.data['address']);
-                    }
                     if (result.data.disabled == false) {
                         $('#edit_is_active').prop('checked', true).change();
                     } else {
                         $('#edit_is_active').prop('checked', false).change();
                     }
-
-                    let disabled = ['edit_server', 'edit_profile', 'edit_name', 'edit_password',
-                        'edit_ip_address', 'edit_mac', 'edit_data_day', 'edit_time_limit',
-                        'edit_data_limit', 'edit_data_type', 'edit_comment', 'edit_is_active', 'edit_save',
-                        'edit_delete',
-                    ]
-                    disabled.forEach(element => {
-                        $(`#${element}`).prop('disabled', result.data.default);
-                    });
-
                     $('#tbl_detail').empty()
                     Object.keys(result.data).forEach(function(key) {
                         $('#tbl_detail').append(`<tr>
@@ -432,7 +307,6 @@
                 }
             });
         }
-
 
         // });
     </script>

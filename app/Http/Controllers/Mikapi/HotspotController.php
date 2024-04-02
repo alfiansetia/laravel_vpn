@@ -27,4 +27,19 @@ class HotspotController extends Controller
     {
         return view('mikapi.hotspot.user.index');
     }
+
+    public function active()
+    {
+        return view('mikapi.hotspot.active.index');
+    }
+
+    public function host()
+    {
+        return view('mikapi.hotspot.host.index');
+    }
+
+    public function binding()
+    {
+        return view('mikapi.hotspot.binding.index');
+    }
 }

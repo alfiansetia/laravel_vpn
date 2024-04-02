@@ -16,13 +16,16 @@ class BindingResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'DT_RowId'      => $this['.id'],
             '.id'           => $this['.id'],
-            'mac-address'   => $this['mac-address'] ?? null,
             'address'       => $this['address'] ?? null,
-            'to-address'    => $this['to-address'] ?? null,
-            'server'        => $this['address'] ?? 'all',
-            'disabled'      => ($this['disabled'] ?? false) == 'true' ? true : false,
+            'blocked'       => ($this['blocked'] ?? false) == 'true' ? true : false,
+            'bypassed'      => ($this['bypassed'] ?? false) == 'true' ? true : false,
             'comment'       => $this['comment'] ?? null,
+            'disabled'      => ($this['disabled'] ?? false) == 'true' ? true : false,
+            'mac-address'   => $this['mac-address'] ?? null,
+            'server'        => $this['server'] ?? 'all',
+            'to-address'    => $this['to-address'] ?? null,
             'type'          => $this['type'] ?? 'regular'
         ];
     }

@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\Mikapi\Hotspot;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Mikapi\Hotspot\ServerResource;
 use App\Services\Mikapi\Hotspot\ServerServices;
+use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
 
 class ServerController extends Controller
 {
-    use RouterTrait;
+    use RouterTrait, DataTableTrait;
 
     public function __construct(Request $request)
     {
@@ -19,26 +20,33 @@ class ServerController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, ServerServices::class);
-        $query = [];
-        if ($request->filled('name')) {
-            $query['?name'] = $request->name;
+        try {
+            $this->setRouter($request->router, ServerServices::class);
+            $query = [];
+            if ($request->filled('name')) {
+                $query['?name'] = $request->name;
+            }
+            $data = $this->conn->get($query);
+            $resource = ServerResource::collection($data);
+            return $this->callback($resource->toArray($request), $request->dt == 'on');
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        $data = $this->conn->get($query);
-        if (!$data['status']) {
-            return response()->json($data, 422);
-        }
-        return ServerResource::collection($data['data']);
     }
 
     public function show(Request $request, string $id)
     {
-        $this->setRouter($request->router, ServerServices::class);
-        $data = $this->conn->show($id);
-        if (!$data['status']) {
-            return response()->json($data, 422);
+        try {
+            $this->setRouter($request->router, ServerServices::class);
+            $query = [];
+            if ($request->filled('name')) {
+                $query['?name'] = $request->name;
+            }
+            $data = $this->conn->show($id);
+            return new ServerResource($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        return new ServerResource($data['data']);
     }
 
     public function update(Request $request, string $id)

@@ -47,6 +47,7 @@ class UserController extends Controller
                 if (!File::exists($this->path)) {
                     File::makeDirectory($this->path, 755, true);
                 }
+                // return response()->json(['message' => '', 'data' => $data], 500);
                 $json = UserResource::collection($data);
                 File::put($this->full_path, $json->toJson(JSON_PRETTY_PRINT));
                 return $this->callback($json->toArray($request), $dt);
@@ -73,27 +74,30 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'server'        => 'required',
-            'name'          => 'required|min:2|max:30',
-            'password'      => 'nullable|max:30',
+            'server'        => 'nullable',
             'profile'       => 'required',
-            'address'       => 'nullable|ip',
-            'mac-address'   => 'nullable|mac_address',
-            // 'time_limit'    => 'number',
-            // 'data_limit'    => 'number',
+            'name'          => 'required|min:2|max:50',
+            'password'      => 'nullable|max:50',
+            'ip_address'    => 'nullable|ip',
+            'mac'           => 'nullable|mac_address',
+            'data_day'      => 'nullable|integer|between:0,365',
+            'time_limit'    => 'required|date_format:H:i:s',
+            'data_limit'    => 'required|integer|gte:0',
+            'data_type'     => 'nullable|in:K,M,G',
             'comment'       => 'nullable|max:100',
+            'is_active'     => 'nullable|in:on',
         ]);
         $param = [
             'server'             => $request->input('server') ?? 'all',
+            'profile'            => $request->input('profile'),
             'name'               => $request->input('name'),
             'password'           => $request->input('password'),
-            'address'            => $request->input('address') ?? '0.0.0.0',
-            'mac-address'        => $request->input('mac-address') ?? '00:00:00:00:00:00',
-            'profile'            => $request->input('profile'),
-            // 'limit-uptime'       => $request->data_day == null ? $request->time_limit : ($request->data_day . 'd ' . $request->time_limit),
-            // 'limit-bytes-total'  => $request->data_limit == null ? '0' : ($request->data_limit . $request->data_type),
+            'address'            => $request->input('ip_address') ?? '0.0.0.0',
+            'mac-address'        => $request->input('mac') ?? '00:00:00:00:00:00',
+            'limit-uptime'       => ($request->data_day ?? 0) . 'd ' . $request->time_limit,
+            'limit-bytes-total'  => $request->data_limit . ($request->data_type ?? 'K'),
             'comment'            => $request->input('comment'),
-            'disabled'           => $request->input('disabled') ? 'yes' : 'no',
+            'disabled'           => $request->input('is_active') == 'on' ? 'no' : 'yes',
         ];
         try {
             $this->setRouter($request->router, UserServices::class);
@@ -107,28 +111,31 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $this->validate($request, [
-            'server'        => 'required',
-            'name'          => 'required|min:2|max:30',
-            'password'      => 'nullable|max:30',
+            'server'        => 'nullable',
             'profile'       => 'required',
-            'address'       => 'nullable|ip',
-            'mac-address'   => 'nullable|mac_address',
-            // 'time_limit'    => 'number',
-            // 'data_limit'    => 'number',
+            'name'          => 'required|min:2|max:50',
+            'password'      => 'nullable|max:50',
+            'ip_address'    => 'nullable|ip',
+            'mac'           => 'nullable|mac_address',
+            'data_day'      => 'required|integer|between:0,365',
+            'time_limit'    => 'required|date_format:H:i:s',
+            'data_limit'    => 'required|integer|gte:0',
+            'data_type'     => 'required|in:K,M,G',
             'comment'       => 'nullable|max:100',
+            'is_active'     => 'nullable|in:on',
         ]);
         $param = [
             '.id'                => $id,
             'server'             => $request->input('server') ?? 'all',
+            'profile'            => $request->input('profile'),
             'name'               => $request->input('name'),
             'password'           => $request->input('password'),
-            'address'            => $request->input('address') ?? '0.0.0.0',
-            'mac-address'        => $request->input('mac-address') ?? '00:00:00:00:00:00',
-            'profile'            => $request->input('profile'),
-            // 'limit-uptime'       => $request->data_day == null ? $request->time_limit : ($request->data_day . 'd ' . $request->time_limit),
-            // 'limit-bytes-total'  => $request->data_limit == null ? '0' : ($request->data_limit . $request->data_type),
+            'address'            => $request->input('ip_address') ?? '0.0.0.0',
+            'mac-address'        => $request->input('mac') ?? '00:00:00:00:00:00',
+            'limit-uptime'       => ($request->data_day ?? 0) . 'd ' . $request->time_limit,
+            'limit-bytes-total'  => $request->data_limit . $request->data_type,
             'comment'            => $request->input('comment'),
-            'disabled'           => $request->input('disabled') ? 'yes' : 'no',
+            'disabled'           => $request->input('is_active') == 'on' ? 'no' : 'yes',
         ];
         try {
             $this->setRouter($request->router, UserServices::class);
@@ -144,6 +151,21 @@ class UserController extends Controller
         try {
             $this->setRouter($request->router, UserServices::class);
             $data = $this->conn->destroy($id);
+            return response()->json(['message' => 'Success Delete Data!', 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
+
+    public function destroy_batch(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|array|min:1|max:1000'
+        ]);
+        $id = $request->id;
+        try {
+            $this->setRouter($request->router, UserServices::class);
+            $data = $this->conn->destroy_batch($id);
             return response()->json(['message' => 'Success Delete Data!', 'data' => $data]);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);

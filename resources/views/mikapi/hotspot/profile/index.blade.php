@@ -11,6 +11,13 @@
 
     <link href="{{ asset('backend/src/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css">
 
+    <link href="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/src/noUiSlider/nouislider.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/light/flatpickr/custom-flatpickr.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/dark/flatpickr/custom-flatpickr.css') }}" rel="stylesheet"
+        type="text/css">
+
     <link href="{{ asset('backend/src/assets/css/light/scrollspyNav.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/assets/css/light/forms/switches.css') }}" rel="stylesheet" type="text/css">
 
@@ -34,6 +41,7 @@
 
         @include('mikapi.hotspot.profile.add')
         @include('mikapi.hotspot.profile.edit')
+        @include('mikapi.hotspot.profile.detail')
     </div>
 @endsection
 @push('jslib')
@@ -46,6 +54,10 @@
 
     <script src="{{ asset('backend/src/plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/select2/custom-select2.js') }}"></script>
+
+
+    <script src="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/moment/moment-with-locales.min.js') }}"></script>
 
     <!-- InputMask -->
     {{-- <script src="{{ asset('backend/src/plugins/src/input-mask/jquery.inputmask.bundle.min.js') }}"></script> --}}
@@ -61,6 +73,26 @@
     <script>
         // $(document).ready(function() {
 
+        var f1 = $('#time_limit').flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i:S",
+            defaultDate: "today",
+            disableMobile: true,
+            time_24hr: true,
+            enableSeconds: true
+        })
+
+        var f2 = $('#edit_time_limit').flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i:S",
+            defaultDate: "today",
+            disableMobile: true,
+            time_24hr: true,
+            enableSeconds: true
+        })
+
         $('.maxlength').maxlength({
             alwaysShow: true,
             placement: "top",
@@ -69,6 +101,8 @@
         $(".select2").select2();
 
         $("#parent, #edit_parent").select2({
+            placeholder: 'none',
+            allowClear: true,
             ajax: {
                 delay: 1000,
                 url: "{{ route('api.mikapi.queues.index') }}" + param_router,
@@ -121,10 +155,22 @@
                 className: "",
                 orderable: !1,
                 render: function(data, type, row, meta) {
-                    return `
-                    <div class="form-check form-check-primary d-block new-control">
-                        <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >
-                    </div>`
+                    if (type == 'display') {
+                        let text = `<div class="form-check form-check-primary d-block new-control">
+                        <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >`
+                        if (row.disabled) {
+                            text +=
+                                '<span class="badge me-1 badge-danger" title="Disabled">X</span>'
+                        }
+                        if (row.default) {
+                            text +=
+                                '<span class="badge me-1 badge-info" title="Default">*</span>'
+                        }
+                        text += `</div>`
+                        return text
+                    } else {
+                        return data
+                    }
                 }
             }, {
                 title: "Name",
@@ -177,8 +223,10 @@
         })
 
         $('#btn_delete').click(function() {
-            delete_batch("{{ route('api.mikapi.hotspot.profiles.index') }}")
+            delete_batch("{{ route('api.mikapi.hotspot.profiles.destroy.batch') }}" + param_router)
         })
+
+        $('#edit_delete').after(btn_detail)
 
         multiCheck(table);
 
@@ -204,6 +252,10 @@
                     $('#edit_name').val(result.data.name);
                     $('#edit_shared_users').val(result.data['shared-users']);
                     $('#edit_rate_limit').val(result.data['rate-limit']);
+                    let time = result.data['session-timeout'];
+                    let timeparse = parsedtm(time);
+                    $('#edit_data_day').val(timeparse.day).change();
+                    f2.setDate(timeparse.time);
                     if (result.data['parent-queue'] == null) {
                         $('#edit_parent').val('').trigger('change');
                     } else {
@@ -211,6 +263,14 @@
                             true);
                         $('#edit_parent').append(option).trigger('change');
                     }
+                    $('#tbl_detail').empty()
+                    Object.keys(result.data).forEach(function(key) {
+                        $('#tbl_detail').append(`<tr>
+                                <td style="width:30%">${key}</td>
+                                <td style="width:2%">:</td>
+                                <td style="width:68%">${result.data[key]}</td>
+                            </tr>`)
+                    });
                     if (show) {
                         show_card_edit()
                         input_focus('name')
@@ -228,4 +288,5 @@
 
         // });
     </script>
+    <script src="{{ asset('js/trigger.js') }}"></script>
 @endpush
