@@ -26,7 +26,7 @@ class LogServices extends RouterApiServices
             ]);
             cek_error($data1);
             $data2 = $this->API->comm('/system/logging/action/set', [
-                'numbers'       => 0,
+                'numbers'       => '0,1',
                 'memory-lines'  => 1000
             ]);
             cek_error($data2);

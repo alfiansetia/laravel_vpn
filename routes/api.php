@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Mikapi\DHCP\LeasesController as DHCPLeasesController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ActiveController as HotspotActiveController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\BindingController as HotspotBindingController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\CookieController as HotspotCookieController;
@@ -131,12 +132,26 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('mikapi/ppp/l2tp_secrets', [PPPL2tpSecretController::class, 'destroy_batch'])
             ->name('api.mikapi.ppp.l2tp_secrets.destroy.batch');
 
+        Route::apiResource('mikapi/dhcp/leases', DHCPLeasesController::class)
+            ->only(['index', 'show', 'destroy'])
+            ->names('api.mikapi.dhcp.leases');
+        Route::delete('mikapi/dhcp/leases', [DHCPLeasesController::class, 'destroy_batch'])
+            ->name('api.mikapi.dhcp.leases.destroy.batch');
+
+        Route::get('mikapi/system/routerboards', [RouterboardController::class, 'index'])
+            ->name('api.mikapi.system.routerboards.index');
+        Route::get('mikapi/system/routerboards-settings', [RouterboardController::class, 'settings'])
+            ->name('api.mikapi.system.routerboards.settings');
+
+        Route::get('mikapi/system/resources', [ResourceController::class, 'index'])
+            ->name('api.mikapi.system.resources.index');
+
 
         Route::apiResource('mikapi/interfaces', InterfaceController::class)->only(['index', 'show', 'update']);
 
         Route::apiResource('mikapi/system/packages', PackageController::class)->only(['index', 'show']);
-        Route::apiResource('mikapi/system/resources', ResourceController::class)->only(['index']);
-        Route::apiResource('mikapi/system/routerboards', RouterboardController::class)->only(['index']);
+        // Route::apiResource('mikapi/system/resources', ResourceController::class)->only(['index']);
+        // Route::apiResource('mikapi/system/routerboards', RouterboardController::class)->only(['index']);
         Route::apiResource('mikapi/system/users', SystemUserController::class)->only(['index']);
 
         Route::delete('mikapi/logs', [LogController::class, 'destroy'])->name('api.mikapi.logs.destroy');

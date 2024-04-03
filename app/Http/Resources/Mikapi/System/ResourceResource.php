@@ -28,9 +28,9 @@ class ResourceResource extends JsonResource
             'cpu-load'          => (int) ($this['cpu-load'] ?? '0'),
             'free-hdd-space'    => (int) ($this['free-hdd-space'] ?? '0'),
             'total-hdd-space'   => (int) ($this['total-hdd-space'] ?? '0'),
-            'architecture-name' => $this['architecture-name'],
-            'board-name'        => $this['board-name'],
-            'platform'          => $this['platform'],
+            'architecture-name' => $this['architecture-name'] ?? null,
+            'board-name'        => $this['board-name'] ?? null,
+            'platform'          => $this['platform'] ?? null,
         ];
     }
 }

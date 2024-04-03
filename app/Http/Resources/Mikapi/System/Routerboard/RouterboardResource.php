@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Mikapi\System;
+namespace App\Http\Resources\Mikapi\System\Routerboard;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,7 +22,7 @@ class RouterboardResource extends JsonResource
             'factory-firmware'  => $this['factory-firmware'] ?? null,
             'current-firmware'  => $this['current-firmware'] ?? null,
             'upgrade-firmware'  => $this['upgrade-firmware'] ?? null,
-            'routerboard'       => $this['routerboard'] == 'true' ? true : false,
+            'routerboard'       => ($this['routerboard'] ?? false) == "true" ? true : false,
         ];
     }
 }

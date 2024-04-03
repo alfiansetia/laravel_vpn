@@ -7,9 +7,11 @@ use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Mikapi\DashboardController;
+use App\Http\Controllers\Mikapi\DHCPController;
 use App\Http\Controllers\Mikapi\HotspotController;
 use App\Http\Controllers\Mikapi\LogController;
 use App\Http\Controllers\Mikapi\PPPController;
+use App\Http\Controllers\Mikapi\SystemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProfileController;
@@ -59,6 +61,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'getData'])->name('mikapi.dashboard.get.data');
         Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
 
+        Route::get('mikapi/system/routerboard', [SystemController::class, 'routerboard'])->name('mikapi.system.routerboard');
+        Route::get('mikapi/system/resource', [SystemController::class, 'resource'])->name('mikapi.system.resource');
+
         Route::get('mikapi/log', [LogController::class, 'index'])->name('mikapi.log.index');
         Route::get('mikapi/hotspot/server', [HotspotController::class, 'server'])->name('mikapi.hotspot.server');
         Route::get('mikapi/hotspot/profile', [HotspotController::class, 'profile'])->name('mikapi.hotspot.profile');
@@ -72,6 +77,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('mikapi/ppp/secret', [PPPController::class, 'secret'])->name('mikapi.ppp.secret');
         Route::get('mikapi/ppp/active', [PPPController::class, 'active'])->name('mikapi.ppp.active');
         Route::get('mikapi/ppp/l2tp_secret', [PPPController::class, 'l2tp_secret'])->name('mikapi.ppp.l2tp_secret');
+
+        Route::get('mikapi/dhcp/lease', [DHCPController::class, 'lease'])->name('mikapi.dhcp.lease');
 
         // Profile
         Route::get('setting/profile', [ProfileController::class, 'profile'])->name('setting.profile');

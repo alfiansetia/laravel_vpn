@@ -19,15 +19,25 @@ class ResourceController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, ResourceServices::class);
-        $query = [];
-        if ($request->filled('name')) {
-            $query['?name'] = $request->name;
+        try {
+            $this->setRouter($request->router, ResourceServices::class);
+            $query = [];
+            $data = $this->conn->get($query);
+            return ResourceResource::collection($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        $data = $this->conn->get($query);
-        if (!$data['status']) {
-            return response()->json($data, 422);
+    }
+
+    public function settings(Request $request)
+    {
+        try {
+            $this->setRouter($request->router, ResourceServices::class);
+            $query = [];
+            $data = $this->conn->settings($query);
+            return ResourceResource::collection($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        return ResourceResource::collection($data['data']);
     }
 }
