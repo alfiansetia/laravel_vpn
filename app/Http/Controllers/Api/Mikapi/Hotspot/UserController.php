@@ -37,6 +37,12 @@ class UserController extends Controller
                 if ($request->filled('server')) {
                     $query['?server'] = $request->input('server');
                 }
+                if ($request->filled('address')) {
+                    $query['?address'] = $request->input('address');
+                }
+                if ($request->filled('mac-address')) {
+                    $query['?mac-address'] = $request->input('mac-address');
+                }
                 if ($request->filled('profile')) {
                     $query['?profile'] = $request->input('profile');
                 }
@@ -47,7 +53,6 @@ class UserController extends Controller
                 if (!File::exists($this->path)) {
                     File::makeDirectory($this->path, 755, true);
                 }
-                // return response()->json(['message' => '', 'data' => $data], 500);
                 $json = UserResource::collection($data);
                 File::put($this->full_path, $json->toJson(JSON_PRETTY_PRINT));
                 return $this->callback($json->toArray($request), $dt);

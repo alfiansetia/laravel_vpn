@@ -186,14 +186,10 @@
                 title: "Session Timeout",
                 data: 'session-timeout',
                 render: function(data, type, row, meta) {
-                    if (data == null) {
-                        return null;
+                    if (type == 'display') {
+                        return dtm(data);
                     } else {
-                        if (type == 'display') {
-                            return dtm(data);
-                        } else {
-                            return data;
-                        }
+                        return data;
                     }
                 }
             }, {

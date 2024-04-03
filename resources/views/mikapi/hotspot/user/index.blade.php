@@ -226,31 +226,9 @@
             }, {
                 title: "Server",
                 data: 'server',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        if (data == null) {
-                            return 'all';
-                        } else {
-                            return data
-                        }
-                    } else {
-                        return data
-                    }
-                }
             }, {
                 title: "Name",
                 data: 'name',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        if (row.disabled == 'true') {
-                            return `<span data-toggle="tooltip" title="Disabled"><font color="red">${data}</font></span>`;
-                        } else {
-                            return data
-                        }
-                    } else {
-                        return data
-                    }
-                }
             }, {
                 title: "Profile",
                 data: 'profile',
@@ -351,6 +329,7 @@
                     $('#edit_password').val(result.data['password']);
                     $('#edit_rate_limit').val(result.data['rate-limit']);
                     $('#edit_comment').val(result.data.comment);
+                    $('#edit_ip_address').val(result.data['address']);
                     let time = result.data['limit-uptime'];
                     let timeparse = parsedtm(time);
                     $('#edit_data_day').val(timeparse.day).change();
@@ -389,11 +368,6 @@
                         let option = new Option(result.data.profile, result.data
                             .profile, true, true);
                         $('#edit_profile').append(option).trigger('change');
-                    }
-                    if (result.data['address'] == null) {
-                        $('#edit_ip_address').val('');
-                    } else {
-                        $('#edit_ip_address').val(result.data['address']);
                     }
                     if (result.data.disabled == false) {
                         $('#edit_is_active').prop('checked', true).change();

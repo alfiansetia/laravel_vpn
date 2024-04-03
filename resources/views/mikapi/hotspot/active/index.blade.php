@@ -78,16 +78,16 @@
                 orderable: !1,
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        let textt = `<div class="form-check form-check-primary d-block new-control">
+                        let text = `<div class="form-check form-check-primary d-block new-control">
                         <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >`
                         if (row.radius) {
-                            textt += '<span class="badge me-1 badge-success" title="Radius">R</span>'
+                            text += '<span class="badge me-1 badge-success" title="Radius">R</span>'
                         }
                         if (row.blocked) {
-                            textt += '<span class="badge me-1 badge-danger" title="Bloked">B</span>'
+                            text += '<span class="badge me-1 badge-danger" title="Bloked">B</span>'
                         }
-                        textt += `</div>`
-                        return textt
+                        text += `</div>`
+                        return text
                     } else {
                         return data
                     }
@@ -95,28 +95,9 @@
             }, {
                 title: "Server",
                 data: 'server',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return `${data}`;
-                    } else {
-                        return data;
-                    }
-
-                }
             }, {
                 title: "User",
                 data: 'user',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        if (row.disabled == 'true') {
-                            return `<span data-toggle="tooltip" title="Disabled"><font color="red">${data}</font></span>`;
-                        } else {
-                            return data
-                        }
-                    } else {
-                        return data
-                    }
-                }
             }, {
                 title: "MAC",
                 data: 'mac-address',

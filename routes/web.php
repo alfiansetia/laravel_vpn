@@ -69,6 +69,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('mikapi/hotspot/cookie', [HotspotController::class, 'cookie'])->name('mikapi.hotspot.cookie');
 
         Route::get('mikapi/ppp/profile', [PPPController::class, 'profile'])->name('mikapi.ppp.profile');
+        Route::get('mikapi/ppp/secret', [PPPController::class, 'secret'])->name('mikapi.ppp.secret');
+        Route::get('mikapi/ppp/active', [PPPController::class, 'active'])->name('mikapi.ppp.active');
+        Route::get('mikapi/ppp/l2tp_secret', [PPPController::class, 'l2tp_secret'])->name('mikapi.ppp.l2tp_secret');
 
         // Profile
         Route::get('setting/profile', [ProfileController::class, 'profile'])->name('setting.profile');

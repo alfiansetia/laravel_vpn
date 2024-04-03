@@ -23,11 +23,20 @@ class BindingController extends Controller
         try {
             $this->setRouter($request->router, BindingServices::class);
             $query = [];
-            if ($request->filled('name')) {
-                $query['?name'] = $request->name;
+            if ($request->filled('server')) {
+                $query['?server'] = $request->input('server');
             }
-            if ($request->filled('profile')) {
-                $query['?profile'] = $request->profile;
+            if ($request->filled('address')) {
+                $query['?address'] = $request->input('address');
+            }
+            if ($request->filled('type')) {
+                $query['?type'] = $request->input('type');
+            }
+            if ($request->filled('to-address')) {
+                $query['?to-address'] = $request->input('to-address');
+            }
+            if ($request->filled('mac-address')) {
+                $query['?mac-address'] = $request->input('mac-address');
             }
             if ($request->filled('comment')) {
                 $query['?comment'] = $request->comment;

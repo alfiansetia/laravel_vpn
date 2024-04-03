@@ -26,8 +26,8 @@ class CookieController extends Controller
             if ($request->filled('domain')) {
                 $query['?domain'] = $request->input('domain');
             }
-            if ($request->filled('mac_address')) {
-                $query['?mac_address'] = $request->input('mac_address');
+            if ($request->filled('mac-address')) {
+                $query['?mac-address'] = $request->input('mac-address');
             }
             if ($request->filled('user')) {
                 $query['?user'] = $request->input('user');

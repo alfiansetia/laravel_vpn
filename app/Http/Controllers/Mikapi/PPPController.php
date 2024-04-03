@@ -21,4 +21,14 @@ class PPPController extends Controller
     {
         return view('mikapi.ppp.secret.index');
     }
+
+    public function active()
+    {
+        return view('mikapi.ppp.active.index');
+    }
+
+    public function l2tp_secret()
+    {
+        return view('mikapi.ppp.l2tp_secret.index');
+    }
 }

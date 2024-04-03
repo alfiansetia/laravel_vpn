@@ -109,14 +109,6 @@
             }, {
                 title: "Server",
                 data: 'server',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return `${data}`;
-                    } else {
-                        return data;
-                    }
-
-                }
             }, {
                 title: "MAC",
                 data: 'mac-address',
@@ -126,16 +118,6 @@
             }, {
                 title: "To Addr",
                 data: 'to-address',
-            }, {
-                title: "Uptime",
-                data: 'uptime',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return dtm(data);
-                    } else {
-                        return data;
-                    }
-                }
             }, {
                 title: "Uptime",
                 data: 'uptime',

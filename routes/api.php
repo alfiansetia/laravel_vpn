@@ -11,7 +11,10 @@ use App\Http\Controllers\Api\Mikapi\Hotspot\ServerProfileController as HotspotSe
 use App\Http\Controllers\Api\Mikapi\Hotspot\UserController as HotspotUserController;
 use App\Http\Controllers\Api\Mikapi\InterfaceController;
 use App\Http\Controllers\Api\Mikapi\LogController;
+use App\Http\Controllers\Api\Mikapi\PPP\ActiveController as PPPActiveController;
+use App\Http\Controllers\Api\Mikapi\PPP\L2tpSecretController as PPPL2tpSecretController;
 use App\Http\Controllers\Api\Mikapi\PPP\ProfileController as PPPProfileController;
+use App\Http\Controllers\Api\Mikapi\PPP\SecretController as PPPSecretController;
 use App\Http\Controllers\Api\Mikapi\QueueController;
 use App\Http\Controllers\Api\Mikapi\System\PackageController;
 use App\Http\Controllers\Api\Mikapi\System\ResourceController;
@@ -109,6 +112,24 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             ->names('api.mikapi.ppp.profiles');
         Route::delete('mikapi/ppp/profiles', [PPPProfileController::class, 'destroy_batch'])
             ->name('api.mikapi.ppp.profiles.destroy.batch');
+
+        Route::apiResource('mikapi/ppp/secrets', PPPSecretController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.ppp.secrets');
+        Route::delete('mikapi/ppp/secrets', [PPPSecretController::class, 'destroy_batch'])
+            ->name('api.mikapi.ppp.secrets.destroy.batch');
+
+        Route::apiResource('mikapi/ppp/actives', PPPActiveController::class)
+            ->only(['index', 'show', 'destroy'])
+            ->names('api.mikapi.ppp.actives');
+        Route::delete('mikapi/ppp/actives', [PPPActiveController::class, 'destroy_batch'])
+            ->name('api.mikapi.ppp.actives.destroy.batch');
+
+        Route::apiResource('mikapi/ppp/l2tp_secrets', PPPL2tpSecretController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.ppp.l2tp_secrets');
+        Route::delete('mikapi/ppp/l2tp_secrets', [PPPL2tpSecretController::class, 'destroy_batch'])
+            ->name('api.mikapi.ppp.l2tp_secrets.destroy.batch');
 
 
         Route::apiResource('mikapi/interfaces', InterfaceController::class)->only(['index', 'show', 'update']);

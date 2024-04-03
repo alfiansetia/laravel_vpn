@@ -226,22 +226,15 @@
             table.ajax.reload()
         })
 
-        var btn_element = `<div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Action
-                        <i data-feather="chevron-down"></i> 
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <li><button id="btn_delete" type="button" class="dropdown-item bs-tooltip" title="Delete All Log">Delete All</button></li>
-                    </ul>
-                </div>`
+        $("div.toolbar").html(btn_element_refresh);
 
-        $("div.toolbar").html(btn_element);
-
-        $('#btn_add').click(function() {
-            show_card_add()
-            input_focus('name')
+        $('#btn_refresh').click(function() {
+            refresh = true
+            table.ajax.reload()
         })
+
+        $('#btn_add').remove()
+        $('#btn_delete').text('Delete All Log')
 
         $('#btn_delete').click(function() {
             delete_all()

@@ -185,17 +185,6 @@
             }, {
                 title: "Server",
                 data: 'server',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        if (data == null) {
-                            return 'all';
-                        } else {
-                            return data
-                        }
-                    } else {
-                        return data
-                    }
-                }
             }, {
                 title: "MAC",
                 data: 'mac-address',

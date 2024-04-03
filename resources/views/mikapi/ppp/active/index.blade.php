@@ -1,4 +1,4 @@
-@extends('layouts.backend.template_mikapi', ['title' => 'Hotspot Active'])
+@extends('layouts.backend.template_mikapi', ['title' => 'PPP Active'])
 @push('csslib')
     <link href="{{ asset('backend/src/plugins/src/table/datatable/datatables.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/plugins/css/light/table/datatable/dt-global_style.css') }}" rel="stylesheet"
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        @include('mikapi.hotspot.active.detail')
+        @include('mikapi.ppp.active.detail')
 
     </div>
 @endsection
@@ -46,7 +46,7 @@
             processing: true,
             serverSide: false,
             ajax: {
-                url: "{{ route('api.mikapi.hotspot.actives.index') }}",
+                url: "{{ route('api.mikapi.ppp.actives.index') }}",
                 data: function(dt) {
                     dt.dt = 'on'
                     dt.router = "{{ request()->query('router') }}";
@@ -81,10 +81,10 @@
                         let textt = `<div class="form-check form-check-primary d-block new-control">
                         <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >`
                         if (row.radius) {
-                            textt += '<span class="badge me-1 badge-success" title="Radius">R</span>'
+                            textt += '<span class="badge me-1 badge-secondary" title="Radius">R</span>'
                         }
-                        if (row.blocked) {
-                            textt += '<span class="badge me-1 badge-danger" title="Bloked">B</span>'
+                        if (row.local) {
+                            textt += '<span class="badge me-1 badge-info" title="Local">L</span>'
                         }
                         textt += `</div>`
                         return textt
@@ -93,33 +93,14 @@
                     }
                 }
             }, {
-                title: "Server",
-                data: 'server',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return `${data}`;
-                    } else {
-                        return data;
-                    }
-
-                }
+                title: "Name",
+                data: 'name',
             }, {
-                title: "User",
-                data: 'user',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        if (row.disabled == 'true') {
-                            return `<span data-toggle="tooltip" title="Disabled"><font color="red">${data}</font></span>`;
-                        } else {
-                            return data
-                        }
-                    } else {
-                        return data
-                    }
-                }
+                title: "Service",
+                data: 'service',
             }, {
-                title: "MAC",
-                data: 'mac-address',
+                title: "Caller Id",
+                data: 'caller-id',
             }, {
                 title: "Address",
                 data: 'address',
@@ -129,36 +110,6 @@
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
                         return dtm(data);
-                    } else {
-                        return data;
-                    }
-                }
-            }, {
-                title: "Time Left",
-                data: 'session-time-left',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return dtm(data);
-                    } else {
-                        return data;
-                    }
-                }
-            }, {
-                title: "IN",
-                data: 'bytes-in',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return formatBytes(data);
-                    } else {
-                        return data;
-                    }
-                }
-            }, {
-                title: "OUT",
-                data: 'bytes-out',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return formatBytes(data);
                     } else {
                         return data;
                     }
@@ -192,19 +143,19 @@
         })
 
         $('#btn_delete').click(function() {
-            delete_batch("{{ route('api.mikapi.hotspot.actives.destroy.batch') }}" + param_router)
+            delete_batch("{{ route('api.mikapi.ppp.actives.destroy.batch') }}" + param_router)
         })
 
         multiCheck(table);
 
         var id;
-        var url_put = "{{ route('api.mikapi.hotspot.actives.destroy.batch') }}/" + id + param_router;
-        var url_delete = "{{ route('api.mikapi.hotspot.actives.destroy', '') }}/" + id + param_router;
+        var url_put = "{{ route('api.mikapi.ppp.actives.destroy.batch') }}/" + id + param_router;
+        var url_delete = "{{ route('api.mikapi.ppp.actives.destroy', '') }}/" + id + param_router;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
-            url_put = "{{ route('api.mikapi.hotspot.actives.destroy.batch') }}/" + id + param_router;
-            url_delete = "{{ route('api.mikapi.hotspot.actives.destroy', '') }}/" + id + param_router;
+            url_put = "{{ route('api.mikapi.ppp.actives.destroy.batch') }}/" + id + param_router;
+            url_delete = "{{ route('api.mikapi.ppp.actives.destroy', '') }}/" + id + param_router;
             edit(true)
         });
 

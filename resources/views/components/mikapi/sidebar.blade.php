@@ -114,9 +114,9 @@
             </li>
 
             <li
-                class="menu {{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' ? 'active' : '' }}">
+                class="menu {{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' || $title == 'PPP L2tp Secret' ? 'active' : '' }}">
                 <a href="#ppp_nav" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' || $title == 'PPP L2tp Secret' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="share-2"></i>
@@ -126,16 +126,19 @@
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ $title == 'PPP Profile' || $title == 'PPP Secret' || $title == 'PPP Active' || $title == 'PPP L2tp Secret' ? 'show' : '' }}"
                     id="ppp_nav" data-bs-parent="#accordionExample">
                     <li class="{{ $title == 'PPP Profile' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.ppp.profile') }}{{ $param_router }}"> Profile </a>
                     </li>
                     <li class="{{ $title == 'PPP Secret' ? 'active' : '' }}">
-                        <a href="{{ route('mikapi.hotspot.user') }}{{ $param_router }}"> Secret </a>
+                        <a href="{{ route('mikapi.ppp.secret') }}{{ $param_router }}"> Secret </a>
                     </li>
                     <li class="{{ $title == 'PPP Active' ? 'active' : '' }}">
-                        <a href="{{ route('mikapi.hotspot.active') }}{{ $param_router }}"> Active </a>
+                        <a href="{{ route('mikapi.ppp.active') }}{{ $param_router }}"> Active </a>
+                    </li>
+                    <li class="{{ $title == 'PPP L2tp Secret' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.ppp.l2tp_secret') }}{{ $param_router }}"> L2tp Secret </a>
                     </li>
                 </ul>
             </li>

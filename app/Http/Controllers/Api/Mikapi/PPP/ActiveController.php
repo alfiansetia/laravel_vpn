@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Mikapi\Hotspot;
+namespace App\Http\Controllers\Api\Mikapi\PPP;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Mikapi\Hotspot\ActiveResource;
-use App\Services\Mikapi\Hotspot\ActiveServices;
+use App\Http\Resources\Mikapi\PPP\ActiveResource;
+use App\Services\Mikapi\PPP\ActiveServices;
 use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
@@ -23,17 +23,14 @@ class ActiveController extends Controller
         try {
             $this->setRouter($request->router, ActiveServices::class);
             $query = [];
-            if ($request->filled('server')) {
-                $query['?server'] = $request->input('server');
+            if ($request->filled('service')) {
+                $query['?service'] = $request->input('service');
             }
             if ($request->filled('address')) {
                 $query['?address'] = $request->input('address');
             }
-            if ($request->filled('mac-address')) {
-                $query['?mac-address'] = $request->input('mac-address');
-            }
-            if ($request->filled('user')) {
-                $query['?user'] = $request->input('user');
+            if ($request->filled('name')) {
+                $query['?name'] = $request->input('name');
             }
             if ($request->filled('comment')) {
                 $query['?comment'] = $request->input('comment');
