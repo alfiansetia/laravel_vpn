@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\Mikapi;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Mikapi\InterfaceResource;
 use App\Services\Mikapi\InterfaceServices;
+use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
 
 class InterfaceController extends Controller
 {
-    use RouterTrait;
+    use RouterTrait, DataTableTrait;
 
     public function __construct(Request $request)
     {
@@ -19,29 +20,32 @@ class InterfaceController extends Controller
 
     public function index(Request $request)
     {
-        $this->setRouter($request->router, InterfaceServices::class);
-        $query = [];
-        if ($request->filled('name')) {
-            $query['?name'] = $request->name;
+        try {
+            $this->setRouter($request->router, InterfaceServices::class);
+            $query = [];
+            if ($request->filled('name')) {
+                $query['?name'] = $request->name;
+            }
+            if ($request->filled('default-name')) {
+                $query['?default-name'] = $request->input('default-name');
+            }
+            $data = $this->conn->get($query);
+            $resource = InterfaceResource::collection($data);
+            return $this->callback($resource->toArray($request), $request->dt == 'on');
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        if ($request->filled('default-name')) {
-            $query['?default-name'] = $request->input('default-name');
-        }
-        $data = $this->conn->get($query);
-        if (!$data['status']) {
-            return response()->json($data, 422);
-        }
-        return InterfaceResource::collection($data['data']);
     }
 
     public function show(Request $request, string $id)
     {
-        $this->setRouter($request->router, InterfaceServices::class);
-        $data = $this->conn->show($id);
-        if (!$data['status']) {
-            return response()->json($data, 422);
+        try {
+            $this->setRouter($request->router, InterfaceServices::class);
+            $data = $this->conn->show($id);
+            return new InterfaceResource($data);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-        return new InterfaceResource($data['data']);
     }
 
     public function update(Request $request, string $id)

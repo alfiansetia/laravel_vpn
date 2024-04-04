@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\Mikapi;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Mikapi\LogResource;
 use App\Services\Mikapi\LogServices;
+use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
-    use RouterTrait;
+    use RouterTrait, DataTableTrait;
 
     public function __construct(Request $request)
     {
@@ -26,7 +27,8 @@ class LogController extends Controller
                 $query['?topics'] = $request->input('topics');
             }
             $data = $this->conn->get($query);
-            return LogResource::collection($data);
+            $resource = LogResource::collection($data);
+            return $this->callback($resource->toArray($request), $request->dt == 'on');
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);
         }

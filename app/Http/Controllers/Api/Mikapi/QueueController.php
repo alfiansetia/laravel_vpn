@@ -25,7 +25,8 @@ class QueueController extends Controller
                 $query['?name'] = $request->name;
             }
             $data = $this->conn->get($query);
-            return QueueResource::collection($data);
+            $resource = QueueResource::collection($data);
+            return $this->callback($resource->toArray($request), $request->dt == 'on');
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);
         }

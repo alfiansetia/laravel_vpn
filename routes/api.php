@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Mikapi\DashboardController;
 use App\Http\Controllers\Api\Mikapi\DHCP\LeasesController as DHCPLeasesController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ActiveController as HotspotActiveController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\BindingController as HotspotBindingController;
@@ -59,6 +60,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
 
         Route::apiResource('ports', PortController::class)->only(['show']);
+
+
+        Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'get'])->name('api.mikapi.dashboard.get');
 
         Route::apiResource('mikapi/hotspot/profiles', HotspotProfileController::class)
             ->only(['index', 'show', 'store', 'update', 'destroy'])
@@ -147,7 +151,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             ->name('api.mikapi.system.resources.index');
 
 
-        Route::apiResource('mikapi/interfaces', InterfaceController::class)->only(['index', 'show', 'update']);
+        Route::apiResource('mikapi/interfaces', InterfaceController::class)
+            ->only(['index', 'show'])
+            ->names('api.mikapi.interfaces');
 
         Route::apiResource('mikapi/system/packages', PackageController::class)->only(['index', 'show']);
         // Route::apiResource('mikapi/system/resources', ResourceController::class)->only(['index']);

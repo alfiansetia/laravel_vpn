@@ -339,7 +339,7 @@
         }
 
         function dashboard() {
-            let url = "{{ route('mikapi.dashboard.get.data') }}?router=" + routerId;
+            let url = "{{ route('api.mikapi.dashboard.get') }}" + param_router;
             $.get(url).done(function(res) {
                 let cpuload = 0
                 let ramtot = 0
@@ -352,7 +352,6 @@
                 let sys_ros = 'No data!'
                 let sys_up = 'No data!'
                 let sys_rb = 'No data!'
-
                 if (res.data.resource.length > 0) {
                     cpuload = Math.round(res.data.resource[0]['cpu-load']);
                     ramtot = res.data.resource[0]['total-memory'];
@@ -412,29 +411,25 @@
                 dashboard()
             });
 
-            $('#monitor-tab').click(function() {
-                $('#interface').attr('disabled', false);
-                clearInterval(i);
-                i = setInterval(monitor, 2500)
-            })
+            // $('#monitor-tab').click(function() {
+            //     $('#interface').attr('disabled', false);
+            //     clearInterval(i);
+            //     i = setInterval(monitor, 2500)
+            // })
 
-            $('#log-tab').click(function() {
-                $('#interface').attr('disabled', true);
-                clearInterval(i);
-            })
-
-            $('body').tooltip({
-                selector: '[data-toggle="tooltip"]'
-            });
+            // $('#log-tab').click(function() {
+            //     $('#interface').attr('disabled', true);
+            //     clearInterval(i);
+            // })
 
             $("#interface").select2({
                 tags: true,
                 ajax: {
                     delay: 1000,
-                    url: "{{ route('mikapi.dashboard') }}",
+                    url: "{{ route('api.mikapi.interfaces.index') }}",
                     data: function(params) {
                         return {
-                            email: params.term,
+                            name: params.term,
                             page: params.page
                         };
                     },
@@ -444,7 +439,7 @@
                                 return {
                                     text: item.name,
                                     id: item.name,
-                                    disabled: item.disabled == 'true' ? true : false,
+                                    disabled: item.disabled,
                                 }
                             })
                         };
@@ -464,7 +459,8 @@
                 ],
                 rowId: '.id',
                 ajax: {
-                    url: "{{ route('mikapi.dashboard') }}?router=" + routerId,
+                    url: "{{ route('api.mikapi.logs.index') }}" + param_router +
+                        '&topics=hotspot,info,debug',
                     error: function(xhr, error, code) {
                         if (xhr.status == 500) {
                             Snackbar.show({

@@ -306,3 +306,17 @@ function generateUsername(string $string)
     $username = preg_replace('/[^a-zA-Z0-9_]/', '', $username);
     return $username;
 }
+
+
+function date_log(string $date)
+{
+    if (empty($date)) {
+        return strtolower(date('M/d H:i:s'));
+    }
+    $parts = explode(' ', $date);
+    if (count($parts) == 2) {
+        return $date;
+    } else {
+        return strtolower(date('M/d') . ' ' . $date);
+    }
+}
