@@ -48,7 +48,7 @@
                             ];
                         @endphp
                         @foreach ($policies as $item)
-                            <div class="col-lg-3 col-md-3 col-6 mb-2 mt-2">
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-6 mb-2 mt-2">
                                 <div class="switch form-switch-custom switch-inline form-switch-success">
                                     <input class="switch-input" type="checkbox" role="switch"
                                         id="edit_{{ $item }}" name="{{ $item }}" checked>

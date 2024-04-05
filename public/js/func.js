@@ -400,7 +400,7 @@ var dom = "<'inv-list-top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-cont
 "<'table-responsive'tr>" +
 "<'inv-list-bottom-section d-sm-flex justify-content-sm-between text-center'<'inv-list-pages-count  mb-sm-0 mb-3'i><'inv-list-pagination'p>>"
 
-var btn_element = `<div class="btn-group" role="group">
+var btn_element = `<div class="btn-group" role="group" id="btn_group_action_table">
                     <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         Action
                         <i data-feather="chevron-down"></i> 
@@ -411,7 +411,7 @@ var btn_element = `<div class="btn-group" role="group">
                     </ul>
                 </div>`
 
-var btn_element_refresh = `<div class="btn-group" role="group">
+var btn_element_refresh = `<div class="btn-group" role="group" id="btn_group_action_table">
     <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
         Action
         <i data-feather="chevron-down"></i> 

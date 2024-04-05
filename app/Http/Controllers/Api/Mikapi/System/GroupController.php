@@ -13,6 +13,28 @@ class GroupController extends Controller
 {
     use RouterTrait, DataTableTrait;
 
+    private
+        $policies = [
+            'read',
+            'winbox',
+            'local',
+            'telnet',
+            'ssh',
+            'ftp',
+            'reboot',
+            'write',
+            'policy',
+            'test',
+            'password',
+            'web',
+            'sniff',
+            'sensitive',
+            'api',
+            'romon',
+            'dude',
+            'tikapp',
+        ];
+
     public function __construct(Request $request)
     {
         $this->middleware('checkRouterExists');
@@ -47,34 +69,13 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        $policies = [
-            'read',
-            'winbox',
-            'local',
-            'telnet',
-            'ssh',
-            'ftp',
-            'reboot',
-            'write',
-            'policy',
-            'test',
-            'password',
-            'web',
-            'sniff',
-            'sensitive',
-            'api',
-            'romon',
-            'dude',
-            'tikapp',
-        ];
-
         $rules = [
             'name'      => 'required|min:1|max:50',
             'skin'      => 'nullable',
             'comment'   => 'nullable|max:100',
         ];
 
-        foreach ($policies as $item) {
+        foreach ($this->policies as $item) {
             $rules[$item] = 'nullable|in:on';
         }
 
@@ -84,10 +85,9 @@ class GroupController extends Controller
             'skin'              => 'nullable',
             'comment'           => 'nullable|max:100',
         ]);
-        $activatedPolicies = collect($policies)->map(function ($item) use ($request) {
-            return $request->input($item) === 'on' ? '!' . $item : $item;
+        $activatedPolicies = collect($this->policies)->map(function ($item) use ($request) {
+            return $request->input($item) !== 'on' ? '!' . $item : $item;
         })->implode(',');
-
         $param = [
             'name'      => $request->input('name'),
             'skin'      => $request->input('skin') ?? 'default',
@@ -105,26 +105,32 @@ class GroupController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $param =  [
-            'name'         => 'required|min:1|max:50',
-            'group'        => 'required',
-            'ip_address'   => 'nullable|ip',
-            'comment'      => 'nullable|max:100',
+        $rules = [
+            'name'      => 'required|min:1|max:50',
+            'skin'      => 'nullable',
+            'comment'   => 'nullable|max:100',
         ];
-        if ($request->filled('password')) {
-            $param['password'] = 'required|min:1|max:50';
+
+        foreach ($this->policies as $item) {
+            $rules[$item] = 'nullable|in:on';
         }
-        $this->validate($request, $param);
+
+        $this->validate($request, $rules);
+        $this->validate($request, [
+            'name'              => 'required|min:1|max:50',
+            'skin'              => 'nullable',
+            'comment'           => 'nullable|max:100',
+        ]);
+        $activatedPolicies = collect($this->policies)->map(function ($item) use ($request) {
+            return $request->input($item) !== 'on' ? '!' . $item : $item;
+        })->implode(',');
         $param = [
-            '.id'          => $id,
-            'name'         => $request->input('name'),
-            'group'        => $request->input('group'),
-            'address'      => $request->input('ip_address') ?? '0.0.0.0',
-            'comment'      => $request->input('comment'),
+            '.id'       => $id,
+            'name'      => $request->input('name'),
+            'skin'      => $request->input('skin') ?? 'default',
+            'comment'   => $request->input('comment'),
+            'policy'    => $activatedPolicies,
         ];
-        if ($request->filled('password')) {
-            $param['password'] = $request->input('password');
-        }
         try {
             $this->setRouter($request->router, GroupServices::class);
             $data = $this->conn->update($param);

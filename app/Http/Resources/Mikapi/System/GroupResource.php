@@ -24,10 +24,10 @@ class GroupResource extends JsonResource
             '.id'       => $this['.id'],
             'comment'   => $this['comment'] ?? null,
             'name'      => $this['name'],
-            'policy'    => $this['policy'],
-            'policies'  => $policy,
             'skin'      => $this['skin'] ?? 'default',
             'system'    => ($this['system'] ?? false) == "true" ? true : false,
+            'policy'    => $this['policy'],
+            'policies'  => $policy,
         ];
     }
 }

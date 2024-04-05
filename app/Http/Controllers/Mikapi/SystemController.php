@@ -31,4 +31,9 @@ class SystemController extends Controller
     {
         return view('mikapi.system.group.index');
     }
+
+    public function user_active()
+    {
+        return view('mikapi.system.user_active.index');
+    }
 }
