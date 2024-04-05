@@ -123,6 +123,8 @@
             }
         });
 
+        multiCheck(table)
+
         $("div.toolbar").html(btn_element_refresh);
 
         $('#btn_add').remove()

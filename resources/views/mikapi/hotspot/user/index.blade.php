@@ -302,6 +302,48 @@
             delete_batch("{{ route('api.mikapi.hotspot.users.destroy.batch') }}" + param_router)
         })
 
+        $('#btn_delete').after(
+            `<li><button id="btn_print" type="button" class="dropdown-item bs-tooltip" title="Print Selected Data">Print</button></li>`
+        )
+        $('#btn_print').click(function() {
+            let ids = $('input[name="id[]"]:checked').length;
+            if (ids <= 0) {
+                Swal.fire({
+                    title: 'Failed!',
+                    text: "No Selected Data!",
+                    icon: 'error',
+                })
+            }
+            let checkedRowsData = [];
+            $('input[name="id[]"]:checked').each(function() {
+                let rowIndex = $(this).closest('tr').index();
+                let rowData = table.row(rowIndex).data();
+                checkedRowsData.push(rowData);
+            });
+            // console.log(checkedRowsData);
+            let printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Data Print</title></head><body>');
+            printWindow.document.write('<h1>Data Table</h1>');
+            printWindow.document.write('<table border="1">');
+            printWindow.document.write('<tr><th>ID</th><th>Name</th><th>Age</th></tr>');
+
+            // Tambahkan data ke dalam tabel di tab baru
+            for (let i = 0; i < checkedRowsData.length; i++) {
+                if (checkedRowsData[i].default == false) {
+                    printWindow.document.write('<tr>');
+                    printWindow.document.write('<td>' + checkedRowsData[i]['.id'] + '</td>');
+                    printWindow.document.write('<td>' + checkedRowsData[i].name + '</td>');
+                    printWindow.document.write('<td>' + checkedRowsData[i].password + '</td>');
+                    printWindow.document.write('</tr>');
+                }
+            }
+
+            printWindow.document.write('</table></body></html>');
+            printWindow.document.close();
+            printWindow.print();
+
+        })
+
         $('#edit_delete').after(btn_detail)
 
         multiCheck(table);
