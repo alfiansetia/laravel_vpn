@@ -195,7 +195,6 @@
                     }
                     Object.keys(result.data.policies).forEach(element => {
                         $(`#edit_${element}`).prop('checked', result.data.policies[element]).change();
-
                     });
                     $('#tbl_detail').empty()
                     Object.keys(result.data).forEach(function(key) {
