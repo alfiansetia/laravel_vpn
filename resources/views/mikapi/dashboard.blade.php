@@ -38,6 +38,11 @@
         type="text/css" />
     <link href="{{ asset('backend/src/plugins/css/dark/notification/snackbar/custom-snackbar.css') }}" rel="stylesheet"
         type="text/css" />
+
+    <link href="{{ asset('backend/src/assets/css/light/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('backend/src/assets/css/light/components/tabs.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('backend/src/assets/css/dark/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('backend/src/assets/css/dark/components/tabs.css') }}" rel="stylesheet" type="text/css" />
 @endpush
 
 @section('content')
@@ -75,8 +80,6 @@
     <script src="{{ asset('backend/src/plugins/src/notification/snackbar/snackbar.min.js') }}"></script>
 @endpush
 @push('js')
-
-
     <script src="{{ asset('assets/js/func.js') }}"></script>
 
     @if (session()->has('error'))
@@ -87,256 +90,10 @@
         </script>
     @endif
 
-    <script>
-        try {
-            var options = {
-                series: [{
-                    name: 'RX',
-                    data: []
-                }, {
-                    name: 'TX',
-                    data: []
-                }],
-                chart: {
-                    fontFamily: 'Quicksand, sans-serif',
-                    height: 400,
-                    type: 'area',
-                    zoom: {
-                        enabled: true,
-                        type: 'x',
-                        autoScaleYaxis: false,
-                        zoomedArea: {
-                            fill: {
-                                color: '#90CAF9',
-                                opacity: 0.4
-                            },
-                            stroke: {
-                                color: '#0D47A1',
-                                opacity: 0.4,
-                                width: 1
-                            }
-                        }
-                    },
-                    dropShadow: {
-                        enabled: true,
-                        opacity: 0.2,
-                        blur: 10,
-                        left: -7,
-                        top: 22
-                    },
-                },
-                colors: ['#1b55e2', '#e7515a'],
-                dataLabels: {
-                    enabled: false
-                },
-                title: {
-                    text: 'Traffic Monitor',
-                    align: 'left',
-                    margin: 0,
-                    offsetX: -10,
-                    offsetY: 0,
-                    floating: false,
-                    style: {
-                        fontSize: '18px',
-                        color: '#0e1726'
-                    },
-                },
-                stroke: {
-                    show: true,
-                    curve: 'smooth',
-                    width: 2,
-                    lineCap: 'square'
-                },
-                markers: {
-                    discrete: [{
-                        seriesIndex: 0,
-                        dataPointIndex: 7,
-                        fillColor: '#000',
-                        strokeColor: '#000',
-                        size: 5
-                    }, {
-                        seriesIndex: 2,
-                        dataPointIndex: 11,
-                        fillColor: '#000',
-                        strokeColor: '#000',
-                        size: 4
-                    }]
-                },
-                xaxis: {
-                    type: 'datetime',
-                    tickAmount: 5,
-                    crosshairs: {
-                        show: true
-                    },
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    },
-                    formatter: function(val) {
-                        return moment(new Date(val)).format("HH:mm:ss");
-                    }
-                },
-                yaxis: {
-                    tickAmount: 4,
-                    floating: false,
-                    labels: {
-                        formatter: function(value, index) {
-                            return formatBytes(value)
-                        },
-                        offsetX: -22,
-                        offsetY: 0,
-                        style: {
-                            fontSize: '12px',
-                            fontFamily: 'Quicksand, sans-serif',
-                            cssClass: 'apexcharts-yaxis-title',
-                        },
-                    },
-                    axisBorder: {
-                        show: false,
-                    },
-                    axisTicks: {
-                        show: false
-                    },
-                    grid: {
-                        borderColor: '#e0e6ed',
-                        strokeDashArray: 5,
-                        xaxis: {
-                            lines: {
-                                show: true
-                            }
-                        },
-                        yaxis: {
-                            lines: {
-                                show: false,
-                            }
-                        },
-                        padding: {
-                            top: 0,
-                            right: 0,
-                            bottom: 0,
-                            left: -10
-                        },
-                    },
-                    legend: {
-                        position: 'top',
-                        horizontalAlign: 'right',
-                        offsetY: -50,
-                        fontSize: '16px',
-                        fontFamily: 'Quicksand, sans-serif',
-                        markers: {
-                            width: 10,
-                            height: 10,
-                            strokeWidth: 0,
-                            strokeColor: '#fff',
-                            fillColors: undefined,
-                            radius: 12,
-                            onClick: undefined,
-                            offsetX: 0,
-                            offsetY: 0
-                        },
-                        itemMargin: {
-                            horizontal: 0,
-                            vertical: 20
-                        }
-                    },
-                },
-                tooltip: {
-                    theme: 'dark',
-                    marker: {
-                        show: true,
-                    },
-                    x: {
-                        format: "HH:mm:ss",
-                        show: true,
-                    },
-                    fixed: {
-                        enabled: false,
-                        position: 'topRight'
-                    }
-                },
-                fill: {
-                    type: "gradient",
-                    gradient: {
-                        type: "vertical",
-                        shadeIntensity: 1,
-                        inverseColors: !1,
-                        opacityFrom: .28,
-                        opacityTo: .05,
-                        stops: [45, 100]
-                    }
-                },
-                responsive: [{
-                    breakpoint: 575,
-                    options: {
-                        legend: {
-                            offsetY: -30,
-                        },
-                    },
-                }],
-                grid: {
-                    yaxis: {
-                        lines: {
-                            offsetX: -30
-                        }
-                    },
-                    padding: {
-                        left: 20
-                    }
-                }
-            };
-            var chart = new ApexCharts(document.querySelector("#revenueMonthly"), options);
-            chart.render();
-        } catch (e) {
-            console.log(e);
-        }
-    </script>
+
     <script>
         var count = 0;
         var routerId = "{{ request()->query('router') }}";
-
-        function monitor() {
-            let name = $("#interface option:selected").text()
-            name1 = name.replace('&lt;', '<');
-            name2 = name1.replace('&gt;', '>');
-            let url = "{{ route('mikapi.dashboard', ':id') }}";
-            url = url.replace(':id', name2);
-            $.get(url).done(function(res) {
-                if (res.status == true) {
-                    count++;
-                    chart.appendData([{
-                        data: [{
-                            x: Date.now(),
-                            y: res.data['rx-bits-per-second']
-                        }],
-                    }, {
-                        data: [{
-                            x: Date.now(),
-                            y: res.data['tx-bits-per-second']
-                        }],
-                    }]);
-                } else {
-                    Snackbar.show({
-                        text: res.message,
-                        pos: 'bottom-left'
-                    });
-                }
-            }).fail(function(xhr) {
-                if (xhr.status == 500) {
-                    Snackbar.show({
-                        text: 'Server Error!',
-                        pos: 'bottom-left'
-                    });
-                } else {
-                    Snackbar.show({
-                        text: xhr.responseJSON.message,
-                        pos: 'bottom-left'
-                    });
-                }
-
-            })
-        }
 
         function dashboard() {
             let url = "{{ route('api.mikapi.dashboard.get') }}" + param_router;
@@ -396,7 +153,7 @@
         }
 
         $(document).ready(function() {
-            $('#btn_refresh').click(function() {
+            $('.refresh-data').click(function() {
                 block();
                 dashboard();
                 table.ajax.reload();
@@ -409,45 +166,6 @@
 
             $('#tes').click(function() {
                 dashboard()
-            });
-
-            // $('#monitor-tab').click(function() {
-            //     $('#interface').attr('disabled', false);
-            //     clearInterval(i);
-            //     i = setInterval(monitor, 2500)
-            // })
-
-            // $('#log-tab').click(function() {
-            //     $('#interface').attr('disabled', true);
-            //     clearInterval(i);
-            // })
-
-            $("#interface").select2({
-                tags: true,
-                ajax: {
-                    delay: 1000,
-                    url: "{{ route('api.mikapi.interfaces.index') }}",
-                    data: function(params) {
-                        return {
-                            name: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.data, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.name,
-                                    disabled: item.disabled,
-                                }
-                            })
-                        };
-                    },
-                },
-                escapeMarkup: function(text) {
-                    return text;
-                }
             });
 
             var table = $('#tableData').DataTable({
@@ -472,12 +190,10 @@
                                 text: xhr.responseJSON.message,
                                 pos: 'bottom-left'
                             });
-
                         }
                     }
                 },
-                dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-                    "<'table-responsive'tr>" +
+                dom: "<'table-responsive'tr>" +
                     "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
                 oLanguage: {
                     "oPaginate": {
@@ -497,7 +213,7 @@
                 lengthChange: false,
                 columns: [{
                     title: "Time",
-                    data: 'time',
+                    data: 'time'
                 }, {
                     title: "Message",
                     data: 'message',

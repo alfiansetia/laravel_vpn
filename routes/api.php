@@ -150,7 +150,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('mikapi/system/resources', [ResourceController::class, 'index'])
             ->name('api.mikapi.system.resources.index');
 
-
+        Route::get('mikapi/interfaces/{id}/monitor', [InterfaceController::class, 'monitor'])
+            ->name('api.mikapi.interfaces.monitor');
         Route::apiResource('mikapi/interfaces', InterfaceController::class)
             ->only(['index', 'show'])
             ->names('api.mikapi.interfaces');

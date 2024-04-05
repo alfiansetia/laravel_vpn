@@ -4,7 +4,7 @@
             <div class="widget widget-one_hybrid widget-engagement">
                 <div class="widget-heading">
                     <div class="w-title" data-toggle="tooltip" title="Open"
-                        onclick="window.location.href = `{{ route('mikapi.dashboard') }}`">
+                        onclick="window.location.href = `{{ route('mikapi.hotspot.active') }}${param_router}`">
                         <div class="w-icon">
                             <i data-feather="wifi"></i>
                         </div>
@@ -20,7 +20,7 @@
             <div class="widget widget-one_hybrid widget-followers">
                 <div class="widget-heading">
                     <div class="w-title" data-toggle="tooltip" title="Open"
-                        onclick="window.location.href = `{{ route('mikapi.dashboard') }}`">
+                        onclick="window.location.href = `{{ route('mikapi.hotspot.user') }}${param_router}`">
                         <div class="w-icon">
                             <i data-feather="users"></i>
                         </div>
@@ -36,7 +36,7 @@
             <div class="widget widget-one_hybrid widget-engagement">
                 <div class="widget-heading">
                     <div class="w-title" data-toggle="tooltip" title="Open"
-                        onclick="window.location.href = `{{ route('mikapi.dashboard') }}`">
+                        onclick="window.location.href = `{{ route('mikapi.ppp.active') }}${param_router}`">
                         <div class="w-icon">
                             <i data-feather="airplay"></i>
                         </div>
@@ -52,7 +52,7 @@
             <div class="widget widget-one_hybrid widget-followers">
                 <div class="widget-heading">
                     <div class="w-title" data-toggle="tooltip" title="Open"
-                        onclick="window.location.href = `{{ route('mikapi.dashboard') }}`">
+                        onclick="window.location.href = `{{ route('mikapi.ppp.secret') }}${param_router}`">
                         <div class="w-icon">
                             <i data-feather="list"></i>
                         </div>

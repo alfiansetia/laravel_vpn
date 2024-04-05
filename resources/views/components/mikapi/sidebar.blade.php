@@ -150,6 +150,16 @@
                 </a>
             </li>
 
+            <li class="menu {{ $title == 'Monitor Interface' ? 'active' : '' }}">
+                <a href="{{ route('mikapi.monitor.interface') }}{{ $param_router }}"
+                    aria-expanded="{{ $title == 'Monitor Interface' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="monitor"></i>
+                        <span>Monitor</span>
+                    </div>
+                </a>
+            </li>
+
             <li class="menu menu-heading">
                 <div class="heading">
                     <i data-feather="minus"></i>

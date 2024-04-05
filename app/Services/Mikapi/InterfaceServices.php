@@ -16,4 +16,19 @@ class InterfaceServices extends RouterApiServices
         $this->name = 'system';
         $this->command = '/interface/';
     }
+
+    public function monitor($id)
+    {
+        if ($this->connect()) {
+            $data = $this->API->comm("/interface/monitor-traffic", [
+                'interface' => $id,
+                'once'      => '',
+            ]);
+            cek_error($data);
+            $this->disconnect();
+            return $data;
+        } else {
+            return handle_fail_login($this->API);
+        }
+    }
 }

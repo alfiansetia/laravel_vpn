@@ -10,6 +10,7 @@ use App\Http\Controllers\Mikapi\DashboardController;
 use App\Http\Controllers\Mikapi\DHCPController;
 use App\Http\Controllers\Mikapi\HotspotController;
 use App\Http\Controllers\Mikapi\LogController;
+use App\Http\Controllers\Mikapi\MonitorController;
 use App\Http\Controllers\Mikapi\PPPController;
 use App\Http\Controllers\Mikapi\SystemController;
 use App\Http\Controllers\OrderController;
@@ -78,6 +79,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('mikapi/ppp/l2tp_secret', [PPPController::class, 'l2tp_secret'])->name('mikapi.ppp.l2tp_secret');
 
         Route::get('mikapi/dhcp/lease', [DHCPController::class, 'lease'])->name('mikapi.dhcp.lease');
+
+        Route::get('mikapi/monitor/interface', [MonitorController::class, 'interface'])->name('mikapi.monitor.interface');
 
         // Profile
         Route::get('setting/profile', [ProfileController::class, 'profile'])->name('setting.profile');

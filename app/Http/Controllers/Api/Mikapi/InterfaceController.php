@@ -63,4 +63,15 @@ class InterfaceController extends Controller
         $data = $this->conn->update($param);
         return response()->json($data, $data['status'] ? 200 : 422);
     }
+
+    public function monitor(Request $request, string $id)
+    {
+        try {
+            $this->setRouter($request->router, InterfaceServices::class);
+            $data = $this->conn->monitor($id);
+            return response()->json(['data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
 }
