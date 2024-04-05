@@ -21,4 +21,14 @@ class SystemController extends Controller
     {
         return view('mikapi.system.resource.index');
     }
+
+    public function user()
+    {
+        return view('mikapi.system.user.index');
+    }
+
+    public function group()
+    {
+        return view('mikapi.system.group.index');
+    }
 }

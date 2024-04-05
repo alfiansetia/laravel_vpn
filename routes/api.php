@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\Mikapi\PPP\L2tpSecretController as PPPL2tpSecretCon
 use App\Http\Controllers\Api\Mikapi\PPP\ProfileController as PPPProfileController;
 use App\Http\Controllers\Api\Mikapi\PPP\SecretController as PPPSecretController;
 use App\Http\Controllers\Api\Mikapi\QueueController;
+use App\Http\Controllers\Api\Mikapi\System\GroupController;
 use App\Http\Controllers\Api\Mikapi\System\PackageController;
 use App\Http\Controllers\Api\Mikapi\System\ResourceController;
 use App\Http\Controllers\Api\Mikapi\System\RouterboardController;
@@ -159,7 +160,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('mikapi/system/packages', PackageController::class)->only(['index', 'show']);
         // Route::apiResource('mikapi/system/resources', ResourceController::class)->only(['index']);
         // Route::apiResource('mikapi/system/routerboards', RouterboardController::class)->only(['index']);
-        Route::apiResource('mikapi/system/users', SystemUserController::class)->only(['index']);
+        Route::apiResource('mikapi/system/users', SystemUserController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])->names('api.mikapi.system.users');
+        Route::delete('mikapi/system/users', [SystemUserController::class, 'destroy_batch'])
+            ->name('api.mikapi.system.users.destroy.batch');
+
+        Route::apiResource('mikapi/system/groups', GroupController::class)
+            ->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names('api.mikapi.system.groups');
+        Route::delete('mikapi/system/groups', [GroupController::class, 'destroy_batch'])
+            ->name('api.mikapi.system.groups.destroy.batch');
 
         Route::delete('mikapi/logs', [LogController::class, 'destroy'])->name('api.mikapi.logs.destroy');
         Route::apiResource('mikapi/logs', LogController::class)->only(['index', 'show'])->names('api.mikapi.logs');

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Mikapi\System;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Mikapi\System\UserResource;
-use App\Services\Mikapi\System\UserServices;
+use App\Http\Resources\Mikapi\System\GroupResource;
+use App\Services\Mikapi\System\GroupServices;
 use App\Traits\DataTableTrait;
 use App\Traits\RouterTrait;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class GroupController extends Controller
 {
     use RouterTrait, DataTableTrait;
 
@@ -21,13 +21,13 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $this->setRouter($request->router, UserServices::class);
+            $this->setRouter($request->router, GroupServices::class);
             $query = [];
             if ($request->filled('name')) {
                 $query['?name'] = $request->name;
             }
             $data = $this->conn->get($query);
-            $resource = UserResource::collection($data);
+            $resource = GroupResource::collection($data);
             return $this->callback($resource->toArray($request), $request->dt == 'on');
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);
@@ -37,9 +37,9 @@ class UserController extends Controller
     public function show(Request $request, string $id)
     {
         try {
-            $this->setRouter($request->router, UserServices::class);
+            $this->setRouter($request->router, GroupServices::class);
             $data = $this->conn->show($id);
-            return new UserResource($data);
+            return new GroupResource($data);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 500);
         }
@@ -63,7 +63,7 @@ class UserController extends Controller
             'comment'           => $request->input('comment'),
         ];
         try {
-            $this->setRouter($request->router, UserServices::class);
+            $this->setRouter($request->router, GroupServices::class);
             $data = $this->conn->store($param);
             return response()->json(['message' => 'Success Insert Data!', 'data' => $data]);
         } catch (\Throwable $th) {
@@ -94,7 +94,7 @@ class UserController extends Controller
             $param['password'] = $request->input('password');
         }
         try {
-            $this->setRouter($request->router, UserServices::class);
+            $this->setRouter($request->router, GroupServices::class);
             $data = $this->conn->update($param);
             return response()->json(['message' => 'Success Update Data!', 'data' => $data]);
         } catch (\Throwable $th) {
@@ -105,7 +105,7 @@ class UserController extends Controller
     public function destroy(Request $request, string $id)
     {
         try {
-            $this->setRouter($request->router, UserServices::class);
+            $this->setRouter($request->router, GroupServices::class);
             $data = $this->conn->destroy($id);
             return response()->json(['message' => 'Success Delete Data!', 'data' => $data]);
         } catch (\Throwable $th) {
@@ -120,7 +120,7 @@ class UserController extends Controller
         ]);
         $id = $request->id;
         try {
-            $this->setRouter($request->router, UserServices::class);
+            $this->setRouter($request->router, GroupServices::class);
             $data = $this->conn->destroy_batch($id);
             return response()->json(['message' => 'Success Delete Data!', 'data' => $data]);
         } catch (\Throwable $th) {

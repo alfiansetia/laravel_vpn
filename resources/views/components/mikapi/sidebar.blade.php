@@ -166,9 +166,10 @@
                     <span>SETTING</span>
                 </div>
             </li>
-            <li class="menu {{ $title == 'System Routerboard' || $title == 'System Resource' ? 'active' : '' }}">
+            <li
+                class="menu {{ $title == 'System Routerboard' || $title == 'System Resource' || $title == 'System User' || $title == 'System Group' ? 'active' : '' }}">
                 <a href="#system_nav" data-bs-toggle="collapse"
-                    aria-expanded="{{ $title == 'System Routerboard' || $title == 'System Resource' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'System Routerboard' || $title == 'System Resource' || $title == 'System User' || $title == 'System Group' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="cpu"></i>
@@ -178,13 +179,19 @@
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'System Routerboard' || $title == 'System Resource' ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ $title == 'System Routerboard' || $title == 'System Resource' || $title == 'System User' || $title == 'System Group' ? 'show' : '' }}"
                     id="system_nav" data-bs-parent="#accordionExample">
                     <li class="{{ $title == 'System Routerboard' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.system.routerboard') }}{{ $param_router }}"> Routerboard </a>
                     </li>
                     <li class="{{ $title == 'System Resource' ? 'active' : '' }}">
                         <a href="{{ route('mikapi.system.resource') }}{{ $param_router }}"> Resource </a>
+                    </li>
+                    <li class="{{ $title == 'System User' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.system.user') }}{{ $param_router }}"> User </a>
+                    </li>
+                    <li class="{{ $title == 'System Group' ? 'active' : '' }}">
+                        <a href="{{ route('mikapi.system.group') }}{{ $param_router }}"> Group </a>
                     </li>
                 </ul>
             </li>

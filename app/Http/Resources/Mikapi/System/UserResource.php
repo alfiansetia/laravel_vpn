@@ -16,13 +16,15 @@ class UserResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'DT_RowId'          => $this['.id'],
             '.id'               => $this['.id'],
-            'name'              => $this['name'],
-            'group'             => $this['group'],
-            'address'           => $this['address'],
-            'last-logged-in'    => $this['last-logged-in'] ?? null,
+            'address'           => $this['address'] ?? null,
             'comment'           => $this['comment'] ?? null,
-            'disabled'          => $this['disabled'] == 'true' ? true : false,
+            'disabled'          => ($this['disabled'] ?? false) == "true" ? true : false,
+            'group'             => $this['group'] ?? null,
+            'last-logged-in'    => $this['last-logged-in'] ?? null,
+            'name'              => $this['name'],
+            // 'password'          => $this['password'] ?? null,
         ];
     }
 }
