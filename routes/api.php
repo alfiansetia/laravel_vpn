@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('routers', RouterController::class);
         Route::get('routers/{routers}/ping', [RouterController::class, 'ping']);
 
-        Route::apiResource('vpns', VpnController::class)->only(['index', 'show']);
+        Route::apiResource('vpns', VpnController::class)->only(['index', 'show'])->names('api.vpn');
 
         Route::apiResource('ports', PortController::class)->only(['show']);
 

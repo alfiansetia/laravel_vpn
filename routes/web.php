@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('vpn-autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
         Route::get('port-getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
         Route::resource('vpn', VpnController::class)->only(['create', 'index', 'show']);
+        Route::get('vpn/{vpn}/download', [VpnController::class, 'download'])->name('vpn.download');
 
         Route::delete('router-batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
         Route::get('router-open', [RouterController::class, 'open'])->name('router.open');

@@ -34,6 +34,7 @@ class InvoiceController extends Controller
                 $result = $data->with('user', 'bank', 'vpn');
             } else {
                 $data->where('user_id', $user->id);
+                $data->whereRelation('vpn', 'user_id', $user->id);
                 $result = $data->with('user:id,name,email', 'bank:id,name,acc_name', 'vpn:id,username,server_id', 'vpn.server:id,name');
             }
             return DataTables::of($result)->toJson();

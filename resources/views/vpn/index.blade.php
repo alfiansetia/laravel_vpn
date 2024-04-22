@@ -220,6 +220,10 @@
             });
         })
 
+        $('#download').click(function() {
+            window.open("{{ url('vpn') }}/" + id + '/download', '_blank')
+        })
+
         // $(document).ready(function() {
         var f1 = flatpickr(document.getElementById('expired'), {
             defaultDate: "today",

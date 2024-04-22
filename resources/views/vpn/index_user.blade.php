@@ -242,6 +242,10 @@
         var url_put = ""
         var url_delete = ''
 
+        $('#download').click(function() {
+            window.open("{{ url('vpn') }}/" + id + '/download', '_blank')
+        })
+
         $('#share').click(function() {
             id = $(this).val();
             $.ajax({

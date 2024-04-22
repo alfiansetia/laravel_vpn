@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
@@ -396,5 +398,25 @@ class VpnController extends Controller
                 ]
             ], 500);
         }
+    }
+
+    public function download(Request $request, Vpn $vpn)
+    {
+        $path = storage_path('app/files/vpn');
+        $file_name = generateUsername($vpn->username) . '.rsc';
+        $content = "/interface sstp-client add";
+        $content .= " connect-to=\"" . $vpn->server->domain . "\" ";
+        $content .= " name=\"$vpn->username\" ";
+        $content .= " user=\"$vpn->username\" ";
+        $content .= " password=\"$vpn->username\" ";
+        $content .= " disabled=\"no\" ";
+        $content .= " comment=\"<<==" . $vpn->server->domain . "==>\"; ";
+        $content .= " /tool netwatch add host=\"192.168.168.1\"  ";
+        $content .= " comment=\"<<==" . $vpn->server->domain . "==>\"; ";
+        if (!File::exists($path)) {
+            File::makeDirectory($path, 755, true);
+        }
+        File::put($path . '/' . $file_name, $content);
+        return response()->file($path . '/' . $file_name)->deleteFileAfterSend();
     }
 }

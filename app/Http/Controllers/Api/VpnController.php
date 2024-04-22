@@ -15,7 +15,9 @@ class VpnController extends Controller
         if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 0) {
             $limit = $request->limit;
         }
-        $data = Vpn::with('server')->where('user_id', auth()->id())->paginate($limit)->withQueryString();
+        $data = Vpn::query()
+            ->with('server')->where('user_id', auth()->id())
+            ->paginate($limit)->withQueryString();
         return VpnResource::collection($data);
     }
 
