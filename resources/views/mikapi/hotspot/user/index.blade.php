@@ -207,8 +207,9 @@
                 orderable: !1,
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        let text = `<div class="form-check form-check-primary d-block new-control">
-                        <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >`
+                        let text =
+                            `<div class="form-check form-check-primary d-block new-control">
+                        <input class="form-check-input child-chk" type="checkbox" ${row.default ? 'disabled' : ''} name="id[]" value="${data}" >`
                         if (row.disabled) {
                             text +=
                                 '<span class="badge me-1 badge-danger" title="Disabled">X</span>'
