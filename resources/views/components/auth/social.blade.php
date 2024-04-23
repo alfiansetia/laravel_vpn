@@ -19,7 +19,7 @@
 <div class="col-sm-6 col-12">
     <div class="mb-4">
         <a class="btn btn-social-login w-100" href="{{ route('auth.fb.redirect') }}">
-            <img src="{{ asset('images/github-icon.svg') }}" alt="" class="img-fluid">
+            <img src="{{ asset('images/fb-icon.svg') }}" alt="" class="img-fluid">
             <span class="btn-text-inner">Facebook</span>
         </a>
     </div>
