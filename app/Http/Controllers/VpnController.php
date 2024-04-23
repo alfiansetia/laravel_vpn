@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\DetailVpnMail;
 use App\Models\Port;
 use App\Models\Server;
+use App\Models\TemporaryIp;
 use App\Models\Vpn;
 use App\Services\ServerApiServices;
 use App\Traits\CompanyTrait;
@@ -118,26 +119,31 @@ class VpnController extends Controller
         DB::beginTransaction();
         try {
             $server = Server::find($request->input('server'));
+            $temp = TemporaryIp::first();
             $reg = date('Y-m-d');
             $exp = date('Y-m-d', strtotime('+1 day', strtotime($reg)));
-            $netw = $server->netwatch;
-            $pecah_last_ip = explode('.', $server->last_ip);
-            $pecah_netwatch = explode('.', $netw);
-            $last_ip = $pecah_last_ip[2];
-            $last_count = $pecah_last_ip[3];
-            $last_port = $pecah_last_ip[2] - $pecah_netwatch[2] + 1;
-            if ($last_count >= 199) {
-                $last_ip = $last_ip + 1;
-                $last_count = 9;
-                $last_port = $last_port + 1;
-            }
-            $portweb = 7000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
-            $portapi = 8000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
-            $portwin = 9000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
-            $dst = [$portweb, $portapi, $portwin];
-            $jadi = $pecah_last_ip[0] . '.' . $pecah_last_ip[1] . '.' . $last_ip . '.' . $last_count + 1;
-
             $to = [80, 8728, 8291];
+            $netw = $server->netwatch;
+            if ($temp) {
+                $jadi = $temp->ip;
+                $dst = [$temp->web, $temp->api, $temp->win];
+            } else {
+                $pecah_last_ip = explode('.', $server->last_ip);
+                $pecah_netwatch = explode('.', $netw);
+                $last_ip = $pecah_last_ip[2];
+                $last_count = $pecah_last_ip[3];
+                $last_port = $pecah_last_ip[2] - $pecah_netwatch[2] + 1;
+                if ($last_count >= 199) {
+                    $last_ip = $last_ip + 1;
+                    $last_count = 9;
+                    $last_port = $last_port + 1;
+                }
+                $portweb = 7000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
+                $portapi = 8000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
+                $portwin = 9000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
+                $dst = [$portweb, $portapi, $portwin];
+                $jadi = $pecah_last_ip[0] . '.' . $pecah_last_ip[1] . '.' . $last_ip . '.' . $last_count + 1;
+            }
 
             $username = generateUsername($request->input('username')) . $server->sufiks ?? '';
             $param =  [
@@ -152,11 +158,13 @@ class VpnController extends Controller
             $service = new ServerApiServices($server);
             $service->store($param, $dst);
             $vpn = Vpn::create($param);
-            $server->update([
-                'last_ip'   => $jadi,
-                // 'count_ip'  => $last_count + 1,
-                // 'last_port' => $last_port,
-            ]);
+            if ($temp) {
+                $temp->delete();
+            } else {
+                $server->update([
+                    'last_ip'   => $jadi,
+                ]);
+            }
             for ($i = 0; $i < count($dst); $i++) {
                 Port::create([
                     'vpn_id'    => $vpn->id,

@@ -144,9 +144,10 @@
             </li>
 
             @if ($user->is_admin())
-                <li class="menu {{ $title == 'Data User' || $title == 'Data Bank' ? 'active' : '' }}">
+                <li
+                    class="menu {{ $title == 'Data User' || $title == 'Data Bank' || $title == 'Data Temporary IP' ? 'active' : '' }}">
                     <a href="#invoice" data-bs-toggle="collapse"
-                        aria-expanded="{{ $title == 'Data User' || $title == 'Data Bank' ? 'true' : 'false' }}"
+                        aria-expanded="{{ $title == 'Data User' || $title == 'Data Bank' || $title == 'Data Temporary IP' ? 'true' : 'false' }}"
                         class="dropdown-toggle">
                         <div class="">
                             <i data-feather="database"></i>
@@ -156,13 +157,16 @@
                             <i data-feather="chevron-right"></i>
                         </div>
                     </a>
-                    <ul class="collapse submenu list-unstyled {{ $title == 'Data User' || $title == 'Data Bank' ? 'show' : '' }}"
+                    <ul class="collapse submenu list-unstyled {{ $title == 'Data User' || $title == 'Data Bank' || $title == 'Data Temporary IP' ? 'show' : '' }}"
                         id="invoice" data-bs-parent="#accordionExample">
                         <li class="{{ $title == 'Data Bank' ? 'active' : '' }}">
                             <a href="{{ route('bank.index') }}"> Bank </a>
                         </li>
                         <li class="{{ $title == 'Data User' ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}"> User </a>
+                        </li>
+                        <li class="{{ $title == 'Data Temporary IP' ? 'active' : '' }}">
+                            <a href="{{ route('temporaryip.index') }}"> Temporary IP </a>
                         </li>
                     </ul>
                 </li>

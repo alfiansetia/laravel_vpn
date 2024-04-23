@@ -19,6 +19,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RouterController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TemporaryIpController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VpnController;
@@ -102,7 +103,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('vpn', VpnController::class)->only(['create', 'index', 'show']);
         Route::get('vpn/{vpn}/download', [VpnController::class, 'download'])->name('vpn.download');
 
-        Route::delete('router-batch', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
+        Route::delete('router', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
         Route::get('router-open', [RouterController::class, 'open'])->name('router.open');
         Route::get('router/{router}/ping', [RouterController::class, 'ping'])->name('router.ping');
         Route::resource('router', RouterController::class)->except(['edit', 'create']);
@@ -110,6 +111,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('invoice', InvoiceController::class)->only(['index', 'show']);
 
         Route::group(['middleware' => ['is.admin']], function () {
+
+            Route::delete('temporaryip', [TemporaryIpController::class, 'destroyBatch'])->name('temporaryip.destroy.batch');
+            Route::resource('temporaryip', TemporaryIpController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
 
             Route::resource('invoice', InvoiceController::class)->only(['store', 'update', 'destroy',]);
 
