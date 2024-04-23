@@ -24,9 +24,9 @@ return new class extends Migration
             $table->integer('port')->default(0);
             $table->integer('price')->default(0);
             $table->integer('annual_price')->default(0);
-            $table->integer('last_ip')->default(0);
-            $table->integer('count_ip')->default(0);
-            $table->integer('last_port')->default(0);
+            $table->string('last_ip');
+            // $table->integer('count_ip')->default(0);
+            // $table->integer('last_port')->default(0);
             $table->enum('is_active', ['yes', 'no'])->default('yes');
             $table->enum('is_available', ['yes', 'no'])->default('yes');
             // $table->integer('time_free')->default(0);

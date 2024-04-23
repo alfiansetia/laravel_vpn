@@ -19,7 +19,7 @@
                         <div class="form-group col-md-6 mb-2">
                             <label for="ip"><i class="fas fa-ethernet me-1 bs-tooltip" title="IP Server"></i>IP
                                 Server :</label>
-                            <input type="text" name="ip" class="form-control maxlength" id="ip"
+                            <input type="text" name="ip" class="form-control mask_ip maxlength" id="ip"
                                 placeholder="Please Enter IP Address" minlength="0" maxlength="15" required>
                             <span id="err_ip" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
@@ -35,7 +35,7 @@
                         <div class="form-group col-md-6 mb-2">
                             <label for="netwatch"><i class="far fa-clock me-1 bs-tooltip"
                                     title="Netwatch Server"></i>Netwatch Server :</label>
-                            <input type="text" name="netwatch" class="form-control maxlength" id="netwatch"
+                            <input type="text" name="netwatch" class="form-control mask_ip maxlength" id="netwatch"
                                 minlength="0" maxlength="15" placeholder="Please Enter Netwatch" required>
                             <span id="err_netwatch" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
@@ -73,21 +73,30 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="form-group col-md-4 mb-2">
+                        <div class="form-group col-md-6 mb-2">
                             <label for="port"><i class="fas fa-random me-1 bs-tooltip"
                                     title="Port Server"></i>Port :</label>
                             <input type="number" name="port" class="form-control" id="port"
                                 placeholder="Please Enter Port" value="0" min="0" required>
                             <span id="err_port" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
-                        <div class="form-group col-md-4 mb-2">
+                        <div class="form-group col-md-6 mb-2">
+                            <label for="last_ip"><i class="fas fa-undo me-1 bs-tooltip"
+                                    title="Last IP Server"></i>Last IP :</label>
+                            <input type="text" name="last_ip" class="form-control mask_ip" id="last_ip"
+                                placeholder="Please Enter Last IP" required>
+                            <span id="err_last_ip" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="form-group col-md-6 mb-2">
                             <label for="price"><i class="fas fa-dollar-sign me-1 bs-tooltip"
                                     title="Price Server"></i>Price :</label>
                             <input type="number" name="price" class="form-control" id="price"
                                 placeholder="Please Enter Price" value="0" min="0" required>
                             <span id="err_price" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
-                        <div class="form-group col-md-4 mb-2">
+                        <div class="form-group col-md-6 mb-2">
                             <label for="annual_price"><i class="fas fa-dollar-sign me-1 bs-tooltip"
                                     title="Annual Price Server"></i>Annual Price :</label>
                             <input type="number" name="annual_price" class="form-control" id="annual_price"
@@ -96,43 +105,16 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="form-group col-md-6 mb-2">
-                            <label for="last_ip"><i class="fas fa-undo me-1 bs-tooltip"
-                                    title="Last IP Server"></i>Last IP :</label>
-                            <input type="number" name="last_ip" class="form-control" id="last_ip"
-                                placeholder="Please Enter Last IP" value="0" min="0" required>
-                            <span id="err_last_ip" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group col-md-6 mb-2">
-                            <label for="last_port"><i class="fas fa-step-forward me-1 bs-tooltip"
-                                    title="Last Port Server"></i>Last Port :</label>
-                            <input type="number" name="last_port" class="form-control" id="last_port"
-                                placeholder="Please Enter Last Port" value="0" min="0" required>
-                            <span id="err_last_port" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="form-group col-md-6 mb-2">
-                            <label for="count_ip"><i class="fas fa-stopwatch-20 me-1 bs-tooltip"
-                                    title="Count IP Server"></i>Count IP :</label>
-                            <input type="number" name="count_ip" class="form-control" id="count_ip"
-                                placeholder="Please Enter Count IP" value="0" min="0" required>
-                            <span id="err_count_ip" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group col-md-3 mb-2">
-                            <label class="bs-tooltip" for="active" title="Option Active Server"></label>
-                            <div class="form-check ps-0">
-                                <div class="switch form-switch-custom switch-inline form-switch-primary mt-4">
-                                    <input class="switch-input" type="checkbox" role="switch" id="active"
-                                        name="active" checked>
-                                    <label class="switch-label" for="active">Active</label>
-                                </div>
+                        <div class="col-lg-2 col-6 mb-2 mt-2">
+                            <div class="switch form-switch-custom switch-inline form-switch-primary">
+                                <input class="switch-input" type="checkbox" role="switch" id="active"
+                                    name="active" checked>
+                                <label class="switch-label" for="active">Active</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-3 mb-2">
-                            <label class="bs-tooltip" for="available" title="Option Available Server"></label>
+                        <div class="col-lg-2 col-6 mb-2 mt-2">
                             <div class="form-check ps-0">
-                                <div class="switch form-switch-custom switch-inline form-switch-primary mt-4">
+                                <div class="switch form-switch-custom switch-inline form-switch-primary">
                                     <input class="switch-input" type="checkbox" role="switch" id="available"
                                         name="available" checked>
                                     <label class="switch-label" for="available">Available</label>

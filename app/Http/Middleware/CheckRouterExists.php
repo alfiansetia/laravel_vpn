@@ -46,7 +46,7 @@ class CheckRouterExists
         );
         if ($validator->fails()) {
             if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['message' => $validator->messages(), 'errors' => $validator->errors()], 422);
+                return response()->json(['message' => "Invalid Selected Router!", 'errors' => $validator->errors()], 422);
             }
             return redirect(route('router.index'))->withErrors($validator)->withInput();
         }

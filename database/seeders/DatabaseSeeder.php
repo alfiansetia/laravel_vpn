@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             // PortSeeder::class,
             TestMigrateSeeder::class,
             // RouterSeeder::class,
-            BankSeeder::class,
+            // BankSeeder::class,
         ]);
     }
 }

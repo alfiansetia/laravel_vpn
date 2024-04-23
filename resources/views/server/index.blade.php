@@ -62,9 +62,12 @@
             placement: "top",
         });
 
-        $("#ip, #edit_ip, #netwatch, #edit_netwatch").inputmask({
-            alias: "ip"
-        });
+        Inputmask("ip").mask($(".mask_ip"));
+        Inputmask("mac").mask($(".mask_mac"));
+
+        // $("#ip, #edit_ip, #netwatch, #edit_netwatch").inputmask({
+        //     alias: "ip"
+        // });
 
         var table = $('#tableData').DataTable({
             processing: true,
@@ -194,8 +197,8 @@
                     $('#edit_price').val(result.data.price);
                     $('#edit_annual_price').val(result.data.annual_price);
                     $('#edit_last_ip').val(result.data.last_ip);
-                    $('#edit_count_ip').val(result.data.count_ip);
-                    $('#edit_last_port').val(result.data.last_port);
+                    // $('#edit_count_ip').val(result.data.count_ip);
+                    // $('#edit_last_port').val(result.data.last_port);
                     if (result.data.is_active == 'yes') {
                         $('#edit_active').prop('checked', true).change();
                     } else {

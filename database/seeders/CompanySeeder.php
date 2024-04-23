@@ -20,7 +20,7 @@ class CompanySeeder extends Seeder
             'phone'         => '082324129752',
             'slogan'        => 'Layanan VPN Remote Untuk Device Anda',
             'author'        => 'ALfian',
-            'address'       => 'JL. Kampung Pasar Kembang, Yogyakarta',
+            'address'       => 'JL. Ngumbul - Todanan KM.01. Ngumbul Todanan Blora',
             'link_blog'     => 'https://blog.kacangan.net',
             'link_status'   => 'https://stats.uptimerobot.com/Xkn03tnOPl',
             'email'         => 'adm.kacangan@gmail.com',

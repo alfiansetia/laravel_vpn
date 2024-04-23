@@ -120,13 +120,12 @@ class VpnController extends Controller
             $server = Server::find($request->input('server'));
             $reg = date('Y-m-d');
             $exp = date('Y-m-d', strtotime('+1 day', strtotime($reg)));
-            $service = new ServerApiServices($server);
             $netw = $server->netwatch;
-            $last_ip = $server->last_ip;
-            $last_count = $server->count_ip;
-            $last_port = $server->last_port;
-            $pecah = explode('.', $netw);
-
+            $pecah_last_ip = explode('.', $server->last_ip);
+            $pecah_netwatch = explode('.', $netw);
+            $last_ip = $pecah_last_ip[2];
+            $last_count = $pecah_last_ip[3];
+            $last_port = $pecah_last_ip[2] - $pecah_netwatch[2] + 1;
             if ($last_count >= 199) {
                 $last_ip = $last_ip + 1;
                 $last_count = 9;
@@ -136,8 +135,10 @@ class VpnController extends Controller
             $portapi = 8000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
             $portwin = 9000 + ($last_port * 100) + (($last_port - 1) * 100) + $last_count + 1;
             $dst = [$portweb, $portapi, $portwin];
+            $jadi = $pecah_last_ip[0] . '.' . $pecah_last_ip[1] . '.' . $last_ip . '.' . $last_count + 1;
+
             $to = [80, 8728, 8291];
-            $jadi = $pecah[0] . '.' . $pecah[1] . '.' . $last_ip . '.' . $last_count + 1;
+
             $username = generateUsername($request->input('username')) . $server->sufiks ?? '';
             $param =  [
                 'user_id'   => $user->id,
@@ -148,12 +149,13 @@ class VpnController extends Controller
                 'expired'   => $exp,
                 'is_active' => 'yes',
             ];
+            $service = new ServerApiServices($server);
             $service->store($param, $dst);
             $vpn = Vpn::create($param);
             $server->update([
-                'last_ip'   => $last_ip,
-                'count_ip'  => $last_count + 1,
-                'last_port' => $last_port,
+                'last_ip'   => $jadi,
+                // 'count_ip'  => $last_count + 1,
+                // 'last_port' => $last_port,
             ]);
             for ($i = 0; $i < count($dst); $i++) {
                 Port::create([
@@ -162,9 +164,8 @@ class VpnController extends Controller
                     'to'        => $to[$i],
                 ]);
             }
-            $data = ['message' => 'Success Insert Data', 'data' => ''];
             DB::commit();
-            return response()->json($data);
+            return response()->json(['message' => 'Success Insert Data', 'data' => $vpn]);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 500);
@@ -212,7 +213,7 @@ class VpnController extends Controller
             }
             $vpn = Vpn::create($param);
             DB::commit();
-            return response()->json(['message' => 'Success Insert Data', 'data' => '']);
+            return response()->json(['message' => 'Success Insert Data', 'data' => $vpn]);
         } catch (Throwable $e) {
             DB::rollBack();
             return response()->json(['message' => 'Failed Insert Data : ' . $e->getMessage(), 'data' => ''], 500);
