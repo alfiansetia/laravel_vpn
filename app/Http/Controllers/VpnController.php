@@ -61,7 +61,7 @@ class VpnController extends Controller
             } else {
                 $data->where('user_id', '=', auth()->id())->with('server:id,name,ip,domain,netwatch,location,price,is_active');
             }
-            $result = $data->latest('id');
+            $result = $data->latest('id')->get();
             return DataTables::of($result)->toJson();
         }
         if (isAdmin()) {

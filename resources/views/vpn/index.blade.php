@@ -424,6 +424,9 @@
             }, {
                 title: "Expired",
                 data: 'expired',
+            }, {
+                title: "Desc",
+                data: 'desc',
             }, ],
             headerCallback: function(e, a, t, n, s) {
                 e.getElementsByTagName("th")[0].innerHTML = `
