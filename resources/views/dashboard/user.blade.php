@@ -117,8 +117,9 @@
                         }
                     },
                 ]
-                var chart_series = [parseInt("{{ $data_vpn['active'] }}"), parseInt("{{ $data_vpn['trial'] }}"),
-                    parseInt("{{ $data_vpn['nonactive'] }}")
+                var chart_series = [parseInt("{{ $data_vpn['active'] ?? 0 }}"), parseInt(
+                        "{{ $data_vpn['trial'] ?? 0 }}"),
+                    parseInt("{{ $data_vpn['nonactive'] ?? 0 }}")
                 ]
 
                 if (ParsedObject.settings.layout.darkMode) {

@@ -5,9 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="keywords"
+        content="vpn, vpn remote, vpn remote mikrotik, remote diluar jaringan, remote device diluar jaringan, solusi ip publik, solusi ip publik dinamis, ip publik indihome, solusi ip publik indihome, cloud hosting, web hosting, hosting, vpn remote murah">
+    <meta name="description"
+        content="KCNET Merupakan layanan Tunneling yang bisa digunakan untuk kebutuhan jaringan seperti vpn remote device, ddns, & cloud hosting. Solusi untuk ip publik dinamis">
+    <meta name="author" content="Mexious Teknologi Indonesia">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }} | {{ $company->name }} - {{ $company->slogan }} </title>
-    <link rel="icon" type="image/x-icon" href="{{ $company->logo_light }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/default/favicon.ico') }}" />
 
     <script>
         var light_logo = "{{ $company->logo_light }}";
