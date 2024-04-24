@@ -18,9 +18,9 @@
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="name"><i class="fas fa-clone me-1 bs-tooltip"
-                                title="Session Name"></i>Session Name :</label>
+                                title="Router Name"></i>Router Name :</label>
                         <input type="text" name="name" class="form-control maxlength" id="name"
-                            placeholder="Please Enter Session Name" minlength="3" maxlength="50" required>
+                            placeholder="Please Enter Router Name" minlength="3" maxlength="50" required>
                         <span id="err_name" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
