@@ -31,7 +31,7 @@
         </div>
 
         <div class="shadow-bottom"></div>
-        <ul class="list-unstyled menu-categories" id="accordionExample" >
+        <ul class="list-unstyled menu-categories" id="accordionExample">
 
             <li class="menu {{ $title == 'Dashboard' ? 'active' : '' }}">
                 <a href="{{ route('home') }}" aria-expanded="{{ $title == 'Dashboard' ? 'true' : 'false' }}"
@@ -202,6 +202,9 @@
                     @endif
                 </ul>
             </li>
+            <li class="menu menu-heading"></li>
+            <li class="menu menu-heading"></li>
+            <li class="menu menu-heading"></li>
 
 
         </ul>
