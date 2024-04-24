@@ -67,13 +67,27 @@
                                                         @endforeach
                                                     </ul>
                                                     </p>
-
+                                                    @if ($vpn->is_expired())
+                                                        <p
+                                                            style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:16px;line-height:1.5em;margin-top:0;text-align:left; ">
+                                                            <br>
+                                                            <font color="red"><b>Akun VPN Anda sudah Expired,
+                                                                    silahkan lakukan
+                                                                    perpanjangan agar VPN anda tetap bisa digunakan dan
+                                                                    akun tsb tidak terhapus dari member Area ! </b>
+                                                            </font>
+                                                    @endif
                                                     <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:16px;line-height:1.5em;margin-top:0;text-align:left">
                                                         <br>
                                                         <br>Regards,
                                                         <br>
                                                         <span class="il">{{ $company->name }}</span>
+                                                        <br><a
+                                                            href="https://member.kacangan.net">https://member.kacangan.net</a>
+                                                        <br><a href="https://kacangan.net">https://kacangan.net</a>
+                                                        <br><a
+                                                            href="https://blog.kacangan.net">https://blog.kacangan.net</a>
                                                     </p>
                                                 </td>
                                             </tr>
