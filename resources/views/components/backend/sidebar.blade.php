@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="profile-info">
+        {{-- <div class="profile-info">
             <div class="user-info">
                 <div class="profile-img">
                     <img src="{{ $user->avatar }}" alt="avatar">
@@ -28,7 +28,7 @@
                     <p class="">{{ $user->role }}</p>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
