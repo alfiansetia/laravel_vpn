@@ -88,6 +88,8 @@
                                                         <br><a href="https://kacangan.net">https://kacangan.net</a>
                                                         <br><a
                                                             href="https://blog.kacangan.net">https://blog.kacangan.net</a>
+                                                        <br>Whatsapp : <a
+                                                            href="https://api.whatsapp.com/send/?phone=6282324129752&text=Halo">082324129752</a>
                                                     </p>
                                                 </td>
                                             </tr>
