@@ -56,9 +56,9 @@
 
     </div>
 
-    <button class="btn btn-primary" id="tes">TES</button>
+    {{-- <button class="btn btn-primary" id="tes">TES</button>
 
-    <button class="btn btn-primary" id="stop">STOP</button>
+    <button class="btn btn-primary" id="stop">STOP</button> --}}
 
     {{-- <div class="spinner-border" role="status"> --}}
     </div>
