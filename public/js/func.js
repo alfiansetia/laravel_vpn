@@ -67,7 +67,8 @@ function show_alert(message, type){
     })
 }
 
-function handleResponseCode(code) {
+function handleResponseCode(xhr) {
+    let code = xhr.status
     if (code === 404) {
         Swal.fire({
             title: 'Failed!',
