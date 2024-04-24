@@ -248,16 +248,16 @@ var App = function() {
     var inBuiltfunctionality = {
         mainCatActivateScroll: function() {
 
-            // if (document.querySelector('.menu-categories')) {
+            if (document.querySelector('.menu-categories')) {
             
-            //     const ps = new PerfectScrollbar('.menu-categories', {
-            //         wheelSpeed:.5,
-            //         swipeEasing:!0,
-            //         minScrollbarLength:40,
-            //         maxScrollbarLength:300
-            //     });
+                const ps = new PerfectScrollbar('.menu-categories', {
+                    wheelSpeed:.5,
+                    swipeEasing:!0,
+                    minScrollbarLength:40,
+                    maxScrollbarLength:300
+                });
 
-            // }
+            }
         },
         notificationScroll: function() {
 
