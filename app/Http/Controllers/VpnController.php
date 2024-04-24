@@ -201,6 +201,7 @@ class VpnController extends Controller
             'expired'      => 'required|date_format:Y-m-d',
             'is_active'    => 'nullable|in:on',
             'sync'         => 'nullable|in:on',
+            'desc'         => 'nullable|max:200',
         ]);
         DB::beginTransaction();
         try {
@@ -213,6 +214,7 @@ class VpnController extends Controller
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
                 'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
+                'desc'      => $request->input('desc'),
             ];
             if ($request->sync == 'on') {
                 $server = Server::find($request->input('server'));
@@ -257,6 +259,7 @@ class VpnController extends Controller
             'expired'       => 'required|date_format:Y-m-d',
             'is_active'     => 'nullable|in:on',
             'sync'          => 'nullable|in:on',
+            'desc'          => 'nullable|max:200',
         ]);
         $expired = $request->input('expired');
         try {
@@ -267,6 +270,7 @@ class VpnController extends Controller
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
                 'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
+                'desc'      => $request->input('desc'),
             ];
             if ($request->sync == 'on') {
                 $service = $this->setServer($vpn);
