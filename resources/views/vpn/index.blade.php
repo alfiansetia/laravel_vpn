@@ -176,12 +176,9 @@
                     data: $(form).serialize(),
                     beforeSend: function() {
                         block();
-                        clear_validate($(form))
                     },
                     success: function(res) {
                         unblock();
-                        table.ajax.reload();
-                        reset();
                         Swal.fire(
                             'Success!',
                             res.message,
