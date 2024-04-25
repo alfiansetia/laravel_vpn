@@ -72,6 +72,13 @@
                     <div class="row mb-2">
                         <div class="col-lg-2 col-6 mb-2 mt-2">
                             <div class="switch form-switch-custom switch-inline form-switch-success">
+                                <input class="switch-input" type="checkbox" role="switch" id="is_trial"
+                                    name="is_trial" checked>
+                                <label class="switch-label" for="is_trial">Trial</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-6 mb-2 mt-2">
+                            <div class="switch form-switch-custom switch-inline form-switch-success">
                                 <input class="switch-input" type="checkbox" role="switch" id="is_active"
                                     name="is_active" checked>
                                 <label class="switch-label" for="is_active">Active</label>

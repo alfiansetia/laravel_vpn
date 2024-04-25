@@ -571,6 +571,11 @@
                             true, true);
                         $('#edit_server').append(option2).trigger('change');
                     }
+                    if (result.data.is_trial == 'yes') {
+                        $('#edit_is_trial').prop('checked', true).change();
+                    } else {
+                        $('#edit_is_trial').prop('checked', false).change();
+                    }
 
                     if (result.data.is_active == 'yes') {
                         $('#edit_is_active').prop('checked', true).change();

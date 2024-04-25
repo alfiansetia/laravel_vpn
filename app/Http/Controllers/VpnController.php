@@ -200,6 +200,7 @@ class VpnController extends Controller
             'ip'           => 'required|ip|unique:vpns,ip,' . $request->input('ip') . ',id,server_id,' . $request->input('server'),
             'expired'      => 'required|date_format:Y-m-d',
             'is_active'    => 'nullable|in:on',
+            'is_trial'     => 'nullable|in:on',
             'sync'         => 'nullable|in:on',
             'desc'         => 'nullable|max:200',
         ]);
@@ -214,6 +215,7 @@ class VpnController extends Controller
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
                 'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
+                'is_trial'  => $request->input('is_active') == 'on' ? 'yes' : 'no',
                 'desc'      => $request->input('desc'),
             ];
             if ($request->sync == 'on') {
@@ -258,6 +260,7 @@ class VpnController extends Controller
             'ip'            => 'required|ip|unique:vpns,ip,' . $vpn->id . ',id,server_id,' . $vpn->server_id,
             'expired'       => 'required|date_format:Y-m-d',
             'is_active'     => 'nullable|in:on',
+            'is_trial'      => 'nullable|in:on',
             'sync'          => 'nullable|in:on',
             'desc'          => 'nullable|max:200',
         ]);
@@ -270,6 +273,7 @@ class VpnController extends Controller
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
                 'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
+                'is_trial'  => $request->input('is_active') == 'on' ? 'yes' : 'no',
                 'desc'      => $request->input('desc'),
             ];
             if ($request->sync == 'on') {
