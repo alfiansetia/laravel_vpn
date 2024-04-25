@@ -51,7 +51,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|max:25|min:3',
+            'name'      => 'required|max:30|min:3',
             'email'     => 'required|email|unique:users,email',
             'gender'    => 'required|in:male,female',
             'phone'     => 'nullable|max:15',
@@ -78,7 +78,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->validate($request, [
-            'name'      => 'required|max:25|min:3',
+            'name'      => 'required|max:30|min:3',
             'email'     => 'required|email|unique:users,email,' . $user->id,
             'gender'    => 'required|in:male,female',
             'phone'     => 'nullable|max:15',

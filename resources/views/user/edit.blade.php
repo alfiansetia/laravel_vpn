@@ -13,7 +13,7 @@
                         <label class="control-label" for="edit_name"><i class="far fa-user me-1 bs-tooltip"
                                 title="Full Name User"></i>Name :</label>
                         <input type="text" name="name" class="form-control maxlength" id="edit_name"
-                            placeholder="Please Enter Name" minlength="3" maxlength="25" required>
+                            placeholder="Please Enter Name" minlength="3" maxlength="30" required>
                         <span id="err_edit_name" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
