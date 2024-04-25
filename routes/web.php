@@ -14,6 +14,7 @@ use App\Http\Controllers\Mikapi\MonitorController;
 use App\Http\Controllers\Mikapi\PPPController;
 use App\Http\Controllers\Mikapi\SystemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RouterController;
@@ -59,6 +60,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::group(['middleware' => ['is.active']], function () {
+
+        Route::get('page/contact', [PageController::class, 'contact'])->name('page.contact');
 
         Route::get('mikapi/dashboard', [DashboardController::class, 'index'])->name('mikapi.dashboard');
 

@@ -202,6 +202,21 @@
                     @endif
                 </ul>
             </li>
+            <li class="menu menu-heading">
+                <div class="heading">
+                    <i data-feather="minus"></i>
+                    <span>HELP</span>
+                </div>
+            </li>
+            <li class="menu {{ $title == 'Page Contact' ? 'active' : '' }}">
+                <a href="{{ route('page.contact') }}"
+                    aria-expanded="{{ $title == 'Page Contact' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="help-circle"></i>
+                        <span>Contact</span>
+                    </div>
+                </a>
+            </li>
             <li class="menu menu-heading"></li>
             <li class="menu menu-heading"></li>
             <li class="menu menu-heading"></li>
