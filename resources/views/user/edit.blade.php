@@ -38,7 +38,7 @@
                         <label class="control-label" for="edit_phone"><i class="fas fa-phone-alt me-1 bs-tooltip"
                                 title="Phone User"></i>Phone :</label>
                         <input type="text" name="phone" class="form-control maxlength" id="edit_phone"
-                            placeholder="Please Enter Phone" minlength="3" maxlength="15" required>
+                            placeholder="Please Enter Phone" minlength="0" maxlength="15">
                         <span id="err_edit_phone" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
@@ -53,7 +53,7 @@
                         <label class="control-label" for="edit_address"><i class="fas fa-map-marker me-1 bs-tooltip"
                                 title="Address User"></i>Address :</label>
                         <textarea name="address" class="form-control maxlength" id="edit_address" placeholder="Please Enter Address"
-                            minlength="3" maxlength="100" required></textarea>
+                            minlength="0" maxlength="100"></textarea>
                         <span id="err_edit_address" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
                     <div class="form-group row">
