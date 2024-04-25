@@ -215,7 +215,7 @@ class VpnController extends Controller
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
                 'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
-                'is_trial'  => $request->input('is_active') == 'on' ? 'yes' : 'no',
+                'is_trial'  => $request->input('is_trial') == 'on' ? 'yes' : 'no',
                 'desc'      => $request->input('desc'),
             ];
             if ($request->sync == 'on') {
@@ -273,7 +273,7 @@ class VpnController extends Controller
                 'ip'        => $request->input('ip'),
                 'expired'   => $expired,
                 'is_active' => $request->input('is_active') == 'on' ? 'yes' : 'no',
-                'is_trial'  => $request->input('is_active') == 'on' ? 'yes' : 'no',
+                'is_trial'  => $request->input('is_trial') == 'on' ? 'yes' : 'no',
                 'desc'      => $request->input('desc'),
             ];
             if ($request->sync == 'on') {
