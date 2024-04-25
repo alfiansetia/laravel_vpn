@@ -62,15 +62,17 @@ class LoginController extends Controller
             $user           = User::where('email', $user_google->getEmail())->first();
 
             if ($user != null) {
+                $user->update(['status' => 'active']);
                 $user->markEmailAsVerified();
                 \auth()->login($user, true);
                 return redirect()->route('home');
             } else {
                 $create = User::Create([
-                    'email'             => $user_google->getEmail(),
-                    'name'              => $user_google->getName(),
-                    'password'          => 0,
-                    'role'              => 'User'
+                    'email'     => $user_google->getEmail(),
+                    'name'      => $user_google->getName(),
+                    'password'  => 0,
+                    'role'      => 'user',
+                    'status'    => 'active',
                 ]);
                 $create->markEmailAsVerified();
                 \auth()->login($create, true);
@@ -93,15 +95,18 @@ class LoginController extends Controller
             $user_fb    = Socialite::driver('facebook')->user();
             $user           = User::where('email', $user_fb->getEmail())->first();
             if ($user != null) {
+                $user->update(['status' => 'active']);
                 $user->markEmailAsVerified();
                 \auth()->login($user, true);
                 return redirect()->route('home');
             } else {
                 $create = User::Create([
-                    'email'             => $user_fb->getEmail(),
-                    'name'              => $user_fb->getName(),
-                    'password'          => 0,
-                    'role'              => 'User'
+                    'email'     => $user_fb->getEmail(),
+                    'name'      => $user_fb->getName(),
+                    'password'  => 0,
+                    'role'      => 'user',
+                    'status'    => 'active',
+
                 ]);
                 $create->markEmailAsVerified();
                 \auth()->login($create, true);
@@ -122,18 +127,20 @@ class LoginController extends Controller
         $jwtPayload = json_decode($tokenPayload);
         $user = $jwtPayload;
         // return $user;
-        $u = User::where('email', $user->email)->first();
+        $user = User::where('email', $user->email)->first();
 
-        if ($u != null) {
-            $u->markEmailAsVerified();
-            \auth()->login($u, true);
+        if ($user != null) {
+            $user->update(['status' => 'active']);
+            $user->markEmailAsVerified();
+            \auth()->login($user, true);
             return redirect()->route('home');
         } else {
             $create = User::Create([
-                'email'             => $user->email,
-                'name'              => $user->name,
-                'password'          => 0,
-                'role'              => 'User'
+                'email'     => $user->email,
+                'name'      => $user->name,
+                'password'  => 0,
+                'role'      => 'user',
+                'status'    => 'active',
             ]);
             $create->markEmailAsVerified();
             \auth()->login($create, true);
