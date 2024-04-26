@@ -177,6 +177,13 @@
             }, {
                 title: "Amount",
                 data: 'amount',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
             }, {
                 title: 'Status',
                 data: 'status',
