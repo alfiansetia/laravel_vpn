@@ -123,6 +123,13 @@
             }, {
                 title: "Price",
                 data: 'price',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
             }, {
                 title: "Location",
                 data: 'location',
