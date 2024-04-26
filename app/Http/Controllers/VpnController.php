@@ -233,17 +233,22 @@ class VpnController extends Controller
         }
     }
 
-    public function show(Request $request, Vpn $vpn)
+    public function show(Request $request, string $id)
     {
         $user = Auth::user();
         if ($request->ajax()) {
             if ($user->is_admin()) {
-                $vpn = Vpn::with('user', 'server', 'port')->find($vpn->id);
+                $vpn = Vpn::with('user', 'server', 'port')->find($id);
             } else {
-                $vpn = Vpn::where('user_id', '=', $user->id)->with('server:id,name,ip,domain,netwatch,location,price,is_active', 'port')->find($vpn->id);
+                $vpn = Vpn::where('user_id', '=', $user->id)->with('server:id,name,ip,domain,netwatch,location,price,is_active', 'port')->find($id);
+            }
+            if (!$vpn) {
+                return response()->json([
+                    'data'      => null,
+                    'message'   => 'Data Not Found!'
+                ], 404);
             }
             return response()->json([
-                'status'    => true,
                 'data'      => $vpn,
                 'message'   => ''
             ]);
