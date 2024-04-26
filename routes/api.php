@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BalanceHistoryController;
 use App\Http\Controllers\Api\Mikapi\DashboardController;
 use App\Http\Controllers\Api\Mikapi\DHCP\LeasesController as DHCPLeasesController;
 use App\Http\Controllers\Api\Mikapi\Hotspot\ActiveController as HotspotActiveController;
@@ -55,6 +56,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('password', [UserController::class, 'passwordUpdate']);
 
     Route::group(['middleware' => ['verified']], function () {
+
+        Route::get('balance_history', [BalanceHistoryController::class, 'index'])->name('api.balance.index');
 
         Route::apiResource('routers', RouterController::class);
         Route::get('routers/{routers}/ping', [RouterController::class, 'ping']);

@@ -213,6 +213,9 @@
                                 class="fab fa-whatsapp me-1 bs-tooltip" title="Share Whatsapp"></i>WA</button>
                         <button type="button" id="download" class="btn btn-primary me-1"><i
                                 class="fas fa-download me-1 bs-tooltip" title="Download Config"></i>Download</button>
+                        <button type="button" id="btn_extend" class="btn btn-danger me-1"><i
+                                class="fas fa-external-link-alt me-1 bs-tooltip"
+                                title="Extend With Balance"></i>Extend</button>
                     </div>
                 </div>
             </div>

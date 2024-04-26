@@ -22,6 +22,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'balance',
+        'router_limit',
         'phone',
         'address',
         'role',
@@ -102,6 +104,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function is_admin()
     {
         if ($this->role == 'admin') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function is_not_admin()
+    {
+        if ($this->role != 'admin') {
             return true;
         } else {
             return false;

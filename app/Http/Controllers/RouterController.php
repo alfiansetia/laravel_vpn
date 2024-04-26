@@ -42,42 +42,43 @@ class RouterController extends Controller
 
     public function store(Request $request)
     {
-        $count = Router::where('user_id', '=', auth()->user()->id)->count();
-        if ($count < 10) {
-            $this->validate($request, [
-                'vpn'  => [
-                    'required',
-                    'integer',
-                    function ($attribute, $value, $fail) {
-                        $port = Port::whereRelation('vpn', 'user_id', auth()->id())->find($value);
-                        if (!$port) {
-                            $fail('Selected port is invalid!');
-                        }
-                        $port = Router::where('port_id', $value)->first();
-                        if ($port) {
-                            $fail('The selected port is already in use on another router!');
-                        }
-                    }
-                ],
-                'name'      => 'required|min:3|max:50',
-                'username'  => 'required|min:3|max:50',
-                'password'  => 'required|min:3|max:100',
-                'hsname'    => 'required|min:3|max:50',
-                'dnsname'   => 'required|min:3|max:50',
-            ]);
-            $router = Router::create([
-                'user_id'       => auth()->id(),
-                'port_id'       => $request->vpn,
-                'name'          => $request->name,
-                'hsname'        => $request->hsname,
-                'dnsname'       => $request->dnsname,
-                'username'      => $request->username,
-                'password'      => encrypt($request->password),
-            ]);
-            return response()->json(['message' => "Router Created!", 'data' => $router]);
-        } else {
-            return response()->json(['message' => 'User only limit 2 Router!', 'data' => ''], 403);
+        $user = auth()->user();
+        $user_router_limit = $user->router_limit;
+        $count_router_user = Router::where('user_id', '=', $user->id)->count();
+        if ($count_router_user >= $user_router_limit && $user->is_not_admin()) {
+            return response()->json(['message' => 'Your account only limit ' . $user_router_limit . ' Router!', 'data' => ''], 403);
         }
+        $this->validate($request, [
+            'vpn'  => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) use ($user) {
+                    $port = Port::whereRelation('vpn', 'user_id', $user->id)->find($value);
+                    if (!$port) {
+                        $fail('Selected port is invalid!');
+                    }
+                    $port = Router::where('port_id', $value)->first();
+                    if ($port) {
+                        $fail('The selected port is already in use on another router!');
+                    }
+                }
+            ],
+            'name'      => 'required|min:3|max:50',
+            'username'  => 'required|min:3|max:50',
+            'password'  => 'required|min:3|max:100',
+            'hsname'    => 'required|min:3|max:50',
+            'dnsname'   => 'required|min:3|max:50',
+        ]);
+        $router = Router::create([
+            'user_id'       => auth()->id(),
+            'port_id'       => $request->vpn,
+            'name'          => $request->name,
+            'hsname'        => $request->hsname,
+            'dnsname'       => $request->dnsname,
+            'username'      => $request->username,
+            'password'      => encrypt($request->password),
+        ]);
+        return response()->json(['message' => "Router Created!", 'data' => $router]);
     }
 
     public function update(Request $request, string $id)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\DetailVpnMail;
+use App\Models\BalanceHistory;
 use App\Models\Port;
 use App\Models\Server;
 use App\Models\TemporaryIp;
@@ -435,5 +436,57 @@ class VpnController extends Controller
         }
         File::put($path . '/' . $file_name, $content);
         return response()->file($path . '/' . $file_name)->deleteFileAfterSend();
+    }
+
+    public function extend(Request $request, Vpn $vpn)
+    {
+        // return response()->json(date('Y-m-d', strtotime("+$request->amount month", time())), 500);
+        $this->validate($request, [
+            'amount' => 'required|in:1,2,3,4,5,6,12'
+        ]);
+        $user = auth()->user();
+        if ($user->is_not_admin() && $vpn->user_id != $user->id) {
+            return response()->json(['message' => 'This not your VPN!'], 403);
+        }
+        DB::beginTransaction();
+        try {
+            $user_balance = $user->balance;
+            $month = $request->amount;
+            $amount = $month * 10000;
+            if ($month == 12) {
+                $amount = $amount - 20000;
+            }
+            if ($user_balance < $amount) {
+                throw new Exception('Your Balance Not Enough, Please topup!');
+            }
+            $vpn_expired = $vpn->expired;
+            $new_expired = date('Y-m-d', strtotime("+$month month", strtotime($vpn_expired)));
+            if ($vpn->is_expired()) {
+                $new_expired = date('Y-m-d', strtotime("+$month month", time()));
+            }
+            $service = $this->setServer($vpn);
+            $service->extend($vpn, $new_expired);
+            $vpn->update([
+                'expired'   => $new_expired,
+                'is_active' => 'yes',
+            ]);
+            $user->update([
+                'balance' => $user_balance - $amount,
+            ]);
+            BalanceHistory::create([
+                'date'      => date('Y-m-d H:i:s'),
+                'user_id'   => $user->id,
+                'amount'    => $amount,
+                'type'      => 'min',
+                'before'    => $user_balance,
+                'after'     => $user_balance - $amount,
+                'desc'      => 'Extend ' . $vpn->username . ' ' . $month . ' Month',
+            ]);
+            DB::commit();
+            return response()->json(['message' => 'Success Extend Vpn']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => 'Failed Extend Vpn : ' . $th->getMessage()], 500);
+        }
     }
 }

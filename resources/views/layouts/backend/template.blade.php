@@ -137,6 +137,9 @@
     @endif
 
     <script>
+        function hrg(x) {
+            return parseInt(x).toLocaleString('id-ID')
+        }
         feather.replace();
 
         function unblock() {

@@ -14,7 +14,7 @@ class BankController extends Controller
 
     public function __construct()
     {
-        $this->middleware('is.admin');
+        $this->middleware('is.admin')->except('paginate');
         $this->model = Bank::class;
     }
 

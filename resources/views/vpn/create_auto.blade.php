@@ -129,11 +129,11 @@
 
                                             <div class="pricing-header-pricing">
                                                 <p class="pricing monthly-pricing">
-                                                    {{ $item->price }}
+                                                    {{ hrg($item->price) }}
                                                     <br><span class="sub-title monthly-pricing-label">Per month</span>
                                                 </p>
                                                 <p class="pricing yearly-pricing">
-                                                    {{ $item->annual_price }}
+                                                    {{ hrg($item->annual_price) }}
                                                     <br><span class="sub-title monthly-pricing-label">Per Year</span>
                                                 </p>
 

@@ -13,11 +13,15 @@
         type="text/css">
     <link href="{{ asset('backend/src/plugins/css/dark/clipboard/custom-clipboard.css') }}" rel="stylesheet"
         type="text/css">
+    <link href="{{ asset('backend/src/assets/css/light/components/modal.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}" rel="stylesheet" type="text/css" />
 
     <link href="{{ asset('backend/src/assets/css/light/components/tabs.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/assets/css/dark/components/tabs.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/assets/css/light/components/accordions.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/assets/css/dark/components/accordions.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('backend/src/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css">
 @endpush
 @push('css')
     <style>
@@ -87,6 +91,7 @@
         </div>
 
         @include('vpn.detail_user')
+        @include('vpn.extend')
 
     </div>
 @endsection
@@ -94,6 +99,12 @@
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js') }}"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
+
+    <script src="{{ asset('backend/src/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+
+    <script src="{{ asset('backend/src/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/select2/custom-select2.js') }}"></script>
 
     <script src="{{ asset('backend/src/plugins/src/flatpickr/flatpickr.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/moment/moment-with-locales.min.js') }}"></script>
@@ -108,6 +119,10 @@
     <script>
         $('.close-detail').click(function() {
             hide_card_detail()
+        })
+
+        $('#amount').select2({
+            dropdownParent: $('#modal_extend')
         })
 
         var clipboard = new ClipboardJS('.clipboard');
@@ -241,6 +256,7 @@
         var url_post = "{{ route('vpn.store') }}";
         var url_put = ""
         var url_delete = ''
+        var url_extend = ''
 
         $('#download').click(function() {
             window.open("{{ url('vpn') }}/" + id + '/download', '_blank')
@@ -322,6 +338,7 @@
             id = table.row(this).id()
             url_put = "{{ route('vpn.update', '') }}/" + id;
             url_delete = "{{ route('vpn.destroy', '') }}/" + id;
+            url_extend = "{{ url('vpn') }}/" + id + '/extend';
             id = table.row(this).id()
             edit(true)
         });
@@ -416,6 +433,64 @@
                 }
             });
         }
+
+        $('#btn_extend').click(function() {
+            $('#modal_extend').modal('show')
+        })
+
+        $(document).ready(function() {
+            $('#form_extend').submit(function(event) {
+                event.preventDefault();
+            }).validate({
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                    $(element).addClass('is-valid');
+                },
+                submitHandler: function(form) {
+                    console.log('ok');
+                    console.log($(form).serialize())
+                    refresh = true
+                    ajax_setup()
+                    $.ajax({
+                        type: 'POST',
+                        url: url_extend,
+                        data: $(form).serialize(),
+                        beforeSend: function() {
+                            block();
+                            $('#formEdit .error.invalid-feedback').each(function(i) {
+                                $(this).hide();
+                            });
+                            $('#formEdit input.is-invalid').each(function(i) {
+                                $(this).removeClass('is-invalid');
+                            });
+                        },
+                        success: function(res) {
+                            unblock();
+                            table.ajax.reload();
+                            edit(false)
+                            reset();
+                            Swal.fire(
+                                'Success!',
+                                res.message,
+                                'success'
+                            )
+                        },
+                        error: function(xhr, status, error) {
+                            unblock();
+                            handleResponseForm(xhr, 'edit')
+                        }
+                    });
+                }
+            });
+        })
 
         // });
     </script>

@@ -320,3 +320,8 @@ function date_log(string $date)
         return strtolower(date('M/d') . ' ' . $date);
     }
 }
+
+function hrg($angka)
+{
+    return number_format($angka, 0, ',', '.');
+}

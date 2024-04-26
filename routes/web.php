@@ -22,6 +22,7 @@ use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TemporaryIpController;
 use App\Http\Controllers\ToolController;
+use App\Http\Controllers\TopupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VpnController;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +61,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::group(['middleware' => ['is.active']], function () {
+
+        Route::resource('topup', TopupController::class);
 
         Route::get('page/contact', [PageController::class, 'contact'])->name('page.contact');
 
@@ -101,10 +104,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('setting/profile/password', [ProfileController::class, 'passwordUpdate'])->name('setting.profile.password.update');
 
 
+        Route::post('vpn/{vpn}/extend', [VpnController::class, 'extend'])->name('vpn.extend');
+        Route::get('vpn/{vpn}/download', [VpnController::class, 'download'])->name('vpn.download');
         Route::post('vpn-autocreate', [VpnController::class, 'autoCreate'])->name('vpn.autocreate');
         Route::get('port-getbyuser', [PortController::class, 'getByUser'])->name('port.getbyuser');
         Route::resource('vpn', VpnController::class)->only(['create', 'index', 'show']);
-        Route::get('vpn/{vpn}/download', [VpnController::class, 'download'])->name('vpn.download');
 
         Route::delete('router', [RouterController::class, 'destroyBatch'])->name('router.destroy.batch');
         Route::get('router-open', [RouterController::class, 'open'])->name('router.open');
@@ -112,6 +116,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('router', RouterController::class)->except(['edit', 'create']);
 
         Route::resource('invoice', InvoiceController::class)->only(['index', 'show']);
+
+        Route::get('bank-paginate', [BankController::class, 'paginate'])->name('bank.paginate');
 
         Route::group(['middleware' => ['is.admin']], function () {
 
@@ -139,7 +145,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
             Route::delete('port-batch', [PortController::class, 'destroyBatch'])->name('port.destroy.batch');
             Route::resource('port', PortController::class)->except(['edit', 'create']);
 
-            Route::get('bank-paginate', [BankController::class, 'paginate'])->name('bank.paginate');
             Route::delete('bank-batch', [BankController::class, 'destroyBatch'])->name('bank.destroy.batch');
             Route::resource('bank', BankController::class)->except(['edit', 'create']);
 

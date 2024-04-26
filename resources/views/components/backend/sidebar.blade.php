@@ -25,7 +25,7 @@
                 </div>
                 <div class="profile-content">
                     <h6 class="">{{ $user->name }}</h6>
-                    <p class="">{{ $user->role }}</p>
+                    <p class="">Rp. {{ hrg($user->balance) }}</p>
                 </div>
             </div>
         </div>
@@ -133,6 +133,30 @@
                 </li>
             @endif
 
+            <li class="menu {{ $title == 'Data Invoice' || $title == 'Data Topup' ? 'active' : '' }}">
+                <a href="#billing_nav" data-bs-toggle="collapse"
+                    aria-expanded="{{ $title == 'Data Invoice' || $title == 'Data Topup' ? 'true' : 'false' }}"
+                    class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="shopping-cart"></i>
+                        <span>Billing</span>
+                    </div>
+                    <div>
+                        <i data-feather="chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled {{ $title == 'Data Invoice' || $title == 'Data Topup' ? 'show' : '' }}"
+                    id="billing_nav" data-bs-parent="#accordionExample">
+                    <li class="{{ $title == 'Data Invoice' ? 'active' : '' }}">
+                        <a href="{{ route('invoice.index') }}"> List Invoice </a>
+                    </li>
+                    <li class="{{ $title == 'Data Topup' ? 'active' : '' }}">
+                        <a href="{{ route('topup.index') }}"> List Topup </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- 
             <li class="menu {{ $title == 'Data Invoice' ? 'active' : '' }}">
                 <a href="{{ route('invoice.index') }}"
                     aria-expanded="{{ $title == 'Data Invoice' ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -141,7 +165,7 @@
                         <span>List Invoice</span>
                     </div>
                 </a>
-            </li>
+            </li> --}}
 
             @if ($user->is_admin())
                 <li

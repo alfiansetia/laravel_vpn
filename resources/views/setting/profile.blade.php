@@ -1,6 +1,15 @@
 @extends('layouts.backend.template', ['title' => 'Setting Profile'])
 
 @push('css')
+    <link href="{{ asset('backend/src/plugins/src/table/datatable/datatables.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/plugins/css/light/table/datatable/dt-global_style.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ asset('backend/src/assets/css/light/apps/invoice-list.css') }}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/src/plugins/css/dark/table/datatable/dt-global_style.css') }}">
+    <link href="{{ asset('backend/src/assets/css/dark/apps/invoice-list.css') }}" rel="stylesheet" type="text/css" />
+
     <link href="{{ asset('backend/src/assets/css/light/components/list-group.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/src/assets/css/light/users/user-profile.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/src/assets/css/dark/components/list-group.css') }}" rel="stylesheet" type="text/css" />
@@ -20,9 +29,8 @@
     <div class="row layout-spacing ">
         <!-- Content -->
         <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12">
-
             <div class="user-profile">
-                <div class="widget-content widget-content-area">
+                <div class="widget-content widget-content-area p-3">
                     <div class="d-flex justify-content-between">
                         <h3 class="">Profile</h3>
                         <a href="{{ route('setting.profile.edit') }}" class="mt-2 edit-profile bs-tooltip"
@@ -50,6 +58,10 @@
                                 <li class="contacts-block__item">
                                     <i data-feather="map-pin" class="me-3 bs-tooltip" title="Address"></i>
                                     {{ $user->address }}
+                                </li>
+                                <li class="contacts-block__item">
+                                    <i data-feather="award" class="me-3 bs-tooltip" title="Limit Router"></i>
+                                    Limit <span class="badge badge-info">{{ $user->router_limit }}</span> Router
                                 </li>
                                 <li class="contacts-block__item">
                                     <i data-feather="clock" class="me-3 bs-tooltip" title="Last Login At"></i>
@@ -95,8 +107,8 @@
             </div>
         </div>
         <div class="col-xl-7 col-lg-12 col-md-12 col-sm-12">
-            <div class="payment-history layout-spacing ">
-                <div class="widget-content widget-content-area">
+            {{-- <div class="payment-history layout-spacing ">
+                <div class="widget-content widget-content-area p-3">
                     <h3 class="">Invoice History</h3>
                     <div class="list-group">
                         @forelse ($orders as $item)
@@ -129,285 +141,36 @@
                     </div>
 
                 </div>
+            </div> --}}
+
+            <div class="payment-history layout-spacing ">
+                <div class="widget-content widget-content-area p-3 text-center">
+                    <h3 class="mb-0 text-start">Total Balance</h3>
+                    <div class="list-group">
+                        <span style="font-size: 38px;font-weight: 600; color: #191e3a">Rp.
+                            {{ hrg($user->balance) }}</span>
+                    </div>
+                    <a href="{{ route('topup.index') }}" class="btn btn-primary"><i data-feather="plus-circle"></i>
+                        TopUp</a>
+                </div>
+            </div>
+
+            <div class="payment-history layout-spacing ">
+                <div class="widget-content widget-content-area p-3">
+                    <h3 class="">Balance History</h3>
+                    <div class="table-responsive">
+                        <table class="table" id="table_balance"></table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    {{-- <div class="row">
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-            <div class="summary layout-spacing ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Summary</h3>
-                    <div class="order-summary">
-
-                        <div class="summary-list summary-income">
-
-                            <div class="summery-info">
-
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-shopping-bag">
-                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                    </svg>
-                                </div>
-
-                                <div class="w-summary-details">
-
-                                    <div class="w-summary-info">
-                                        <h6>Income <span class="summary-count">$92,600 </span></h6>
-                                        <p class="summary-average">90%</p>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="summary-list summary-profit">
-
-                            <div class="summery-info">
-
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-dollar-sign">
-                                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                    </svg>
-                                </div>
-
-                                <div class="w-summary-details">
-
-                                    <div class="w-summary-info">
-                                        <h6>Profit <span class="summary-count">$37,515</span></h6>
-                                        <p class="summary-average">65%</p>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="summary-list summary-expenses">
-
-                            <div class="summery-info">
-
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-credit-card">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2">
-                                        </rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                    </svg>
-                                </div>
-                                <div class="w-summary-details">
-
-                                    <div class="w-summary-info">
-                                        <h6>Expenses <span class="summary-count">$55,085</span></h6>
-                                        <p class="summary-average">42%</p>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-
-            <div class="pro-plan layout-spacing">
-                <div class="widget">
-
-                    <div class="widget-heading">
-
-                        <div class="task-info">
-                            <div class="w-title">
-                                <h5>Pro Plan</h5>
-                                <span>$25/month</span>
-                            </div>
-                        </div>
-
-                        <div class="task-action">
-                            <button class="btn btn-secondary">Renew Now</button>
-                        </div>
-                    </div>
-
-                    <div class="widget-content">
-
-                        <ul class="p-2 ps-3 mb-4">
-                            <li class="mb-1"><strong>10,000 Monthly Visitors</strong></li>
-                            <li class="mb-1"><strong>Unlimited Reports</strong></li>
-                            <li class=""><strong>2 Years Data Storage</strong></li>
-                        </ul>
-
-                        <div class="progress-data">
-                            <div class="progress-info">
-                                <div class="due-time">
-                                    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <polyline points="12 6 12 12 16 14"></polyline>
-                                        </svg> 5 Days Left</p>
-                                </div>
-                                <div class="progress-stats">
-                                    <p class="text-info">$25 / month</p>
-                                </div>
-                            </div>
-
-                            <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-            <div class="payment-history layout-spacing ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Payment History</h3>
-
-                    <div class="list-group">
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="me-auto">
-                                <div class="fw-bold title">March</div>
-                                <p class="sub-title mb-0">Pro Membership</p>
-                            </div>
-                            <span class="pay-pricing align-self-center me-3">$45</span>
-                            <div class="btn-group dropstart align-self-center" role="group">
-                                <a id="paymentHistory1" href="javascript:void(0);" class="dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-more-horizontal">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="paymentHistory1">
-                                    <a class="dropdown-item" href="javascript:void(0);">View Invoice</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Download Invoice</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="me-auto">
-                                <div class="fw-bold title">February</div>
-                                <p class="sub-title mb-0">Pro Membership</p>
-                            </div>
-                            <span class="pay-pricing align-self-center me-3">$45</span>
-                            <div class="btn-group dropstart align-self-center" role="group">
-                                <a id="paymentHistory2" href="javascript:void(0);" class="dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-more-horizontal">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="paymentHistory2">
-                                    <a class="dropdown-item" href="javascript:void(0);">View Invoice</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Download Invoice</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="me-auto">
-                                <div class="fw-bold title">January</div>
-                                <p class="sub-title mb-0">Pro Membership</p>
-                            </div>
-                            <span class="pay-pricing align-self-center me-3">$45</span>
-                            <div class="btn-group dropstart align-self-center" role="group">
-                                <a id="paymentHistory3" href="javascript:void(0);" class="dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-more-horizontal">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="paymentHistory3">
-                                    <a class="dropdown-item" href="javascript:void(0);">View Invoice</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Download Invoice</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-            <div class="payment-methods layout-spacing ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Payment Methods</h3>
-
-                    <div class="list-group">
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <img src="../src/assets/img/card-americanexpress.svg" class="align-self-center me-3"
-                                alt="americanexpress">
-                            <div class="me-auto">
-                                <div class="fw-bold title">American Express</div>
-                                <p class="sub-title mb-0">Expires on 12/2025</p>
-                            </div>
-                            <span class="badge badge-success align-self-center me-3">Primary</span>
-                        </div>
-
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <img src="../src/assets/img/card-mastercard.svg" class="align-self-center me-3"
-                                alt="mastercard">
-                            <div class="me-auto">
-                                <div class="fw-bold title">Mastercard</div>
-                                <p class="sub-title mb-0">Expires on 03/2025</p>
-                            </div>
-                        </div>
-
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <img src="../src/assets/img/card-visa.svg" class="align-self-center me-3" alt="visa">
-                            <div class="me-auto">
-                                <div class="fw-bold title">Visa</div>
-                                <p class="sub-title mb-0">Expires on 10/2025</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div> --}}
 @endsection
 
 @push('jslib')
+    <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js') }}"></script>
+
     <script src="{{ asset('backend/src/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
@@ -418,6 +181,8 @@
 @endpush
 
 @push('js')
+    <script src="{{ asset('js/func.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('#edit_profile_btn').click(function() {
@@ -455,5 +220,63 @@
             });
 
         });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            var table_balance = $('#table_balance').DataTable({
+                processing: true,
+                serverSide: true,
+                rowId: 'id',
+                ajax: {
+                    url: "{{ route('api.balance.index') }}",
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        handleResponseCode(jqXHR, textStatus, errorThrown)
+                    },
+                    data: function(data) {
+                        data.dt = 'on'
+                    },
+                },
+                columnDefs: [{
+                    defaultContent: '',
+                    targets: "_all"
+                }],
+                order: [0, 'desc'],
+                buttons: [],
+                dom: dom,
+                stripeClasses: [],
+                lengthMenu: length_menu,
+                pageLength: 10,
+                oLanguage: o_lang,
+                columns: [{
+                    title: "Date",
+                    data: 'date',
+                }, {
+                    title: "Amount",
+                    data: 'amount',
+                    render: function(data, type, row, meta) {
+                        let plus = `<span class="badge badge-success">+</span>`;
+                        let min = `<span class="badge badge-danger">-</span>`;
+                        if (type == 'display') {
+                            return `${row.type == 'min' ? min : plus} ${hrg(data)}`
+                        } else {
+                            return data
+                        }
+                    }
+                }, {
+                    title: "Desc",
+                    data: 'desc',
+                }, ],
+                headerCallback: function(e, a, t, n, s) {},
+                drawCallback: function(settings) {
+                    feather.replace();
+                    tooltip()
+                },
+                initComplete: function() {
+                    feather.replace();
+                }
+            });
+        })
     </script>
 @endpush

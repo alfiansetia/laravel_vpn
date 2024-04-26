@@ -196,4 +196,34 @@ class ServerApiServices
             throw new Exception('Selected Server Error!', 500);
         }
     }
+
+    public function extend(Vpn $vpn, string $new_expired)
+    {
+        if ($this->connect()) {
+            $ppp = $this->API->comm("/ppp/secret/print", array(
+                "?name" => $vpn->username,
+            ));
+            if (count($ppp) < 1) {
+                throw new Exception('Selected Server Error!', 500);
+            }
+            $active = $this->API->comm("/ppp/active/print", array(
+                "?name" => $vpn->username,
+            ));
+            $this->API->comm("/ppp/secret/set", array(
+                ".id"               => $ppp[0]['.id'],
+                "disabled"          => 'no',
+                "comment"           => $new_expired
+            ));
+
+            foreach ($active as $value) {
+                $this->API->comm("/ppp/active/remove", array(
+                    ".id" => $value['.id'],
+                ));
+            }
+            $this->disconnect();
+            return true;
+        } else {
+            throw new Exception('Selected Server Error!', 500);
+        }
+    }
 }
