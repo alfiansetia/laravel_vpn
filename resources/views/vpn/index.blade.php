@@ -457,6 +457,7 @@
         var url_post = "{{ route('vpn.store') }}";
         var url_put = "{{ route('vpn.update', '') }}/" + id;
         var url_delete = "{{ route('vpn.destroy', '') }}/" + id;
+        var url_temp = "{{ route('vpn.destroy', '') }}/" + id;
 
         $('#share').click(function() {
             id = $(this).val();
@@ -535,6 +536,7 @@
             edit(true)
             url_put = "{{ route('vpn.update', '') }}/" + id;
             url_delete = "{{ route('vpn.destroy', '') }}/" + id;
+            url_temp = "{{ route('vpn.destroy', '') }}/" + id + '/temporary';
             id = table.row(this).id()
         });
 
@@ -665,6 +667,52 @@
                 }
             });
         }
+
+        $('#btn_temp').click(function() {
+            Swal.fire({
+                title: 'Are you sure Delete & Move to Temporary?',
+                text: "Data Will be Lost!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
+                confirmButtonAriaLabel: 'Thumbs up, Yes!',
+                cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
+                cancelButtonAriaLabel: 'Thumbs down',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                padding: '2em',
+                customClass: 'animated tada',
+                showClass: {
+                    popup: `animated tada`
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    ajax_setup();
+                    $.ajax({
+                        type: 'POST',
+                        url: url_temp,
+                        beforeSend: function() {
+                            block();
+                        },
+                        success: function(res) {
+                            refresh = true
+                            unblock();
+                            table.ajax.reload();
+                            Swal.fire(
+                                'Success!',
+                                res.message,
+                                'success'
+                            )
+                            show_index()
+                        },
+                        error: function(xhr, status, error) {
+                            unblock();
+                            handleResponse(xhr)
+                        }
+                    });
+                }
+            })
+        })
 
         // });
     </script>

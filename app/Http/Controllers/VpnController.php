@@ -445,7 +445,6 @@ class VpnController extends Controller
 
     public function extend(Request $request, Vpn $vpn)
     {
-        // return response()->json(date('Y-m-d', strtotime("+$request->amount month", time())), 500);
         $this->validate($request, [
             'amount' => 'required|in:1,2,3,4,5,6,12'
         ]);
@@ -492,6 +491,32 @@ class VpnController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['message' => 'Failed Extend Vpn : ' . $th->getMessage()], 500);
+        }
+    }
+
+    public function temporary(Request $request, Vpn $vpn)
+    {
+        DB::beginTransaction();
+        try {
+            $ports = $vpn->port;
+            $count_port = count($ports ?? []);
+            if ($count_port != 3) {
+                throw new Exception('Vpn Not Suitable for move to temporary : port available ' . $count_port);
+            }
+            TemporaryIp::create([
+                'ip'    => $vpn->ip,
+                'web'   => $ports[0]->dst,
+                'api'   => $ports[1]->dst,
+                'win'   => $ports[2]->dst,
+            ]);
+            $service = $this->setServer($vpn);
+            $service->destroy($vpn);
+            $vpn->delete();
+            DB::commit();
+            return response()->json(['message' => 'Success Move Vpn to Temporary!']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => 'Failed Move Vpn to Temporary : ' . $th->getMessage()], 500);
         }
     }
 }

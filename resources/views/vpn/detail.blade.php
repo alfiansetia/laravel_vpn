@@ -262,6 +262,9 @@
                                         <button type="button" id="analyze" class="btn btn-warning me-1"><i
                                                 class="fas fa-sync me-1 bs-tooltip"
                                                 title="Analyze"></i>Analyze</button>
+                                        <button type="button" id="btn_temp" class="btn btn-danger me-1"><i
+                                                class="fas fa-sync me-1 bs-tooltip"
+                                                title="Move Temporary IP"></i>Temporary</button>
                                     </div>
                                 </div>
                             </div>
