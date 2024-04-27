@@ -19,6 +19,12 @@ class Kernel extends ConsoleKernel
         })->onFailure(function () {
             Log::error('Cronjob Monitor VPN Gagal dijalankan');
         });
+
+        $schedule->command('database:backup')->dailyAt('01:00')->onSuccess(function () {
+            Log::info('Cronjob Backup Database berhasil dijalankan');
+        })->onFailure(function () {
+            Log::error('Cronjob Backup Database Gagal dijalankan');
+        });
     }
 
     /**
