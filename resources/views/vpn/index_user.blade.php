@@ -381,7 +381,7 @@
                         status.html('<span class="badge badge-warning">Trial</span>')
                     } else {
                         status.html(
-                            `<span class="badge badge-danger">Nonactive </span>${result.data.is_trial == 'yes' ? 'Trial' : ''}`
+                            `<span class="badge badge-danger">Nonactive ${result.data.is_trial == 'yes' ? 'Trial' : ''}</span>`
                         )
                     }
 
