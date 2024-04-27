@@ -404,7 +404,7 @@
                             `<i class="fas fa-circle text-success bs-tooltip" title="Active"></i> ${data}`;
                     } else {
                         text =
-                            `<i class="fas fa-circle text-danger bs-tooltip" title="Nonactive"></i> ${data}`;
+                            `<i class="fas fa-circle text-danger bs-tooltip" title="Nonactive ${row.is_trial === 'yes' ? 'Trial': ''}"></i> ${data}`;
                     }
                     if (type === 'display') {
                         return text
@@ -613,7 +613,9 @@
                     } else if (result.data.is_active == 'yes' && result.data.is_trial === 'yes') {
                         status.html('<span class="badge badge-warning">Trial</span>')
                     } else {
-                        status.html('<span class="badge badge-danger">Nonactive</span>')
+                        status.html(
+                            `<span class="badge badge-danger">Nonactive </span>${result.data.is_trial == 'yes' ? 'Trial' : ''}`
+                        )
                     }
 
                     $('#table_port').html('');
