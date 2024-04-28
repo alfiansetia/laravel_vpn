@@ -65,9 +65,41 @@
             placement: "top",
         });
 
+
         Inputmask("ip").mask($(".mask_ip"));
 
         $(".select2").select2();
+
+        var perpage = 20;
+
+        $("#server, #edit_server").select2({
+            ajax: {
+                delay: 1000,
+                url: "{{ route('server.paginate') }}",
+                data: function(params) {
+                    return {
+                        name: params.term,
+                        page: params.page || 1,
+                        perpage: perpage,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id,
+                                disabled: item.is_active == 'no' ? true : false,
+                            }
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
+                    };
+                },
+            }
+        });
 
         var table = $('#tableData').DataTable({
             processing: true,
@@ -100,6 +132,16 @@
                     <div class="form-check form-check-primary d-block new-control">
                         <input class="form-check-input child-chk" type="checkbox" name="id[]" value="${data}" >
                     </div>`
+                }
+            }, {
+                title: "Server",
+                data: 'server_id',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return data == null ? '' : row.server.name
+                    } else {
+                        return data
+                    }
                 }
             }, {
                 title: "IP",
@@ -166,6 +208,13 @@
                     $('#edit_web').val(result.data.web);
                     $('#edit_api').val(result.data.api);
                     $('#edit_win').val(result.data.win);
+                    if (result.data.server_id == null) {
+                        $('#edit_server').val('').trigger('change');
+                    } else {
+                        let option1 = new Option(result.data.server.name, result.data.server_id,
+                            true, true);
+                        $('#edit_server').append(option1).trigger('change');
+                    }
                     if (show) {
                         show_card_edit()
                         input_focus('ip')

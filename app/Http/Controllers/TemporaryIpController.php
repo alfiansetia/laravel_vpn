@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TemporaryIp;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class TemporaryIpController extends Controller
@@ -15,6 +16,7 @@ class TemporaryIpController extends Controller
     {
         $this->middleware('is.admin');
         $this->model = TemporaryIp::class;
+        $this->with = ['server:id,name'];
     }
 
     /**
@@ -27,7 +29,7 @@ class TemporaryIpController extends Controller
             if ($request->filled('ip')) {
                 $data->where('ip', 'like', "%{$request->ip}%");
             }
-            $result = $data;
+            $result = $data->with('server:id,name');
             return DataTables::of($result)->toJson();
         }
         return view('temp.index');
@@ -39,16 +41,24 @@ class TemporaryIpController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'ip'    => 'required|ip|unique:vpns,ip',
-            'web'   => 'required|integer|gt:0',
-            'api'   => 'required|integer|gt:0',
-            'win'   => 'required|integer|gt:0',
+            'server'    => 'required|exists:servers,id',
+            'ip'        => [
+                'required', 'ip',
+                Rule::unique('vpns')->where(function ($query) use ($request) {
+                    return $query->where('ip', $request->input('ip'))
+                        ->where('server_id', $request->input('server'));
+                })
+            ],
+            'web'       => 'required|integer|gt:0',
+            'api'       => 'required|integer|gt:0',
+            'win'       => 'required|integer|gt:0',
         ]);
         $temp = TemporaryIp::create([
-            'ip'    => $request->input('ip'),
-            'web'   => $request->input('web'),
-            'api'   => $request->input('api'),
-            'win'   => $request->input('win'),
+            'server_id' => $request->input('server'),
+            'ip'        => $request->input('ip'),
+            'web'       => $request->input('web'),
+            'api'       => $request->input('api'),
+            'win'       => $request->input('win'),
         ]);
         return response()->json(['message' => 'Success Insert Data', 'data' => $temp]);
     }
@@ -59,16 +69,24 @@ class TemporaryIpController extends Controller
     public function update(Request $request, TemporaryIp $temporaryIp)
     {
         $this->validate($request, [
-            'ip'    => 'required|ip|unique:vpns,ip,' . $temporaryIp->ip,
-            'web'   => 'required|integer|gt:0',
-            'api'   => 'required|integer|gt:0',
-            'win'   => 'required|integer|gt:0',
+            'server'    => 'required|exists:servers,id',
+            'ip'        => [
+                'required', 'ip',
+                Rule::unique('vpns')->where(function ($query) use ($request) {
+                    return $query->where('ip', $request->input('ip'))
+                        ->where('server_id', $request->input('server'));
+                })->ignore($temporaryIp->id)
+            ],
+            'web'       => 'required|integer|gt:0',
+            'api'       => 'required|integer|gt:0',
+            'win'       => 'required|integer|gt:0',
         ]);
         $temporaryIp->update([
-            'ip'    => $request->input('ip'),
-            'web'   => $request->input('web'),
-            'api'   => $request->input('api'),
-            'win'   => $request->input('win'),
+            'server_id' => $request->input('server'),
+            'ip'        => $request->input('ip'),
+            'web'       => $request->input('web'),
+            'api'       => $request->input('api'),
+            'win'       => $request->input('win'),
         ]);
         return response()->json(['message' => 'Success Update Data', 'data' => '']);
     }

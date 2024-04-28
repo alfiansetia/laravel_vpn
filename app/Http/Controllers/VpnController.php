@@ -120,7 +120,7 @@ class VpnController extends Controller
         DB::beginTransaction();
         try {
             $server = Server::find($request->input('server'));
-            $temp = TemporaryIp::first();
+            $temp = TemporaryIp::where('server_id', $server->id)->first();
             $reg = date('Y-m-d');
             $exp = date('Y-m-d', strtotime('+1 day', strtotime($reg)));
             $to = [80, 8728, 8291];
@@ -504,10 +504,11 @@ class VpnController extends Controller
                 throw new Exception('Vpn Not Suitable for move to temporary : port available ' . $count_port);
             }
             TemporaryIp::create([
-                'ip'    => $vpn->ip,
-                'web'   => $ports[0]->dst,
-                'api'   => $ports[1]->dst,
-                'win'   => $ports[2]->dst,
+                'server_id' => $vpn->server_id,
+                'ip'        => $vpn->ip,
+                'web'       => $ports[0]->dst,
+                'api'       => $ports[1]->dst,
+                'win'       => $ports[2]->dst,
             ]);
             $service = $this->setServer($vpn);
             $service->destroy($vpn);

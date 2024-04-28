@@ -14,4 +14,9 @@ class TemporaryIp extends Model
     protected $casts = [
         'id'        => 'integer',
     ];
+
+    public function server()
+    {
+        return $this->belongsTo(Server::class);
+    }
 }

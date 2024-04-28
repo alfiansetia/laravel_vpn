@@ -9,7 +9,16 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-12 mb-2">
+                        <div class="form-group col-md-6 mb-2">
+                            <label for="server"><i class="fas fa-server me-1 bs-tooltip"
+                                    title="Option Server"></i>Server
+                                :</label>
+                            <select name="server" id="server" class="form-control" style="width: 100%;" required>
+                                <option value="">Please Select Server</option>
+                            </select>
+                            <span id="err_server" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group col-md-6 mb-2">
                             <label class="control-label" for="ip">IP :</label>
                             <input type="text" name="ip" class="form-control mask_ip" id="ip"
                                 placeholder="Please Enter ip" minlength="3" maxlength="25" required>
