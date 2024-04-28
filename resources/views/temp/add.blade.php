@@ -10,9 +10,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-6 mb-2">
-                            <label for="server"><i class="fas fa-server me-1 bs-tooltip"
-                                    title="Option Server"></i>Server
-                                :</label>
+                            <label for="server">Server :</label>
                             <select name="server" id="server" class="form-control" style="width: 100%;" required>
                                 <option value="">Please Select Server</option>
                             </select>
