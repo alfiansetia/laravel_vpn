@@ -28,7 +28,7 @@ class BankController extends Controller
         if ($request->filled('name')) {
             $data->where('name', 'like', "%{$request->name}%");
         }
-        $result = $data->paginate($perpage);
+        $result = $data->where('is_active', 'yes')->paginate($perpage);
         return $result;
     }
 
