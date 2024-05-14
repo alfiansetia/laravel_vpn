@@ -394,6 +394,7 @@ class VpnController extends Controller
         $to = $request->email;
         try {
             Mail::to($to)->queue(new DetailVpnMail($vpn));
+            $vpn->update(['last_email' => date('Y-m-d H:i:s')]);
             return response()->json(['message' => 'Success Send Email to ' . $to]);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Failed Send Email : ' . $th->getMessage()], 500);

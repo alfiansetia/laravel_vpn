@@ -52,6 +52,13 @@
                             placeholder="Please Enter Password" minlength="5" maxlength="100" required>
                         <span id="err_password" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
+                    <div class="form-group mb-2">
+                        <label class="control-label" for="contact"><i class="fas fa-phone me-1 bs-tooltip"
+                                title="contact"></i>Contact :</label>
+                        <input type="tel" name="contact" class="form-control maxlength" id="contact"
+                            placeholder="Please Enter contact" minlength="8" maxlength="15" required>
+                        <span id="err_contact" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
                 </div>
                 <div class="card-footer text-center">
                     <div class="row">

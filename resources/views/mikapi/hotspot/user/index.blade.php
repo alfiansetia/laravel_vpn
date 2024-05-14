@@ -23,6 +23,9 @@
 
     <link href="{{ asset('backend/src/assets/css/dark/scrollspyNav.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/src/assets/css/dark/forms/switches.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/src/assets/css/light/components/modal.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}" rel="stylesheet" type="text/css" />
+
     <style>
         .row-disabled {
             background-color: rgb(218, 212, 212)
@@ -31,6 +34,20 @@
 @endpush
 @section('content')
     <div class="row" id="cancel-row">
+
+        <div class="row layout-top-spacing layout-spacing pb-0" id="card_filter">
+            <div class="col-md-4">
+                <select class="form-control select2" name="status" id="select_comment">
+                    <option value="">All</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-block btn-primary" id="btn_filter">
+                    <i class="fas fa-filter me-1"></i>Filter
+                </button>
+            </div>
+        </div>
+
         <div class="col-xl-12 col-lg-12 col-sm-12 layout-top-spacing layout-spacing" id="card_table">
             <div class="widget-content widget-content-area br-8">
                 <form action="" id="formSelected">
@@ -48,6 +65,8 @@
         @include('mikapi.hotspot.user.edit')
         @include('mikapi.hotspot.user.detail')
     </div>
+    <div id="tes"></div>
+    @include('mikapi.hotspot.user.modal')
 @endsection
 @push('jslib')
     <script src="{{ asset('backend/src/plugins/src/table/datatable/datatables.js') }}"></script>
@@ -161,6 +180,33 @@
                             return {
                                 text: item.name,
                                 id: item.name,
+                            }
+                        })
+                    };
+                },
+            }
+        });
+
+        $("#template").select2({
+            dropdownParent: $('#modal_print'),
+            placeholder: 'Select Template',
+            ajax: {
+                delay: 1000,
+                url: "{{ route('api.template.index') }}" + param_router,
+                data: function(params) {
+                    return {
+                        name: params.term || '',
+                        page: params.page || 1,
+                    };
+                },
+                processResults: function(data, params) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.name,
+                                html_up: item.html_up,
+                                html_vc: item.html_vc,
                             }
                         })
                     };
@@ -283,7 +329,15 @@
             },
             initComplete: function() {
                 feather.replace();
-                refresh = false
+                refresh = false;
+                let data_com = this.api().columns().data()[8]
+                let uniqueData = Array.from(new Set(data_com.filter(item => item !== null && item !== "")));
+                uniqueData.forEach(element => {
+                    let opt = new Option(element, element, true, true);
+                    $('#select_comment').append(opt)
+                });
+                $('#select_comment').val('').trigger('change')
+                // console.log(uniqueData);
             }
         });
 
@@ -292,6 +346,11 @@
         $('#btn_add').click(function() {
             show_card_add()
             input_focus('name')
+        })
+
+        $('#btn_filter').click(function() {
+            let comment = $('#select_comment').val()
+            table.column(8).search(comment).draw()
         })
 
         $('#btn_refresh').click(function() {
@@ -314,34 +373,9 @@
                     text: "No Selected Data!",
                     icon: 'error',
                 })
+                return;
             }
-            let checkedRowsData = [];
-            $('input[name="id[]"]:checked').each(function() {
-                let rowIndex = $(this).closest('tr').index();
-                let rowData = table.row(rowIndex).data();
-                checkedRowsData.push(rowData);
-            });
-            // console.log(checkedRowsData);
-            let printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Data Print</title></head><body>');
-            printWindow.document.write('<h1>Data Table</h1>');
-            printWindow.document.write('<table border="1">');
-            printWindow.document.write('<tr><th>ID</th><th>Name</th><th>Age</th></tr>');
-
-            // Tambahkan data ke dalam tabel di tab baru
-            for (let i = 0; i < checkedRowsData.length; i++) {
-                if (checkedRowsData[i].default == false) {
-                    printWindow.document.write('<tr>');
-                    printWindow.document.write('<td>' + checkedRowsData[i]['.id'] + '</td>');
-                    printWindow.document.write('<td>' + checkedRowsData[i].name + '</td>');
-                    printWindow.document.write('<td>' + checkedRowsData[i].password + '</td>');
-                    printWindow.document.write('</tr>');
-                }
-            }
-
-            printWindow.document.write('</table></body></html>');
-            printWindow.document.close();
-            printWindow.print();
+            $('#modal_print').modal('show')
 
         })
 
@@ -448,6 +482,92 @@
                     handleResponse(xhr)
                 }
             });
+        }
+
+        var hsname = ''
+        var contact = ''
+        var url_logo = ''
+        $.get("{{ route('router.show', request()->query('router')) }}").done(function(result) {
+            hsname = result.data.hsname || '-'
+            contact = result.data.contact || '-'
+            url_logo = result.data.url_logo
+        })
+
+        $(document).ready(function() {
+            $('#btn_modal_print').click(function() {
+                let select = $('#template').select2('data')[0]
+                let type = $('#modal_type').val()
+                let html = ''
+                if (type == 'up') {
+                    html = select.html_up
+                } else {
+                    html = select.html_vc
+                }
+                if (html == '') {
+                    return
+                }
+
+                let decoded = document.createElement('textarea');
+                decoded.innerHTML = html;
+                // var decoded = $("<div/>").html(html).text();
+                // console.log(decoded.value);
+                print_vc(decoded.value)
+
+            })
+        })
+
+        function print_vc(html) {
+            console.log(html);
+            let checkedRowsData = [];
+            $('input[name="id[]"]:checked').each(function() {
+                let rowIndex = $(this).closest('tr').index();
+                let rowData = table.row(rowIndex).data();
+                checkedRowsData.push(rowData);
+            });
+            let printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Data Print</title></head><body>');
+            for (let i = 0; i < checkedRowsData.length; i++) {
+                let username = checkedRowsData[i].name
+                let password = checkedRowsData[i].password
+                let validity = '1d'
+                let price = $('#modal_price').val() || 0
+                let timelimit = checkedRowsData[i]['limit_uptime_parse'] || 'unlimited'
+                let datalimit = checkedRowsData[i]['limit-bytes-total'] == 0 ? 'unlimited' : checkedRowsData[i][
+                    'limit_bytes_total_parse'
+                ]
+                let num = i + 1
+                let newhtml = html.replace('%u_username%', username)
+                newhtml = newhtml.replace('%u_password%', password)
+                newhtml = newhtml.replace('%validity%', validity)
+                newhtml = newhtml.replace('%price%', price)
+                newhtml = newhtml.replace('%hs_name%', hsname)
+                newhtml = newhtml.replace('%timelimit%', timelimit)
+                newhtml = newhtml.replace('%datalimit%', datalimit)
+                newhtml = newhtml.replace('%num%', num)
+                newhtml = newhtml.replace('%contact%', contact)
+                newhtml = newhtml.replace('%url_logo%', url_logo)
+                if (checkedRowsData[i].default == false) {
+                    printWindow.document.write(newhtml);
+                }
+            }
+
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            let img = printWindow.document.querySelector('img');
+            // console.log(img);
+            if (img == null) {
+                printWindow.print();
+            } else {
+                img.onload = function() {
+                    printWindow.print();
+                };
+            }
+            // printWindow.print();
+
+            // printWindow.document.write('<td>' + checkedRowsData[i]['.id'] + '</td>');
+            // printWindow.document.write('<td>' + checkedRowsData[i].name + '</td>');
+            // printWindow.document.write('<td>' + checkedRowsData[i].password + '</td>');
+            // printWindow.document.write('</tr>');
         }
 
 

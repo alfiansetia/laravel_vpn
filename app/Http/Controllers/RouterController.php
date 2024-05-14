@@ -68,6 +68,7 @@ class RouterController extends Controller
             'password'  => 'required|min:3|max:100',
             'hsname'    => 'required|min:3|max:50',
             'dnsname'   => 'required|min:3|max:50',
+            'contact'   => 'required|min:8|max:15'
         ]);
         $router = Router::create([
             'user_id'       => auth()->id(),
@@ -77,13 +78,15 @@ class RouterController extends Controller
             'dnsname'       => $request->dnsname,
             'username'      => $request->username,
             'password'      => encrypt($request->password),
+            'contact'       => $request->contact,
         ]);
         return response()->json(['message' => "Router Created!", 'data' => $router]);
     }
 
     public function update(Request $request, string $id)
     {
-        $router = Router::where('user_id', auth()->id())->find($id);
+        $user = auth()->user();
+        $router = Router::where('user_id', $user->id)->find($id);
         if (!$router) {
             return response()->json(['message' => 'Router Not Found!'], 404);
         }
@@ -91,8 +94,8 @@ class RouterController extends Controller
             'vpn'  => [
                 'required',
                 'integer',
-                function ($attribute, $value, $fail) use ($id) {
-                    $port = Port::whereRelation('vpn', 'user_id', auth()->id())->find($value);
+                function ($attribute, $value, $fail) use ($id, $user) {
+                    $port = Port::whereRelation('vpn', 'user_id', $user->id)->find($value);
                     if (!$port) {
                         $fail('Selected port is invalid!');
                     }
@@ -108,6 +111,7 @@ class RouterController extends Controller
             'hsname'    => 'required|min:3|max:50',
             'dnsname'   => 'required|min:3|max:50',
             'desc'      => 'nullable|max:100',
+            'contact'   => 'required|min:8|max:15'
         ]);
         $param = [
             'port_id'       => $request->vpn,
@@ -115,7 +119,7 @@ class RouterController extends Controller
             'hsname'        => $request->hsname,
             'dnsname'       => $request->dnsname,
             'username'      => $request->username,
-            'desc'          => $request->desc,
+            'contact'       => $request->contact,
         ];
         if ($request->filled('password')) {
             $param['password'] = encrypt($request->password);

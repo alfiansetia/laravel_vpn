@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\Mikapi\System\UserController as SystemUserControlle
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\RouterController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VoucherTemplateController;
 use App\Http\Controllers\Api\VpnController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('password', [UserController::class, 'passwordUpdate']);
 
     Route::group(['middleware' => ['verified']], function () {
+
+        Route::get('template', [VoucherTemplateController::class, 'index'])->name('api.template.index');
 
         Route::get('balance_history', [BalanceHistoryController::class, 'index'])->name('api.balance.index');
 

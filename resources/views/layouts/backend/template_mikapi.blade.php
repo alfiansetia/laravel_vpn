@@ -202,9 +202,12 @@
             block()
             window.location.href = url;
         }
-        // $(document).ready(function(){
-        //     console.clear();
-        // })
+        $(document).ready(function() {
+            // console.clear();
+            $('.bs-tooltip').on("mouseleave", function() {
+                $(this).tooltip("hide");
+            })
+        })
     </script>
 </body>
 

@@ -29,4 +29,13 @@ class Router extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getUrlLogoAttribute($value)
+    {
+        if (!$value) {
+            return asset('/images/default/logo_vc.svg');
+        } else {
+            return $value;
+        }
+    }
 }

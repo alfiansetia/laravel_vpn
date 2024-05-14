@@ -59,6 +59,13 @@
                         </div>
                         <span id="err_edit_password" class="error invalid-feedback" style="display: hide;"></span>
                     </div>
+                    <div class="form-group mb-2">
+                        <label class="control-label" for="edit_contact"><i class="fas fa-phone me-1 bs-tooltip"
+                                title="contact"></i>Contact :</label>
+                        <input type="tel" name="contact" class="form-control maxlength" id="edit_contact"
+                            placeholder="Please Enter contact" minlength="8" maxlength="15" required>
+                        <span id="err_edit_contact" class="error invalid-feedback" style="display: hide;"></span>
+                    </div>
                 </div>
                 <div class="card-footer text-center">
                     <div class="row">
