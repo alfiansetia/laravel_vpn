@@ -248,7 +248,7 @@
             text += `------------------------------------------------\n`;
             text += `Created At : ${moment.utc(data.created_at, "YYYY-MM-DD\THH:mm:ss\Z").format('DD MMM YYYY')}\n`;
             text +=
-                `Status     : ${(data.is_active == 1 && data.masa == 0) ? 'Trial' : (data.is_active == 1 && data.masa > 0) ? 'Active': 'Nonactive' }\n`;
+                `Status     : ${data.is_active == 'yes'  ? 'Active': 'Nonactive' + (data.is_trial == 'yes' ? ' Trial' : '')}\n`;
             text += `Expired    : ${moment(data.expired).format('DD MMM YYYY')}\n`;
             text += `------------------------------------------------\n`;
             for (let i = 0; i < data.port.length; i++) {

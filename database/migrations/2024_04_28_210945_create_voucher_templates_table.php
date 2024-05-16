@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('voucher_templates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name');
             $table->text('html_up')->nullable();
             $table->text('html_vc')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
