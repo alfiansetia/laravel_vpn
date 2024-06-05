@@ -16,7 +16,8 @@ class VpnController extends Controller
             $limit = $request->limit;
         }
         $data = Vpn::query()
-            ->with('server')->where('user_id', auth()->id())
+            ->with('server')->withCount('port')
+            ->where('user_id', auth()->id())
             ->paginate($limit)->withQueryString();
         return VpnResource::collection($data);
     }

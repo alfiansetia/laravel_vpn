@@ -7,18 +7,18 @@ use App\Http\Resources\RouterResource;
 use App\Models\Port;
 use App\Models\Router;
 use App\Services\RouterApiServices;
+use App\Traits\ResponseApiTrait;
 use Illuminate\Http\Request;
 
 class RouterController extends Controller
 {
-
     public function index(Request $request)
     {
         $limit = 10;
         if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 0) {
             $limit = $request->limit;
         }
-        $data = Router::with('port')->where('user_id', auth()->id())->paginate($limit)->withQueryString();
+        $data = Router::with('port.vpn.server')->where('user_id', auth()->id())->paginate($limit);
         return RouterResource::collection($data);
     }
 
@@ -33,44 +33,45 @@ class RouterController extends Controller
 
     public function store(Request $request)
     {
-        $count = Router::where('user_id', '=', auth()->user()->id)->count();
-        if ($count < 10) {
-            $this->validate($request, [
-                'vpn_port'  => [
-                    'required',
-                    'integer',
-                    function ($attribute, $value, $fail) {
-                        $port = Port::whereRelation('vpn', 'user_id', auth()->id())->find($value);
-                        if (!$port) {
-                            $fail('Selected port is invalid!');
-                        }
-                        $port = Router::where('port_id', $value)->first();
-                        if ($port) {
-                            $fail('The selected port is already in use on another router!');
-                        }
-                    }
-                ],
-                'name'      => 'required|min:3|max:20',
-                'username'  => 'required|min:3',
-                'password'  => 'required|min:3',
-                'hsname'    => 'required|min:3|max:30',
-                'dnsname'   => 'required|min:3|max:30',
-                'desc'      => 'nullable|max:30',
-            ]);
-            $router = Router::create([
-                'user_id'       => auth()->id(),
-                'port_id'       => $request->vpn_port,
-                'name'          => $request->name,
-                'hsname'        => $request->hsname,
-                'dnsname'       => $request->dnsname,
-                'username'      => $request->username,
-                'password'      => encrypt($request->password),
-                'desc'          => $request->desc,
-            ]);
-            return response()->json(['message' => "Router Created!", 'data' => new RouterResource($router)]);
-        } else {
-            return response()->json(['status' => false, 'message' => 'User only limit 2 Router!', 'data' => ''], 403);
+        $user = auth()->user();
+        $user_router_limit = $user->router_limit;
+        $count_router_user = Router::where('user_id', '=', $user->id)->count();
+        if ($count_router_user >= $user_router_limit && $user->is_not_admin()) {
+            return response()->json(['message' => 'Your account only limit ' . $user_router_limit . ' Router!', 'data' => ''], 403);
         }
+        $this->validate($request, [
+            'vpn_port'  => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    $port = Port::whereRelation('vpn', 'user_id', auth()->id())->find($value);
+                    if (!$port) {
+                        $fail('Selected port is invalid!');
+                    }
+                    $port = Router::where('port_id', $value)->first();
+                    if ($port) {
+                        $fail('The selected port is already in use on another router!');
+                    }
+                }
+            ],
+            'name'      => 'required|min:3|max:20',
+            'username'  => 'required|min:3',
+            'password'  => 'required|min:3',
+            'hsname'    => 'required|min:3|max:30',
+            'dnsname'   => 'required|min:3|max:30',
+            'desc'      => 'nullable|max:30',
+        ]);
+        $router = Router::create([
+            'user_id'       => auth()->id(),
+            'port_id'       => $request->vpn_port,
+            'name'          => $request->name,
+            'hsname'        => $request->hsname,
+            'dnsname'       => $request->dnsname,
+            'username'      => $request->username,
+            'password'      => encrypt($request->password),
+            'desc'          => $request->desc,
+        ]);
+        return response()->json(['message' => "Router Created!", 'data' => new RouterResource($router)]);
     }
 
     public function update(Request $request, string $id)
@@ -133,16 +134,16 @@ class RouterController extends Controller
             return response()->json(['message' => 'Router Not Found!'], 404);
         }
         if ($router->port->vpn->is_active == 'no') {
-            return response()->json(['mesage' => 'Your VPN Nonactive!'], 422);
+            return response()->json(['mesage' => 'Your VPN Nonactive!'], 403);
         }
         if (!$router->port) {
-            return response()->json(['mesage' => 'Select VPN on Router'], 422);
+            return response()->json(['mesage' => 'Select VPN on Router'], 403);
         }
         if ($router->port->vpn->user_id != auth()->id()) {
-            return response()->json(['mesage' => 'Warning! This Port is not Your VPN Account!'], 422);
+            return response()->json(['mesage' => 'Warning! This Port is not Your VPN Account!'], 403);
         }
         if ($router->port->vpn->server->is_active == 'no') {
-            return response()->json(['mesage' => 'Server OFF! Contact Admin.'], 422);
+            return response()->json(['mesage' => 'Server OFF! Contact Admin.'], 403);
         }
         $con = new RouterApiServices($router);
         $data = $con->ping();

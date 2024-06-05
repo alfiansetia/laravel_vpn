@@ -99,10 +99,10 @@
         $("#vpn, #edit_vpn").select2({
             ajax: {
                 delay: 1000,
-                url: "{{ route('port.getbyuser') }}",
+                url: "{{ route('api.ports.paginate') }}",
                 data: function(params) {
                     return {
-                        dst: params.term,
+                        username: params.term,
                         page: params.page
                     };
                 },
@@ -110,8 +110,7 @@
                     return {
                         results: $.map(data.data, function(item) {
                             return {
-                                text: item.vpn.username + ":" + item.dst + ' => ' + item.vpn
-                                    .server.name,
+                                text: `${item.vpn.username}: ${item.dst} <=> ${item.to} (${item.vpn.server.name})`,
                                 id: item.id,
                                 disabled: item.vpn.is_active == 'yes' ? false : true,
                             }
@@ -158,8 +157,8 @@
                 data: 'port_id',
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        if (data !== null) {
-                            return row.port.vpn.username + ":" + row.port.dst;
+                        if (data != null) {
+                            return `${row.port.vpn.username}: ${row.port.dst} <=> ${row.port.to} (${row.port.vpn.server.name})`;
                         } else {
                             return null;
                         }
@@ -230,10 +229,9 @@
                     $('#edit_password').val('');
                     $('#edit_contact').val(result.data.contact);
                     if (result.data.port_id !== null) {
-                        let option2 = new Option((result.data.port.vpn.username + ":" +
-                                result.data.port.dst + ' => ' + result.data.port.vpn.server.name
-                            ),
-                            (result.data.port_id), true, true);
+                        let option2 = new Option(
+                            `${result.data.port.vpn.username}: ${result.data.port.dst} <=> ${result.data.port.to} (${result.data.port.vpn.server.name})`,
+                            result.data.port_id, true, true);
                         $('#edit_vpn').append(option2).trigger('change');
                     } else {
                         $('#edit_vpn').val('').change();

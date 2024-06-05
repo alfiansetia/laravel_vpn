@@ -15,16 +15,16 @@ class ServerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name,
-            'ip'        => $this->ip,
-            'domain'    => $this->domain,
-            'netwatch'  => $this->netwatch,
-            'location'  => $this->location,
-            'price'     => $this->price,
-            'is_active' => $this->is_active,
-            'time_free' => $this->time_free,
-            'type'      => $this->type,
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'ip'            => $this->ip,
+            'domain'        => $this->domain,
+            'netwatch'      => $this->netwatch,
+            'location'      => $this->location,
+            'price'         => $this->price,
+            'annual_price'  => $this->annual_price,
+            'is_active'     => $this->is_active,
+            'is_available'  => $this->is_available,
         ];
     }
 }

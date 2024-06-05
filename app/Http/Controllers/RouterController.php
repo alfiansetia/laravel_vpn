@@ -16,7 +16,7 @@ class RouterController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Router::with('port.vpn:id,ip,is_active,username')->where('user_id', '=', $this->getUser()->id);
+            $data = Router::with(['port.vpn:id,ip,is_active,username,server_id', 'port.vpn.server:id,name'])->where('user_id', '=', $this->getUser()->id);
             return DataTables::of($data)->toJson();
         }
         return view('router.index');
@@ -26,7 +26,7 @@ class RouterController extends Controller
     {
         $router = $router->load('port.vpn.server');
         if (empty($router->port_id)) {
-            return response()->json(['message' => 'VPN Not Ready On Router!']);
+            return response()->json(['message' => 'VPN Not Ready On Router!'], 403);
         }
         if ($router->port->vpn->user_id != auth()->id()) {
             return response()->json(['message' => 'Unauthorize!'], 403);

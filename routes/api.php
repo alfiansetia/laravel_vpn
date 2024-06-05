@@ -58,16 +58,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['middleware' => ['verified']], function () {
 
-        Route::get('template', [VoucherTemplateController::class, 'index'])->name('api.template.index');
+        Route::delete('template', [VoucherTemplateController::class, 'destroyBatch'])->name('api.template.destroy.batch');
+        Route::apiResource('template', VoucherTemplateController::class)->names('api.template');
 
         Route::get('balance_history', [BalanceHistoryController::class, 'index'])->name('api.balance.index');
 
-        Route::apiResource('routers', RouterController::class);
-        Route::get('routers/{routers}/ping', [RouterController::class, 'ping']);
+        Route::apiResource('routers', RouterController::class)->names('api.routers');
+        Route::get('routers/{routers}/ping', [RouterController::class, 'ping'])->name('api.reouters.ping');
 
         Route::apiResource('vpns', VpnController::class)->only(['index', 'show'])->names('api.vpn');
 
-        Route::apiResource('ports', PortController::class)->only(['show']);
+        Route::get('ports-paginate', [PortController::class, 'paginate'])->name('api.ports.paginate');
+        Route::get('ports', [PortController::class, 'index'])->name('api.ports.index');
 
 
         Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'get'])->name('api.mikapi.dashboard.get');

@@ -56,17 +56,15 @@
 
 
 @push('js')
-    <script src="{{ asset('js/navigation.js') }}"></script>
-    <script src="{{ asset('js/func.js') }}"></script>
+    <script src="{{ asset('js/v1/initial.js') }}"></script>
+    <script src="{{ asset('js/v1/navigation.js') }}"></script>
+    <script src="{{ asset('js/v1/func.js') }}"></script>
+    <script src="{{ asset('js/v1/var.js') }}"></script>
     <script>
         // $(document).ready(function() {
-
-        $('.maxlength').maxlength({
-            alwaysShow: true,
-            placement: "top",
-        });
-
-        $(".select2").select2();
+        var url_index = "{{ route('api.template.index') }}"
+        var url_id;
+        var id;
 
         var table = $('#tableData').DataTable({
             processing: true,
@@ -121,38 +119,19 @@
 
         $("div.toolbar").html(btn_element);
 
-        $('#btn_add').click(function() {
-            show_card_add()
-            input_focus('name')
-        })
-
-        $('.show-detail').click(function() {
-            show_card_detail()
-        })
-
-        $('#btn_delete').click(function() {
-            delete_batch("{{ route('template.destroy.batch') }}")
-        })
-
         multiCheck(table);
-
-        var id;
-        var url_post = "{{ route('template.store') }}";
-        var url_put = "{{ route('template.update', '') }}/" + id;
-        var url_delete = "{{ route('template.destroy', '') }}/" + id;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
+            url_id = url_index + "/" + id
+            $('#formEdit').attr('action', url_id)
             edit(true)
-            url_put = "{{ route('template.update', '') }}/" + id;
-            url_delete = "{{ route('template.destroy', '') }}/" + id;
-            id = table.row(this).id()
         });
 
         function edit(show = false) {
-            clear_validate($('#formEdit'))
+            clear_validate('formEdit')
             $.ajax({
-                url: "{{ route('template.show', '') }}/" + id,
+                url: url_id,
                 method: 'GET',
                 success: function(result) {
                     unblock();
@@ -178,4 +157,5 @@
 
         // });
     </script>
+    <script src="{{ asset('js/v1/trigger.js') }}"></script>
 @endpush

@@ -13,17 +13,19 @@
                         <label class="control-label" for="edit_name">Name :</label>
                         <input type="text" name="name" class="form-control maxlength" id="edit_name"
                             placeholder="Please Enter Name" minlength="3" maxlength="30" required>
-                        <span id="err_edit_name" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_name" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="edit_html_up">HTML UP :</label>
-                        <textarea name="html_up" class="form-control" id="edit_html_up" placeholder="Please Enter HTML UP" rows="10"></textarea>
-                        <span id="err_edit_html_up" class="error invalid-feedback" style="display: hide;"></span>
+                        <textarea name="html_up" class="form-control" id="edit_html_up" placeholder="Please Enter HTML UP" rows="10"
+                            required></textarea>
+                        <span class="error invalid-feedback err_html_up" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="edit_html_vc">HTML VC :</label>
-                        <textarea name="html_vc" class="form-control" id="edit_html_vc" placeholder="Please Enter HTML VC" rows="10"></textarea>
-                        <span id="err_edit_html_vc" class="error invalid-feedback" style="display: hide;"></span>
+                        <textarea name="html_vc" class="form-control" id="edit_html_vc" placeholder="Please Enter HTML VC" rows="10"
+                            required></textarea>
+                        <span class="error invalid-feedback err_html_vc" style="display: hide;"></span>
                     </div>
                 </div>
                 <div class="card-footer text-center">
