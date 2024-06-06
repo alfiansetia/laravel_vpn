@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Invoice extends Model
 {
@@ -36,10 +37,10 @@ class Invoice extends Model
 
     public function getImageAttribute($value)
     {
-        if ($value && file_exists(storage_path('app/images/invoice/' . $value))) {
-            return storage_path('app/images/invoice/' . $value);
+        if ($value && file_exists(public_path('images/invoice/' . $value))) {
+            return asset('images/invoice/' . $value);
         } else {
-            return url('images/default/invoice.png');
+            return asset('images/default/invoice.png');
         }
     }
 }

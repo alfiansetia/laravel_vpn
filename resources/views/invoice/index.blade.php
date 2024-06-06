@@ -79,13 +79,14 @@
 
 
 @push('js')
-    <script src="{{ asset('js/navigation.js') }}"></script>
-    <script src="{{ asset('js/func.js') }}"></script>
+    <script src="{{ asset('js/v1/initial.js') }}"></script>
+    <script src="{{ asset('js/v1/navigation.js') }}"></script>
+    <script src="{{ asset('js/v1/func.js') }}"></script>
+    <script src="{{ asset('js/v1/var.js') }}"></script>
     <script>
-        $('.maxlength').maxlength({
-            alwaysShow: true,
-            placement: "top",
-        });
+        var url_index = "{{ route('invoice.index') }}"
+        var url_id;
+        var id;
 
         var from = flatpickr(document.getElementById('from'), {
             defaultDate: "today",
@@ -235,7 +236,6 @@
             }, {
                 title: 'VPN',
                 data: 'vpn_id',
-                className: "text-center",
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
                         if (data != null) {
@@ -250,6 +250,13 @@
             }, {
                 title: "Total",
                 data: 'total',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
             }, {
                 title: 'Status',
                 data: 'status',
@@ -282,6 +289,7 @@
         $('#btn_add').click(function() {
             show_card_add()
             input_focus('total')
+            readURL('form', 'image')
         })
 
         $('#btn_delete').remove()
@@ -289,27 +297,24 @@
 
         multiCheck(table);
 
-        var id;
-        var url_post = "{{ route('invoice.store') }}";
-        var url_put = "{{ route('invoice.update', '') }}/" + id;
-        var url_delete = "{{ route('invoice.destroy', '') }}/" + id;
-
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
+            url_id = url_index + "/" + id
+            $('#formEdit').attr('action', url_id)
             edit(true)
-            url_put = "{{ route('invoice.update', '') }}/" + id;
-            url_delete = "{{ route('invoice.destroy', '') }}/" + id;
-            id = table.row(this).id()
         });
 
         function edit(show = false) {
-            clear_validate($('#formEdit'))
+            clear_validate('formEdit')
             $.ajax({
                 url: "{{ route('invoice.show', '') }}/" + id,
                 method: 'GET',
                 success: function(result) {
                     unblock();
+                    $('#formEdit')[0].reset();
                     $('#edit_total').val(result.data.total);
+                    $('#formEdit .image_preview').attr('src', result.data.image).width(200).height(200);
+                    $('#formEdit .image_preview').show();
                     $('#edit_desc').val(result.data.desc);
                     $('#titleEdit2').html(`<b>${result.data.number}</b> (${result.data.status})`);
                     edit_from.setDate(result.data.from);
@@ -393,7 +398,7 @@
                     ajax_setup();
                     $.ajax({
                         type: 'DELETE',
-                        url: url_put,
+                        url: url_id,
                         data: {
                             status: status
                         },
@@ -424,6 +429,11 @@
             })
         }
 
+        $('#reset').click(function() {
+            $('#form .image_preview').hide()
+        })
+
         // });
     </script>
+    <script src="{{ asset('js/v1/trigger.js') }}"></script>
 @endpush

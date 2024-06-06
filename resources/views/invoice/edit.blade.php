@@ -15,7 +15,7 @@
                         <select name="user" id="edit_user" class="form-control" style="width: 100%;" required>
                             <option value="">Please Select User</option>
                         </select>
-                        <span id="err_edit_user" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_user" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label for="edit_vpn"><i class="far fa-envelope me-1 bs-tooltip" title="Option VPN"></i>VPN
@@ -23,7 +23,7 @@
                         <select name="vpn" id="edit_vpn" class="form-control" style="width: 100%;" required>
                             <option value="">Please Select VPN</option>
                         </select>
-                        <span id="err_edit_vpn" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_vpn" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label for="edit_from"><i class="fas fa-calendar me-1 bs-tooltip" title="from"></i>From
@@ -31,7 +31,7 @@
                         <input type="text" id="edit_from" name="from"
                             class="form-control form-control-solid flatpickr flatpickr-input active"
                             placeholder="Select Date.." required>
-                        <span id="err_edit_from" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_from" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label for="edit_to"><i class="fas fa-calendar me-1 bs-tooltip" title="to"></i>To
@@ -39,7 +39,7 @@
                         <input type="text" id="edit_to" name="to"
                             class="form-control form-control-solid flatpickr flatpickr-input active"
                             placeholder="Select Date.." required>
-                        <span id="err_edit_to" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_to" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label for="edit_bank"><i class="far fa-envelope me-1 bs-tooltip" title="Option Bank"></i>Bank
@@ -47,21 +47,30 @@
                         <select name="bank" id="edit_bank" class="form-control" style="width: 100%;" required>
                             <option value="">Please Select Bank</option>
                         </select>
-                        <span id="err_edit_bank" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_bank" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label for="edit_total"><i class="fas fa-dollar-sign me-1 bs-tooltip" title="total"></i>Total
                             :</label>
                         <input type="number" id="edit_total" name="total" class="form-control form-control-solid"
                             placeholder="Input Total" value="0" min="1" required>
-                        <span id="err_edit_total" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_total" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="edit_desc"><i class="fas fa-map-marker me-1 bs-tooltip"
                                 title="desc User"></i>Description :</label>
                         <textarea name="desc" class="form-control maxlength" id="edit_desc" placeholder="Please Enter Description"
                             minlength="0" maxlength="100"></textarea>
-                        <span id="err_edit_desc" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_desc" style="display: hide;"></span>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="control-label" for="image"><i class="fas fa-image me-1 bs-tooltip"
+                                title="Image"></i>Image :</label>
+                        <input class="form-control file-upload-input" name="image" type="file" id="image"
+                            onchange="readURL('formEdit', 'image');" accept="image/jpeg, image/png, image/jpg">
+                        <small class="form-text text-muted">Max Size 3MB</small>
+                        <span class="error invalid-feedback err_image"></span>
+                        <br><img class="image_preview mt-1" src="#" style="display: none" />
                     </div>
                 </div>
                 <div class="card-footer text-center">

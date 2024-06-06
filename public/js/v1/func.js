@@ -294,3 +294,18 @@ function send_ajax(formID, method) {
 //         }
 //     })
 // }
+
+function readURL(formID, inputName) {
+    let obj = $(`#${formID} input[name="${inputName}"]`);
+    if(obj.length < 0){
+        return
+    }
+    if (obj[0].files && obj[0].files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#'+ formID +' .image_preview').show()
+            $('#'+ formID +' .image_preview').attr('src', e.target.result).width(200).height(200);
+        };
+        reader.readAsDataURL(obj[0].files[0]);
+    }
+}

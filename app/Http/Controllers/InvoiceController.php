@@ -7,6 +7,7 @@ use App\Models\Vpn;
 use App\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Yajra\DataTables\Facades\DataTables;
 
 class InvoiceController extends Controller
@@ -72,11 +73,21 @@ class InvoiceController extends Controller
             'to'    => 'required|date_format:Y-m-d',
             'total' => 'required|integer|gt:0',
             'desc'  => 'nullable|max:200',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ]);
         $date = date('Y-m-d');
         $date_parse = Carbon::parse($date);
         $count = Invoice::whereDate('date', $date_parse)->count() ?? 0;
         $number = 'INV' . date('ymd', strtotime($date)) . str_pad(($count + 1), 3, 0, STR_PAD_LEFT);
+        $img = null;
+        if ($files = $request->file('image')) {
+            $destinationPath = public_path('/images/invoice/');
+            if (!file_exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 755, true);
+            }
+            $img = 'invoice_' . $number . '_' . date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $img);
+        }
         Invoice::create([
             'number'    => $number,
             'date'      => date('Y-m-d H:i:s'),
@@ -87,6 +98,7 @@ class InvoiceController extends Controller
             'to'        => $request->to,
             'total'     => $request->total,
             'desc'      => $request->desc,
+            'image'     => $img,
         ]);
         return response()->json(['message' => 'Success Insert Data', 'data' => []]);
     }
@@ -104,13 +116,27 @@ class InvoiceController extends Controller
             'to'    => 'required|date_format:Y-m-d',
             'total' => 'required|integer|gt:0',
             'desc'  => 'nullable|max:200',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ];
         if ($invoice->status != 'unpaid') {
             $validate = [
                 'desc'  => 'nullable|max:200',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
             ];
         }
         $this->validate($request, $validate);
+        $img = $invoice->getRawOriginal('image');
+        if ($files = $request->file('image')) {
+            $destinationPath = public_path('/images/invoice/');
+            if (!empty($img) && file_exists($destinationPath . $img)) {
+                File::delete($destinationPath . $img);
+            }
+            if (!file_exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 755, true);
+            }
+            $img = 'invoice_' . $invoice->number . '_' . date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $img);
+        }
         $param  = [
             'user_id'   => $request->user,
             'bank_id'   => $request->bank,
@@ -119,10 +145,12 @@ class InvoiceController extends Controller
             'to'        => $request->to,
             'total'     => $request->total,
             'desc'      => $request->desc,
+            'image'     => $img,
         ];
         if ($invoice->status != 'unpaid') {
             $param = [
                 'desc'  => $request->desc,
+                'image' => $img,
             ];
         }
         $invoice->update($param);
