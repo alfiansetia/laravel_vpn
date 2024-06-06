@@ -313,7 +313,7 @@
                     unblock();
                     $('#formEdit')[0].reset();
                     $('#edit_total').val(result.data.total);
-                    $('#formEdit .image_preview').attr('src', result.data.image).width(200).height(200);
+                    $('#formEdit .image_preview').attr('src', result.data.image);
                     $('#formEdit .image_preview').show();
                     $('#edit_desc').val(result.data.desc);
                     $('#titleEdit2').html(`<b>${result.data.number}</b> (${result.data.status})`);

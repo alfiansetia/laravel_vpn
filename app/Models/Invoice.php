@@ -40,7 +40,7 @@ class Invoice extends Model
         if ($value && file_exists(public_path('images/invoice/' . $value))) {
             return asset('images/invoice/' . $value);
         } else {
-            return asset('images/default/invoice.png');
+            return asset('images/default/noimage.jpg');
         }
     }
 }

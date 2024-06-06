@@ -304,7 +304,7 @@ function readURL(formID, inputName) {
         var reader = new FileReader();
         reader.onload = function(e) {
             $('#'+ formID +' .image_preview').show()
-            $('#'+ formID +' .image_preview').attr('src', e.target.result).width(200).height(200);
+            $('#'+ formID +' .image_preview').attr('src', e.target.result)
         };
         reader.readAsDataURL(obj[0].files[0]);
     }
