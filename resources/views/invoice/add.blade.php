@@ -69,7 +69,7 @@
                             onchange="readURL('form', 'image');" accept="image/jpeg, image/png, image/jpg">
                         <small class="form-text text-muted">Max Size 3MB</small>
                         <span class="error invalid-feedback err_image"></span>
-                        <br><img class="image_preview mt-1" src="#" style="display: none" />
+                        <br><img class="image_preview mt-1" src="#" style="display: none;max-height: 750px" />
                     </div>
                 </div>
             </div>

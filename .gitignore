@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /public/assets/img/logo/*
 /public/files/json/*
+/public/images/invoice/*
