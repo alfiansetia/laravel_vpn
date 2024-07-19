@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'checkRouterExists' => \App\Http\Middleware\CheckRouterExists::class,
         'is.admin' => \App\Http\Middleware\RoleAdmin::class,
         'is.active' => \App\Http\Middleware\ActiveMiddleware::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }

@@ -18,6 +18,28 @@ class Vpn extends Model
         'server_id' => 'integer',
     ];
 
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['username'])) {
+            $query->where('username', 'like', '%' . $filters['username'] . '%');
+        }
+        if (isset($filters['ip'])) {
+            $query->where('ip', 'like', '%' . $filters['ip'] . '%');
+        }
+        if (isset($filters['user_id'])) {
+            $query->where('user_id', $filters['user_id']);
+        }
+        if (isset($filters['server_id'])) {
+            $query->where('server_id', $filters['server_id']);
+        }
+        if (isset($filters['is_active'])) {
+            $query->where('is_active', $filters['is_active']);
+        }
+        if (isset($filters['is_trial'])) {
+            $query->where('is_trial', $filters['is_trial']);
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

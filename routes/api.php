@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\Mikapi\System\UserActiveController;
 use App\Http\Controllers\Api\Mikapi\System\UserController as SystemUserController;
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\RouterController;
+use App\Http\Controllers\Api\ServerController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VoucherTemplateController;
 use App\Http\Controllers\Api\VpnController;
@@ -70,6 +71,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('ports-paginate', [PortController::class, 'paginate'])->name('api.ports.paginate');
         Route::get('ports', [PortController::class, 'index'])->name('api.ports.index');
+
+        Route::get('server-paginate', [ServerController::class, 'paginate'])->name('api.servers.paginate');
+        Route::apiResource('servers', ServerController::class)->names('api.servers');
+        Route::delete('servers', [ServerController::class, 'destroy_batch'])->name('api.servers.destroy.batch');
 
 
         Route::get('mikapi/dashboard/get-data', [DashboardController::class, 'get'])->name('api.mikapi.dashboard.get');

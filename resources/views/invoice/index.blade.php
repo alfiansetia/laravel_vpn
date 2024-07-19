@@ -307,7 +307,7 @@
         function edit(show = false) {
             clear_validate('formEdit')
             $.ajax({
-                url: "{{ route('invoice.show', '') }}/" + id,
+                url: url_id,
                 method: 'GET',
                 success: function(result) {
                     unblock();

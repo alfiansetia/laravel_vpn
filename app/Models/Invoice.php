@@ -20,6 +20,25 @@ class Invoice extends Model
         'total'     => 'integer',
     ];
 
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['number'])) {
+            $query->where('number', 'like', '%' . $filters['number'] . '%');
+        }
+        if (isset($filters['user_id'])) {
+            $query->where('user_id', $filters['user_id']);
+        }
+        if (isset($filters['bank_id'])) {
+            $query->where('bank_id', $filters['bank_id']);
+        }
+        if (isset($filters['vpn_id'])) {
+            $query->where('vpn_id', $filters['vpn_id']);
+        }
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+    }
+
     public function bank()
     {
         return $this->belongsTo(Bank::class);

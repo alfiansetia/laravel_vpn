@@ -52,10 +52,16 @@
 
 
 @push('js')
-    <script src="{{ asset('js/navigation.js') }}"></script>
-    <script src="{{ asset('js/func.js') }}"></script>
+    <script src="{{ asset('js/v1/initial.js') }}"></script>
+    <script src="{{ asset('js/v1/navigation.js') }}"></script>
+    <script src="{{ asset('js/v1/func.js') }}"></script>
+    <script src="{{ asset('js/v1/var.js') }}"></script>
     <script>
         // $(document).ready(function() {
+
+        var url_index = "{{ route('api.servers.index') }}"
+        var url_id;
+        var id;
 
         $('.maxlength').maxlength({
             alwaysShow: true,
@@ -65,16 +71,11 @@
         Inputmask("ip").mask($(".mask_ip"));
         Inputmask("mac").mask($(".mask_mac"));
 
-        // $("#ip, #edit_ip, #netwatch, #edit_netwatch").inputmask({
-        //     alias: "ip"
-        // });
-
         var table = $('#tableData').DataTable({
             processing: true,
             serverSide: true,
-            rowId: 'id',
             ajax: {
-                url: "{{ route('server.index') }}",
+                url: url_index,
                 error: function(jqXHR, textStatus, errorThrown) {
                     handleResponseCode(jqXHR, textStatus, errorThrown)
                 },
@@ -161,37 +162,23 @@
 
         $("div.toolbar").html(btn_element);
 
-        $('#btn_add').click(function() {
-            show_card_add()
-            input_focus('name')
-        })
-
-        $('#btn_delete').click(function() {
-            delete_batch("{{ route('server.destroy.batch') }}")
-        })
-
         multiCheck(table);
-
-        var id;
-        var url_post = "{{ route('server.store') }}";
-        var url_put = "{{ route('server.update', '') }}/" + id;
-        var url_delete = "{{ route('server.destroy', '') }}/" + id;
 
         $('#tableData tbody').on('click', 'tr td:not(:first-child)', function() {
             id = table.row(this).id()
+            url_id = url_index + "/" + id
+            $('#formEdit').attr('action', url_id)
             edit(true)
-            url_put = "{{ route('server.update', '') }}/" + id;
-            url_delete = "{{ route('server.destroy', '') }}/" + id;
-            id = table.row(this).id()
         });
 
         function edit(show = false) {
-            clear_validate($('#formEdit'))
+            clear_validate('formEdit')
             $.ajax({
-                url: "{{ route('server.show', '') }}/" + id,
+                url: url_id,
                 method: 'GET',
                 success: function(result) {
                     unblock();
+                    $('#formEdit')[0].reset();
                     $('#edit_name').val(result.data.name);
                     $('#edit_username').val(result.data.username);
                     $('#edit_password').val('');
@@ -204,8 +191,6 @@
                     $('#edit_price').val(result.data.price);
                     $('#edit_annual_price').val(result.data.annual_price);
                     $('#edit_last_ip').val(result.data.last_ip);
-                    // $('#edit_count_ip').val(result.data.count_ip);
-                    // $('#edit_last_port').val(result.data.last_port);
                     if (result.data.is_active == 'yes') {
                         $('#edit_active').prop('checked', true).change();
                     } else {
@@ -233,4 +218,5 @@
 
         // });
     </script>
+    <script src="{{ asset('js/v1/trigger.js') }}"></script>
 @endpush

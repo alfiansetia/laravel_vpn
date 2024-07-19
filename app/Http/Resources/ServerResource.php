@@ -16,6 +16,7 @@ class ServerResource extends JsonResource
     {
         return [
             'id'            => $this->id,
+            'DT_RowId'      => $this->id,
             'name'          => $this->name,
             'ip'            => $this->ip,
             'domain'        => $this->domain,
@@ -25,6 +26,12 @@ class ServerResource extends JsonResource
             'annual_price'  => $this->annual_price,
             'is_active'     => $this->is_active,
             'is_available'  => $this->is_available,
+            $this->mergeWhen(isAdmin(), [
+                'sufiks'    => $this->sufiks,
+                'port'      => $this->port,
+                'last_ip'   => $this->last_ip,
+                'username'  => $this->username,
+            ]),
         ];
     }
 }
