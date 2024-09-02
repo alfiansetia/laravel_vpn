@@ -474,6 +474,7 @@ class VpnController extends Controller
             $vpn->update([
                 'expired'   => $new_expired,
                 'is_active' => 'yes',
+                'is_trial' => 'no',
             ]);
             $user->update([
                 'balance' => $user_balance - $amount,
